@@ -45,6 +45,10 @@ register_deactivation_hook(__FILE__, 'RRZE\Remoter\deactivation');
 
 add_action('plugins_loaded', 'RRZE\Remoter\loaded');
 
+require_once( __DIR__ . '/includes/posttype/Class_Create_Custom_Post_Type_Server.php' );
+require_once( __DIR__ . '/includes/posttype/Class_Custom_Post_Type_Server.php' );
+
+
 /*
  * Einbindung der Sprachdateien.
  * @return void
@@ -108,10 +112,14 @@ function system_requirements() {
  */
 function loaded() {
     // Sprachdateien werden eingebunden.
+    
     load_textdomain();
     
     // Ab hier können weitere Funktionen bzw. Klassen angelegt werden.
     autoload();
+    
+    $cpt_server = new Class_Custom_Post_Type_Server();
+    
 }
 
 /*
