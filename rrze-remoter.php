@@ -53,6 +53,9 @@ require_once( __DIR__ . '/includes/posttype/Class_Create_Metaboxes.php' );
 require_once( __DIR__ . '/includes/posttype/Class_Create_Custom_Post_Type_Server.php' );
 require_once( __DIR__ . '/includes/posttype/Class_Custom_Post_Type_Server.php' );
 
+require_once( __DIR__ . '/includes/remote/Class_Grab_Remote_Files.php' );
+require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode.php' );
+
 
 /*
  * Einbindung der Sprachdateien.
@@ -123,9 +126,12 @@ function loaded() {
     // Ab hier können weitere Funktionen bzw. Klassen angelegt werden.
     autoload();
     
-    $cpt_server = new Class_Custom_Post_Type_Server();
-    $metaboxes_server = new Class_Create_Metaboxes();
-    $customize_list_server = new Class_Customize_List_View();
+    $remoter_custom_post_type   =   new Class_Custom_Post_Type_Server();
+    $remoter_create_metaboxes   =   new Class_Create_Metaboxes();
+    $remoter_customize_list     =   new Class_Customize_List_View();
+    
+    $remoter_get_data   =   new Class_Grab_Remote_Files();
+    $remoter_shortcode  =   new Class_Build_Shortcode();
     
 }
 
