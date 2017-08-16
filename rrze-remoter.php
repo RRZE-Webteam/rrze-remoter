@@ -45,6 +45,11 @@ register_deactivation_hook(__FILE__, 'RRZE\Remoter\deactivation');
 
 add_action('plugins_loaded', 'RRZE\Remoter\loaded');
 
+/* Includes */
+
+require_once( __DIR__ . '/includes/posttype/Class_Customize_List_View.php' );
+require_once( __DIR__ . '/includes/posttype/Class_Metaboxes_Data.php' );
+require_once( __DIR__ . '/includes/posttype/Class_Create_Metaboxes.php' );
 require_once( __DIR__ . '/includes/posttype/Class_Create_Custom_Post_Type_Server.php' );
 require_once( __DIR__ . '/includes/posttype/Class_Custom_Post_Type_Server.php' );
 
@@ -119,6 +124,8 @@ function loaded() {
     autoload();
     
     $cpt_server = new Class_Custom_Post_Type_Server();
+    $metaboxes_server = new Class_Create_Metaboxes();
+    $customize_list_server = new Class_Customize_List_View();
     
 }
 
