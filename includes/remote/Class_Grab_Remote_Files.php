@@ -12,7 +12,7 @@ class Class_Grab_Remote_Files {
     
     public static function get_files_from_remote_server($index) {
         
-        $postdata = self::rrze_remote_download_query($index['index']);
+        $postdata = self::rrze_remote_download_query($index);
         $opts = self::rrze_remote_download_opts($postdata);
         $context  = stream_context_create($opts);
         
@@ -28,7 +28,9 @@ class Class_Grab_Remote_Files {
                 
             array(
                 
-                'index' => $index
+                'index'     =>  $index['index'],
+                'recursiv'  =>  $index['recursiv'],
+                'filetype'  =>  $index['filetype']
                 
             )
         
