@@ -131,6 +131,7 @@ function loaded() {
     $remoter_customize_list     =   new Class_Customize_List_View();
     
     $remoter_get_data   =   new Class_Grab_Remote_Files();
+    //$remoter_get_data->get_files_from_remote_server();
     $remoter_shortcode  =   new Class_Build_Shortcode();
     
 }
