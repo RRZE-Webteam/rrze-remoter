@@ -10,12 +10,6 @@ class Class_Build_Shortcode {
         
         add_shortcode('remoter', array($this, 'shortcode')); 
         
-       /* $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server();
-        
-        echo '<pre>';
-        print_r($this->remote_data);
-        echo '</pre>';*/
-        
     }
     
     public function shortcode($atts) {
@@ -58,55 +52,31 @@ class Class_Build_Shortcode {
         if ( $the_query->have_posts() ) {
             echo '<ul>';
             while ( $the_query->have_posts() ) {
-                    $the_query->the_post();
-                    echo '<li>' . get_the_title() . '</li>';
-                    echo '<li>' . get_the_ID() . '</li>';
-                    echo '<li>' . get_post_meta($post->ID, 'url', true) . '</li>';
+                $the_query->the_post();
 
-                    echo '<pre>';
-                    print_r($this->remote_server_shortcode);
-                    echo '</pre>';
+                echo '<pre>';
+                print_r($this->remote_server_shortcode);
+                echo '</pre>';
 
-                    $url = get_post_meta($post->ID, 'url', true); 
+                $url = get_post_meta($post->ID, 'url', true); 
 
-                    $file_index = $this->remote_server_shortcode['index'];
-                    $view = $this->remote_server_shortcode['view'];
-                    $recursiv = $this->remote_server_shortcode['recursiv'];
-                    $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $url);
+                $file_index = $this->remote_server_shortcode['index'];
+                $view = $this->remote_server_shortcode['view'];
+                $recursiv = $this->remote_server_shortcode['recursiv'];
+                $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $url);
 
-                    $url = parse_url(get_post_meta($post->ID, 'url', true)); 
-                    
-                    if ($view == 'list' ) $html_list = '<ul>';
-                    if ($view == 'gallery' ) $html_gallery = '<table><tr>';
+                $url = parse_url(get_post_meta($post->ID, 'url', true)); 
 
-                    foreach ($this->remote_data as $key => $value) {
-                        
-                        if($view == 'list') {
-                             
-                            $html_list .= '<li><a href="http://'. $url['host'] . '/' . $file_index . $value . '">' . basename($value) . '</a></li>';
-                            
-                        } elseif($view == 'gallery') {
-                           
-                            $html_gallery .= '<td><a href="http://'. $url['host'] . '/' . $file_index . (($recursiv == 1) ? '' : '/') . $value . '"><img style="width:30%" src="http://'. $url['host'] . '/' . $file_index . '/' . $value . '"></a></tr>';
-                        
-                            
-                        } else {
-                            
-                        }
-                        
-                       
-                        //echo '<a href="http://'. $url['host'] . '/' . $file_index . '/' . $value . '"><img style="width:30%" src="http://'. $url['host'] . '/' . $file_index . '/' . $value . '"></a><br />';
-                    }
-                    
-                    if ($view == 'list' ) $html_list .= '</ul>';
-                    if ($view == 'gallery' ) $html_gallery .= '</tr><table>';
-                    
-                    if ($view == 'list' ) echo $html_list;
-                    if ($view == 'gallery' ) echo $html_gallery;
-
-                    echo '<pre>';
-                    print_r($this->remote_data);
-                    echo '</pre>';
+                if ($view == 'gallery') {
+                    include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
+                } elseif($view == 'list') {
+                    include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
+                } elseif($view == 'table') {
+                    include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
+                } else {
+                    include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
+                }
+                   
             }
             echo '</ul>';
             wp_reset_postdata();
