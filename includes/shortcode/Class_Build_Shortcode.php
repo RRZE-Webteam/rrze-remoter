@@ -29,12 +29,20 @@ class Class_Build_Shortcode {
     
     public function query_args($args) {
         
-        $this->remote_server_args = array(
+        $this->remote_server_args[] = array(
             'post_type'         =>  'Remote-Server',
             'p'                 =>  $args['server_id'],
             'posts_per_page'    =>  1,
             'orderby'           =>  'date',
             'order'             =>  'DESC'
+        );
+        
+        $this->remote_server_args[] = array(
+            'post_type'         =>  'Remote-Server',
+            'p'                 =>  $args['server_id'],
+            'posts_per_page'    =>  5,
+            'orderby'           =>  'date',
+            'order'             =>  'DESC',
         );
         
         return $this->show_results_as_list($this->remote_server_args);
@@ -47,10 +55,10 @@ class Class_Build_Shortcode {
         
         $shortcode_values = array();
         
-        $the_query = new \WP_Query( $query_arguments);
+        $the_query = new \WP_Query( $query_arguments[0]);
 
         if ( $the_query->have_posts() ) {
-            echo '<ul>';
+            //echo '<ul>';
             while ( $the_query->have_posts() ) {
                 $the_query->the_post();
 
@@ -78,7 +86,7 @@ class Class_Build_Shortcode {
                 }
                    
             }
-            echo '</ul>';
+            //echo '</ul>';
             wp_reset_postdata();
         } else {
                 echo 'no posts found';
