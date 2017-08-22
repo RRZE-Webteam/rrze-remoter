@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+/*jQuery(document).ready(function($) {
   
     // This is the variable we are passing via AJAX
     var fruit = 'Banana';
@@ -19,3 +19,4 @@ jQuery(document).ready(function($) {
         }
     });   
 });
+*/

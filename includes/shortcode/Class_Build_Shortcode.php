@@ -8,12 +8,12 @@ class Class_Build_Shortcode {
     
     public function __construct() {
         
-        //add_action(' init', array($this,'add_this_script_footer'));
+      
         add_action( 'wp_ajax_example_ajax_request', array($this, 'example_ajax_request' ));
         add_action( 'wp_ajax_nopriv_example_ajax_request', array($this, 'example_ajax_request' ));
 
         add_shortcode('remoter', array($this, 'shortcode')); 
-        
+        add_action( 'wp_footer', array($this,'add_this_script_footer'));
         
     }
     
@@ -43,20 +43,6 @@ class Class_Build_Shortcode {
         );
         
         return $this->show_results_as_list($this->remote_server_args);
-    }
-    
-    public function query_args_table($args) {
-        
-        $this->remote_server_args = array(
-            'post_type'         =>  'Remote-Server',
-            'p'                 =>  $args['server_id'],
-            'posts_per_page'    =>  5,
-            'orderby'           =>  'date',
-            'order'             =>  'DESC'
-        );
-        
-        return $this->show_results_as_table($this->remote_server_args);
-        
     }
     
     public function show_results_as_list($query_arguments) {
@@ -95,6 +81,8 @@ class Class_Build_Shortcode {
                     include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
                 } elseif($view == 'table') {
                     include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
+                    //$this->example_ajax_request();
+                   
                     //$test = new Class_Remoter_Table_View();
                     //$test->rrze_remoter_script();
                 } else {
@@ -109,24 +97,34 @@ class Class_Build_Shortcode {
         }
     }
     
-    public function add_this_script_footer(){ ?>
+    public function add_this_script_footer(){ 
+        
+        $test = 'samstag';
+        
+        $data = $this->remote_server_shortcode['server_id'];
+        
+        $args = $this->remote_server_args['p'];
+        ?>
   
         <script>
         jQuery(document).ready(function($) {
 
             // This is the variable we are passing via AJAX
             var fruit = 'Banana';
+            
+            var sonne = <?php echo "'$args'" ?>
 
             // This does the ajax request (The Call).
             $.ajax({
                 url: frontendajax.ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
                 data: {
                     'action':'example_ajax_request', // This is a our PHP function below
-                    'fruit' : fruit // This is the variable we are sending via AJAX
+                    'fruit' : fruit,
+                    'sonne' : sonne// This is the variable we are sending via AJAX
                 },
                 success:function(data) {
             // This outputs the result of the ajax request (The Callback)
-                    window.alert(data);
+                    console.log(data);
                 },  
                 error: function(errorThrown){
                     window.alert(errorThrown);
@@ -146,14 +144,16 @@ class Class_Build_Shortcode {
         if ( isset($_REQUEST) ) {
 
             print_r($_REQUEST);
+            
+            //echo do_shortcode('[remoter]');
 
-            echo $this->remote_server_shortcode;
+            //echo $this->remote_server_shortcode;
 
             $fruit = $_REQUEST['fruit'];
 
             // This bit is going to process our fruit variable into an Apple
             if ( $fruit == 'Banana' ) {
-                $fruit = 'Apple';
+                $fruit = 'Apple1';
             }
 
             // Now let's return the result to the Javascript function (The Callback) 
