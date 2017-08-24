@@ -12,7 +12,8 @@ a[class^="site-"] {
 
 .pagination.pagebreaks .subpages a .number.active {
   background: #fff;
-  border: 1px solid #dde5f0; }
+  border: 1px solid #dde5f0;
+  text-decoration: none; }
 
 .pagination.pagebreaks .subpages .number {
   background: #fff;

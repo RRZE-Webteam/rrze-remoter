@@ -145,7 +145,7 @@ class Class_Build_Shortcode_Ajax {
 
                 for ($i = 1; $i <= $pagecount; $i++) {
                     
-                    $html .='<a data-index="' . $file_index . '" data-host="' . $url['host'] . '" data-chunk="' . $number_of_chunks . '" data-pagecount-value= "' . $pagecount . '" class="site-'. $i.'" href="#sign_up"><span class="number active">'.$i.'</span></a>';
+                    $html .='<a data-index="' . $file_index . '" data-host="' . $url['host'] . '" data-chunk="' . $number_of_chunks . '" data-pagecount-value= "' . $pagecount . '" class="site-'. $i.'" href="#sign_up"><span class="'. ($i==1 ? 'number active' : 'number') .'">'.$i.'</span></a>';
                    
                 }
                 
