@@ -10,7 +10,7 @@ class Class_Grab_Remote_Files {
         
     }
     
-    public static function get_files_from_remote_server($index) {
+    public static function get_files_from_remote_server($index, $url) {
         
         $postdata = self::rrze_remote_download_query($index);
         $opts = self::rrze_remote_download_opts($postdata);
