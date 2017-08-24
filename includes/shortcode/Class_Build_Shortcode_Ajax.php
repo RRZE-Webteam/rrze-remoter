@@ -74,7 +74,7 @@ class Class_Build_Shortcode_Ajax {
 
                 $url = parse_url(get_post_meta($post->ID, 'url', true)); 
 
-                $number_of_chunks = 2;
+                $number_of_chunks = 3;
 
                 //----------------------------------------------------------------------------
                 // Break Array Into Chunks
@@ -93,7 +93,7 @@ class Class_Build_Shortcode_Ajax {
                 $pagecount = count($data);
                 
                 
-                echo '<h3>Tabellenansicht</h3>';
+                echo '<h3>Tabellenansicht mit Pagination</h3>';
 
                 $table = '<table>';
 
@@ -120,107 +120,30 @@ class Class_Build_Shortcode_Ajax {
                 }*/
 
                 
-                $res = '<div id="result"></div>';
-                
-                //$res1 = wp_strip_all_tags($res);
-                
-                echo $res;
-                
-                //----------------------------------------------------------------------------
-                // Display array_chunk Data
-                //----------------------------------------------------------------------------
-                ?>
-
-               <script>/*
-                   
-                jQuery(document).ready(function($){
-                    
-                
-                    
-                    /*$('#result').on('change', function() {
-                        alert('hello world');
-
-                    /*$('body').on('change', '#result', function(){
-                        alert('changed');
-                    });*/
-                   
-                   /*
-                   $( 'a[href="#sign_up"]' ).on( "click", function() {
-                       //alert('Hello');
-                      // alert($("a").data('userId'));
-                      // alert($("a.site-1").attr('data-userId'));
-                      //  alert($("[class^='site-']").attr('data-userId'));
-                        
-                         var i = $("[class^='site-1']").attr('data-userId');
-                         
-                         var z = parseInt(i) + 1;
-                         
-                        alert(i);
-                        
-                   
-                      
-                      
-                      });
-                    
-                   
-                    
-                });*/
-                
-                </script>     
-                <?php
-                //echo $t;
                 //$res = '<div id="result"></div>';
                 
                 //$res1 = wp_strip_all_tags($res);
                 
                 //echo $res;
                 
-                //wp_parse_str( $res, $array );
-                
-                //var_dump($array);
-                
-                
-                //$html = str_get_html($content);
-                //$el = $html->find($res, 0);
-                //$innertext = $el->innertext;
-                
-                //var_dump($innertext);
-                
-                /*preg_match("'<div id=\"result\">(.*?)</div>'", $res, $match);
-                var_dump($match);
-                if($match) echo "result=".$match[1];*/
-                
-                //$res1 = wp_strip_all_tags($res);
-                
-                //echo $res1;
-                
-                //$i = (int)$r;
-                
-               // echo $i;
-                
-                
-                //echo '<div id="result"></div>';
-                
-                //echo strip_tags($res);
-                
                 echo '<pre>';
                 print_r($data[$i]);
                 echo '</pre>';
                 
-                /*$output = '<table>';
+                $output = '<div id="result"><table>';
                 
                 foreach ($data[$i] as $key => $value) {
 
                     $output .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . '/' . $file_index . (($recursiv == 1) ? '' : '/') . $value . '">' . basename($value) . '</a></td></tr>';
 
                 }
-                 $output .= '</table>';
-                echo $output;*/
-                
+                 $output .= '</table></div>';
+                echo $output;
+                //$this->c = json_encode($this->remote_data);
                
 
                 for ($i = 1; $i <= $pagecount; $i++) {
-                    echo '<a data-userId="0" data-pagecount-value= "' . $pagecount . '" class="site-'. $i.'" href="#sign_up">'.$i.'</a> | ';
+                    echo '<a data-index="' . $file_index . '" data-host="' . $url['host'] . '" data-chunk="' . $number_of_chunks . '" data-pagecount-value= "' . $pagecount . '" class="site-'. $i.'" href="#sign_up">'.$i.'</a> | ';
                    
                 }
 
@@ -230,12 +153,6 @@ class Class_Build_Shortcode_Ajax {
         } else {
                 echo 'no posts found';
         }
-    }
-    
-    function everything_in_tags($string, $tagname) {
-        $pattern = "#<\s*?$tagname\b[^>]*>(.*?)</$tagname\b[^>]*>#s";
-        preg_match($pattern, $string, $matches);
-        return $matches[1];
     }
     
     public function test_add_this_script_footer(){ 
@@ -254,6 +171,9 @@ class Class_Build_Shortcode_Ajax {
         
         $arr = $this->remote_data;
         
+        $b = json_encode($this->c);
+        
+        print_r($b);
         //print_r($this->pagecount);
         
         //$test = json_encode($arr);
@@ -268,7 +188,7 @@ class Class_Build_Shortcode_Ajax {
             // This is the variable we are passing via AJAX
             var fruit = 'Banana';
             
-            var index = <?php echo "'$args'" ?>
+            //var index = <?php echo "'$args'" ?>
             
             var rec = <?php echo "'$recursiv'" ?>
             
@@ -276,7 +196,7 @@ class Class_Build_Shortcode_Ajax {
             
             //var test = <?php $test ?>
             
-            var arr = <?php print_r($arr) ?>
+            var arr = <?php echo json_encode($arr); ?>;
             
             //var pcount = <?php $pagecount_ajax ?>
             
@@ -292,6 +212,9 @@ class Class_Build_Shortcode_Ajax {
                 var link = $(this).attr('class');
                 var substr = link.replace('site-', '');
                 var pagecount = $(this).attr('data-pagecount-value');
+                var chunk = $(this).attr('data-chunk');
+                var host = $(this).attr('data-host');
+                var index = $(this).attr('data-index');
                 //alert(substr);
                 
                 $.ajax({
@@ -304,7 +227,9 @@ class Class_Build_Shortcode_Ajax {
                         'index': index,
                         'recursiv': rec,
                         'filetype': filetype,
-                        //'arr'   : arr,
+                        'chunk'  : chunk,
+                        'host' : host,
+                        'arr'   : arr
                         //'test' : test
                         //'count' : pcount
                         //'arr'   : arr// This is the variable we are sending via AJAX
@@ -346,39 +271,26 @@ class Class_Build_Shortcode_Ajax {
             'order'             =>  'DESC'
         );
         
-        
-        //$arr = $this->remote_data;
-       
-        
-  
-        // The $_REQUEST contains all the data sent via AJAX from the Javascript call
         if ( isset($_REQUEST) ) {
             
-            //print_r($_REQUEST);
+            /*echo '<pre>';
+            print_r($_REQUEST);
+            echo '<pre>';*/
             
-            /*$output = array_slice($_REQUEST, 4); 
             
-            
-            $the_query = new \WP_Query($args);
-            
-            if ( $the_query->have_posts() ) {
-                    while ( $the_query->have_posts() ) {
-                            $the_query->the_post();
-                            $url = get_post_meta($post->ID, 'url', true); 
-                            $this->_data = Class_Grab_Remote_Files::get_files_from_remote_server($output, $url);
-                            
-                            print_r($this->_data);
-                    }
-                    wp_reset_postdata();
-            } else {
-                    // no posts found
-            }
+            $number_of_chunks = $_REQUEST['chunk'];
 
-            //print_r( $the_query);
+            //----------------------------------------------------------------------------
+            // Break Array Into Chunks
+            //----------------------------------------------------------------------------
+
+            $data = array_chunk($_REQUEST['arr'], $number_of_chunks);
+
+            /*echo '<pre>';
+            print_r($data);
+            echo '</pre>';*/
             
-            
-            
-            //print_r($output);*/
+          
             
             if (null !== $_REQUEST['p']) {
                 if ($_REQUEST['p'] > $_REQUEST['count']) {
@@ -390,121 +302,26 @@ class Class_Build_Shortcode_Ajax {
                 $i = 0;
             }
             
-            echo (int)$i;
+            //echo (int)$i;
             
-            /*$i;*/
-             
+            /*echo '<pre>';
+            print_r($data[$i]);
+            echo '</pre>';*/
             
-            /*$the_query = new \WP_Query($args);
-            
-            if ( $the_query->have_posts() ) {
-            
-            while ( $the_query->have_posts() ) {
-                $the_query->the_post();
+            $table = '<table>';
 
-                /*echo '<pre>';
-                print_r($this->remote_server_shortcode);
-                echo '</pre>';
+            $id = uniqid();
 
-                $url = get_post_meta($post->ID, 'url', true); 
+            foreach ($data[$i] as $key => $value) {
 
-                $file_index = $this->remote_server_shortcode['index'];
-                $view = $this->remote_server_shortcode['view'];
-                $recursiv = $this->remote_server_shortcode['recursiv'];
-                $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $url);
+                $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host'] . '/' . $_REQUEST['index'] . (($_REQUEST['recursive'] == 1) ? '' : '/') . $value . '">' . basename($value) . '</a></td></tr>';
 
-                //$url = parse_url(get_post_meta($post->ID, 'url', true));
-            }
-            echo  $_REQUEST['sonne'];
-            }
-            
-            //echo $the_query;
-            
-            //echo do_shortcode('[remoter]');
-
-            //echo $this->remote_server_shortcode;
-
-            /*$fruit = $_REQUEST['fruit'];
-
-            // This bit is going to process our fruit variable into an Apple
-            if ( $fruit == 'Banana' ) {
-                $fruit = 'Apple2';
             }
 
-            // Now let's return the result to the Javascript function (The Callback) 
-            echo $fruit;  */      
+            $table .= '</table>';
+            echo $table;
         }
-
-        // Always die in functions echoing AJAX content
+       
        die();
     }
 }
-
-/*/*
- *   public function test_add_this_script_footer(){ 
-        
-        $test = 'samstag';
-        
-        $data = $this->remote_server_shortcode['server_id'];
-        
-        $args = $this->remote_server_args['p'];
-        ?>
-  
-        <script>
-        jQuery(document).ready(function($) {
-
-            // This is the variable we are passing via AJAX
-            var fruit = 'Banana';
-            
-            var sonne = <?php echo "'$args'" ?>
-
-            // This does the ajax request (The Call).
-            $.ajax({
-                url: frontendajax.ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
-                data: {
-                    'action':'test_example_ajax_request', // This is a our PHP function below
-                    'fruit' : fruit,
-                    'sonne' : sonne// This is the variable we are sending via AJAX
-                },
-                success:function(data) {
-            // This outputs the result of the ajax request (The Callback)
-                    console.log(data);
-                },  
-                error: function(errorThrown){
-                    window.alert(errorThrown);
-                }
-            });   
-
-        });
-        </script>
-        <?php } 
- 
-
-    
-    
-    public function test_example_ajax_request() {
-  
-        // The $_REQUEST contains all the data sent via AJAX from the Javascript call
-        if ( isset($_REQUEST) ) {
-
-            print_r($_REQUEST);
-            
-            //echo do_shortcode('[remoter]');
-
-            //echo $this->remote_server_shortcode;
-
-            $fruit = $_REQUEST['fruit'];
-
-            // This bit is going to process our fruit variable into an Apple
-            if ( $fruit == 'Banana' ) {
-                $fruit = 'Apple2';
-            }
-
-            // Now let's return the result to the Javascript function (The Callback) 
-            echo $fruit;        
-        }
-
-        // Always die in functions echoing AJAX content
-       die();
-    }
-}*/
