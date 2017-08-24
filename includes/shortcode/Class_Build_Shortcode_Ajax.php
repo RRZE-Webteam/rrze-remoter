@@ -141,11 +141,16 @@ class Class_Build_Shortcode_Ajax {
                 echo $output;
                 //$this->c = json_encode($this->remote_data);
                
+                $html = '<nav class="pagination pagebreaks" role="navigation"><h3>Seite:</h3><span class="subpages">';
 
                 for ($i = 1; $i <= $pagecount; $i++) {
-                    echo '<a data-index="' . $file_index . '" data-host="' . $url['host'] . '" data-chunk="' . $number_of_chunks . '" data-pagecount-value= "' . $pagecount . '" class="site-'. $i.'" href="#sign_up">'.$i.'</a> | ';
+                    
+                    $html .='<a data-index="' . $file_index . '" data-host="' . $url['host'] . '" data-chunk="' . $number_of_chunks . '" data-pagecount-value= "' . $pagecount . '" class="site-'. $i.'" href="#sign_up"><span class="number active">'.$i.'</span></a>';
                    
                 }
+                
+                $html .= '</span></nav>';
+                echo $html;
 
             }
          
