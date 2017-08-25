@@ -57,7 +57,7 @@ require_once( __DIR__ . '/includes/posttype/Class_Custom_Post_Type_Server.php' )
 
 require_once( __DIR__ . '/includes/remote/Class_Grab_Remote_Files.php' );
 require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode.php' );
-require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode_Ajax.php' );
+//require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode_Ajax.php' );
 
 //require_once( __DIR__ . '/includes/templates/table.php' );
 
@@ -147,7 +147,7 @@ function loaded() {
     $remoter_get_data   =   new Class_Grab_Remote_Files();
     //$remoter_get_data->get_files_from_remote_server();
     $remoter_shortcode  =   new Class_Build_Shortcode();
-    $remoter_shortcode_ajax  =   new Class_Build_Shortcode_Ajax();
+    //$remoter_shortcode_ajax  =   new Class_Build_Shortcode_Ajax();
     
 }
 

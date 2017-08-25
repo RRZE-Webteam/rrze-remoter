@@ -7,17 +7,16 @@ defined('ABSPATH') || exit;
 class Class_Build_Shortcode {
     
     public function __construct() {
-        
       
-        add_action( 'wp_ajax_example_ajax_request', array($this, 'example_ajax_request' ));
-        add_action( 'wp_ajax_nopriv_example_ajax_request', array($this, 'example_ajax_request' ));
-
+        add_action( 'wp_ajax_rrze_remote_table_ajax_request', array($this, 'rrze_remote_table_ajax_request' ));
+        add_action( 'wp_ajax_nopriv_rrze_remote_table_ajax_request', array($this, 'rrze_remote_table_ajax_request' ));
         add_shortcode('remoter', array($this, 'shortcode')); 
-        add_action( 'wp_footer', array($this,'add_this_script_footer'));
+        add_action( 'wp_footer', array($this,'rrze_remote_table_script_footer'));
         
     }
     
     public function shortcode($atts) {
+        
         $this->remote_server_shortcode = shortcode_atts( array(
             'server_id' => '2212879',
             'file'      => 'http://remoter.dev/images/jeny.png',
@@ -62,29 +61,22 @@ class Class_Build_Shortcode {
             while ( $the_query->have_posts() ) {
                 $the_query->the_post();
 
-                echo '<pre>';
-                print_r($this->remote_server_shortcode);
-                echo '</pre>';
-
                 $url = get_post_meta($post->ID, 'url', true); 
 
                 $file_index = $this->remote_server_shortcode['index'];
                 $view = $this->remote_server_shortcode['view'];
                 $recursiv = $this->remote_server_shortcode['recursiv'];
+                $filetype = $this->remote_server_shortcode['filetype'];
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $url);
 
                 $url = parse_url(get_post_meta($post->ID, 'url', true)); 
-
+                
                 if ($view == 'gallery') {
                     include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
                 } elseif($view == 'list') {
                     include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
                 } elseif($view == 'table') {
                     include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
-                    //$this->example_ajax_request();
-                   
-                    //$test = new Class_Remoter_Table_View();
-                    //$test->rrze_remoter_script();
                 } else {
                     include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
                 }
@@ -97,39 +89,49 @@ class Class_Build_Shortcode {
         }
     }
     
-    public function add_this_script_footer(){ 
+    public function rrze_remote_table_script_footer(){ 
         
-        $test = 'samstag';
+        $arr = $this->res;
         
-        $data = $this->remote_server_shortcode['server_id'];
-        
-        $args = $this->remote_server_args['p'];
         ?>
   
         <script>
         jQuery(document).ready(function($) {
 
-            // This is the variable we are passing via AJAX
-            var fruit = 'Banana';
-            
-            var sonne = <?php echo "'$args'" ?>
+            var arr = <?php echo json_encode($arr); ?>;
 
-            // This does the ajax request (The Call).
-            $.ajax({
-                url: frontendajax.ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
-                data: {
-                    'action':'example_ajax_request', // This is a our PHP function below
-                    'fruit' : fruit,
-                    'sonne' : sonne// This is the variable we are sending via AJAX
-                },
-                success:function(data) {
-            // This outputs the result of the ajax request (The Callback)
-                    console.log(data);
-                },  
-                error: function(errorThrown){
-                    window.alert(errorThrown);
-                }
-            });   
+            $('a[href="#sign_up"]').click(function(){
+                var link = $(this).attr('class');
+                var page = link.replace('page-', '');
+                var pagecount = $(this).attr('data-pagecount-value');
+                var chunk = $(this).attr('data-chunk');
+                var host = $(this).attr('data-host');
+                var index = $(this).attr('data-index');
+                var recursiv = $(this).attr('data-recursiv');
+                var filetype = $(this).attr('data-filetype');
+                
+                $.ajax({
+                    url: frontendajax.ajaxurl,
+                    data: {
+                        'action'    :'rrze_remote_table_ajax_request',
+                        'p'         : page,
+                        'count'     : pagecount,
+                        'index'     : index,
+                        'recursiv'  : recursiv,
+                        'filetype'  : filetype,
+                        'chunk'     : chunk,
+                        'host'      : host,
+                        'arr'       : arr
+                    },
+                    success:function(data) {
+                        $( "#result" ).html(data);
+                        //console.log(data);
+                    },  
+                    error: function(errorThrown){
+                        window.alert(errorThrown);
+                    }
+                }); 
+            });
 
         });
         </script>
@@ -138,29 +140,38 @@ class Class_Build_Shortcode {
 
     
     
-    public function example_ajax_request() {
-  
-        // The $_REQUEST contains all the data sent via AJAX from the Javascript call
+    public function rrze_remote_table_ajax_request() {
+        
         if ( isset($_REQUEST) ) {
-
-            print_r($_REQUEST);
             
-            //echo do_shortcode('[remoter]');
+            $number_of_chunks = $_REQUEST['chunk'];
 
-            //echo $this->remote_server_shortcode;
+            $data = array_chunk($_REQUEST['arr'], $number_of_chunks);
+            
+            if (null !== $_REQUEST['p']) {
+                if ($_REQUEST['p'] > $_REQUEST['count']) {
+                    die('<span style="color:#FF0000">Error: Page Does Not Exist</span>');
+                }
+                $i = $_REQUEST['p'] - 1;
+            }
+            else {
+                $i = 0;
+            }
+            
+            $table = '<table>';
 
-            $fruit = $_REQUEST['fruit'];
+            $id = uniqid();
 
-            // This bit is going to process our fruit variable into an Apple
-            if ( $fruit == 'Banana' ) {
-                $fruit = 'Apple1';
+            foreach ($data[$i] as $key => $value) {
+
+                $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host'] . '/' . $_REQUEST['index'] . (($_REQUEST['recursiv'] == 1) ? '' : '/') . $value . '">' . basename($value) . '</a></td></tr>';
+
             }
 
-            // Now let's return the result to the Javascript function (The Callback) 
-            echo $fruit;        
+            $table .= '</table>';
+            echo $table;
         }
-
-        // Always die in functions echoing AJAX content
+       
        die();
     }
 }
