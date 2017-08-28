@@ -1,6 +1,8 @@
 <?php
 
-
+/*echo '<pre>';
+print_r($this->remote_data);
+echo '</pre>';*/
 
 $url = parse_url(get_post_meta($post->ID, 'url', true)); 
 
@@ -10,13 +12,7 @@ $data = array_chunk($this->remote_data, $number_of_chunks);
 
 $this->res = $this->remote_data; 
 
-/*echo '<pre>';
-print_r($data);
-echo '</pre>';*/
-
 $pagecount = count($data);
-
-
 
 echo '<h3>Tabellenansicht mit Pagination</h3>';
 
@@ -24,12 +20,27 @@ $i = 0;
 
 $id = uniqid();
 
-$output = '<div id="result"><table><tr><th>Name</th><th>Dateigröße</th></tr>';
+$output = '<div id="result"><table><tr><th>Name</th><th>Dateityp</th><th>Dateigröße</th></tr>';
 
 foreach ($data[$i] as $key => $value) {
+    
+    $bytes = $value['size'];
+            
+    if ($bytes>= 1073741824) {
+        $size = number_format($bytes / 1073741824, 2) . ' GB';
+    } elseif ($bytes >= 1048576) {
+       $size = number_format($bytes / 1048576, 2) . ' MB';
+    } elseif ($bytes >= 1024) {
+        $size = number_format($bytes / 1024, 0) . ' KB';
+    } elseif ($bytes > 1) {
+        $size = $bytes . ' bytes';
+    } elseif ($bytes == 1) {
+        $size = '1 byte';
+    } else {
+        $size = '0 bytes';
+    }
 
-    $output .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . $value['image'] . '">' . basename($value['image']) . '</a></td><td>' . number_format($value['size']) .  '</td></tr>';
-
+    $output .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . $value['image'] . '">' . substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a></td><td>' . $value['extension'] . '</td><td>' . $size .  '</td></tr>';
 }
 
 $output .= '</table></div>';

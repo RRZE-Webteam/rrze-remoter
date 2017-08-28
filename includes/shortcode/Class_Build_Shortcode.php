@@ -25,6 +25,8 @@ class Class_Build_Shortcode {
             'max'       => '5',
             'filetype'  => 'jpg',
             'view'      => 'list',
+            'orderby'   => 'size',
+            'order'     => 'asc'
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -96,7 +98,7 @@ class Class_Build_Shortcode {
     
     public function rrze_remote_table_script_footer(){ 
         
-        $arr = $this->res;
+        $arr = (isset($this->res)) ? $this->res : '';
         
         ?>
   
@@ -163,13 +165,29 @@ class Class_Build_Shortcode {
                 $i = 0;
             }
             
-            $table = '<table><tr><th>Name</th><th>Dateigröße</th></tr>';
+            $table = '<table><tr><th>Name</th><th>Dateityp</th><th>Dateigröße</th></tr>';
 
             $id = uniqid();
 
             foreach ($data[$i] as $key => $value) {
+                
+                $bytes = $value['size'];
+            
+                if ($bytes>= 1073741824) {
+                    $size = number_format($bytes / 1073741824, 2) . ' GB';
+                } elseif ($bytes >= 1048576) {
+                   $size = number_format($bytes / 1048576, 2) . ' MB';
+                } elseif ($bytes >= 1024) {
+                    $size = number_format($bytes / 1024, 0) . ' KB';
+                } elseif ($bytes > 1) {
+                    $size = $bytes . ' bytes';
+                } elseif ($bytes == 1) {
+                    $size = '1 byte';
+                } else {
+                    $size = '0 bytes';
+                }
 
-                $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">' . basename($value['image']) . '</a></td><td>' . number_format($value['size']) .  '</td></tr>';
+                $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">' . substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a></td><td>' . $value['extension'] . '</td><td>' . $size.  '</td></tr>';
 
             }
 

@@ -30,7 +30,10 @@ class Class_Grab_Remote_Files {
                 
                 'index'     =>  $index['index'],
                 'recursiv'  =>  $index['recursiv'],
-                'filetype'  =>  $index['filetype']
+                'filetype'  =>  $index['filetype'],
+                'file'      =>  $index['file'],
+                'orderby'   =>  $index['orderby'],
+                'order'     =>  $index['order']
                 
             )
         
