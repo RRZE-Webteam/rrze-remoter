@@ -68,6 +68,11 @@ class Class_Build_Shortcode {
                 $recursiv = $this->remote_server_shortcode['recursiv'];
                 $filetype = $this->remote_server_shortcode['filetype'];
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $url);
+                
+                /*echo '<pre>';
+                print_r($this->remote_data);
+                echo '</pre>';*/
+                
 
                 $url = parse_url(get_post_meta($post->ID, 'url', true)); 
                 
@@ -158,13 +163,13 @@ class Class_Build_Shortcode {
                 $i = 0;
             }
             
-            $table = '<table>';
+            $table = '<table><tr><th>Name</th><th>Dateigröße</th></tr>';
 
             $id = uniqid();
 
             foreach ($data[$i] as $key => $value) {
 
-                $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host'] . '/' . $_REQUEST['index'] . (($_REQUEST['recursiv'] == 1) ? '' : '/') . $value . '">' . basename($value) . '</a></td></tr>';
+                $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">' . basename($value['image']) . '</a></td><td>' . number_format($value['size']) .  '</td></tr>';
 
             }
 

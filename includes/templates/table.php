@@ -10,9 +10,9 @@ $data = array_chunk($this->remote_data, $number_of_chunks);
 
 $this->res = $this->remote_data; 
 
-echo '<pre>';
-print_r($this->remote_data);
-echo '</pre>';
+/*echo '<pre>';
+print_r($data);
+echo '</pre>';*/
 
 $pagecount = count($data);
 
@@ -24,11 +24,11 @@ $i = 0;
 
 $id = uniqid();
 
-$output = '<div id="result"><table>';
+$output = '<div id="result"><table><tr><th>Name</th><th>Dateigröße</th></tr>';
 
 foreach ($data[$i] as $key => $value) {
 
-    $output .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . '/' . $file_index . (($recursiv == 1) ? '' : '/') . $value . '">' . basename($value) . '</a></td></tr>';
+    $output .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . $value['image'] . '">' . basename($value['image']) . '</a></td><td>' . number_format($value['size']) .  '</td></tr>';
 
 }
 

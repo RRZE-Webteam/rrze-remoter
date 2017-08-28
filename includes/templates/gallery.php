@@ -1,8 +1,8 @@
 <?php
 
-echo '<pre>';
+/*echo '<pre>';
 print_r($this->remote_data);
-echo '</pre>';
+echo '</pre>';*/
 
 
 echo '<h3>Galerie</h3>';
@@ -12,8 +12,8 @@ $id = uniqid();
 echo '<div id="slider-' . $id . '" class="image-gallery-slider">
 <ul class="slides">';
 foreach ($this->remote_data as $key => $value) {
-echo '<li><img src="http://'. $url['host'] . '/' . $file_index . (($recursiv == 1) ? '' : '/') . $value . '"/>
-<div class="gallery-image-caption">Bild in Originalgröße (1153px). Ausrichtung keine.<br /><span class="linkorigin">(<a href="http://'. $url['host'] . '/' . $file_index . (($recursiv == 1) ? '' : '/') . $value . '"  title="Bild in Originalgröße (1153px). Ausrichtung keine." class="lightbox" rel="lightbox-601862376">Vergrößern</a>)</span></div>
+echo '<li><img src="http://'. $url['host'] . $value['image'] . '"/>
+<div class="gallery-image-caption">Bild in Originalgröße (1153px). Ausrichtung keine.<br /><span class="linkorigin">(<a href="http://'. $url['host'] . $value['image'] . '"  title="Bild in Originalgröße (1153px). Ausrichtung keine." class="lightbox" rel="lightbox-601862376">Vergrößern</a>)</span></div>
 </li>';
 }
 
@@ -24,7 +24,7 @@ echo '
 echo '<div id="carousel-' . $id . '" class="image-gallery-carousel">
 <ul class="slides">';
 foreach ($this->remote_data as $key => $value) {
-echo '<li><img src="http://'. $url['host'] . '/' . $file_index . (($recursiv == 1) ? '' : '/') . $value . '" width="120" height="80" alt=""/></li>';
+echo '<li><img src="http://'. $url['host'] . $value['image'] . '" width="120" height="80" alt=""/></li>';
 }
 echo '</ul></div>';
 ?>
