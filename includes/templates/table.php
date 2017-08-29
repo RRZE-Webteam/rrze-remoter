@@ -6,7 +6,7 @@ echo '</pre>';*/
 
 $url = parse_url(get_post_meta($post->ID, 'url', true)); 
 
-$number_of_chunks = 3;
+$number_of_chunks = (int)$this->remote_server_shortcode['chunk'];
 
 $data = array_chunk($this->remote_data, $number_of_chunks);
 
@@ -20,7 +20,13 @@ $i = 0;
 
 $id = uniqid();
 
-$output = '<div id="result"><table><tr><th>Name</th><th>Dateityp</th><th>Dateigröße</th></tr>';
+$output = '<div id="result"><table><tr>';
+$output .= '<th>Name</th>';
+$output .= '<th>Änderungsdatum</th>';
+$output .= '<th>Dateityp</th>';
+$output .= '<th>Dateigröße</th>';
+$output .= '</tr>';
+
 
 foreach ($data[$i] as $key => $value) {
     
@@ -40,7 +46,7 @@ foreach ($data[$i] as $key => $value) {
         $size = '0 bytes';
     }
 
-    $output .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . $value['image'] . '">' . substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a></td><td>' . $value['extension'] . '</td><td>' . $size .  '</td></tr>';
+    $output .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . $value['image'] . '">' . substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a></td><td>' . date('Y-m-d H:i:s', $value['change_time']) . '</td><td>' . $value['extension'] . '</td><td>' . $size .  '</td></tr>';
 }
 
 $output .= '</table></div>';
@@ -51,8 +57,15 @@ $html = '<nav class="pagination pagebreaks" role="navigation"><h3>Seite:</h3><sp
 
 for ($i = 1; $i <= $pagecount; $i++) {
 
-    $html .='<a data-filetype="' . $filetype . '" data-recursiv="' . $recursiv . '" data-index="' . $file_index . '" data-host="' . $url['host'] . '" data-chunk="' . $number_of_chunks . '" data-pagecount-value= "' . $pagecount . '" class="page-'. $i.'" href="#sign_up"><span class="'. ($i==1 ? 'number active' : 'number') .'">'.$i.'</span></a>';
-
+    $html .= '<a data-filetype="' . $filetype . '" href="#get_list"';
+    $html .= 'data-recursiv="' . $recursiv . '"';
+    $html .= 'data-index="' . $file_index . '"';
+    $html .= 'data-host="' . $url['host'] . '"';
+    $html .= 'data-chunk="' . $number_of_chunks . '"';
+    $html .= 'data-pagecount-value= "' . $pagecount . '"'; 
+    $html .= 'class="page-'. $i.'">';
+    $html .= '<span class="'. ($i==1 ? 'number active' : 'number') .'">'.$i.'</span>';
+    $html .= '</a>';
 }
 
 $html .= '</span></nav>';

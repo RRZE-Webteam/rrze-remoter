@@ -19,11 +19,12 @@ class Class_Build_Shortcode {
         
         $this->remote_server_shortcode = shortcode_atts( array(
             'server_id' => '2212879',
-            'file'      => 'http://remoter.dev/images/jeny.png',
-            'index'     => 'images',
+            'file'      => '',
+            'index'     => '',
             'recursiv'  => '1',
-            'max'       => '5',
-            'filetype'  => 'jpg',
+            'max'       => '3',
+            'chunk'     => '3',
+            'filetype'  => '',
             'view'      => 'list',
             'orderby'   => 'size',
             'order'     => 'asc'
@@ -107,7 +108,7 @@ class Class_Build_Shortcode {
 
             var arr = <?php echo json_encode($arr); ?>;
 
-            $('a[href="#sign_up"]').click(function(){
+            $('a[href="#get_list"]').click(function(){
                 var link = $(this).attr('class');
                 var page = link.replace('page-', '');
                 var pagecount = $(this).attr('data-pagecount-value');
@@ -165,7 +166,12 @@ class Class_Build_Shortcode {
                 $i = 0;
             }
             
-            $table = '<table><tr><th>Name</th><th>Dateityp</th><th>Dateigröße</th></tr>';
+            $table = '<table><tr>';
+            $table .= '<th>Name</th>';
+            $table .= '<th>Änderungsdatum</th>';
+            $table .= '<th>Dateityp</th>';
+            $table .= '<th>Dateigröße</th>';
+            $table .= '</tr>';
 
             $id = uniqid();
 
@@ -187,8 +193,11 @@ class Class_Build_Shortcode {
                     $size = '0 bytes';
                 }
 
-                $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">' . substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a></td><td>' . $value['extension'] . '</td><td>' . $size.  '</td></tr>';
-
+                $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">';
+                $table .=  substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a>';
+                $table .= '</td><td>' . date('Y-m-d H:i:s', $value['change_time']) . '</td>';
+                $table .= '<td>' . $value['extension'] . '</td>';
+                $table .= '<td>' . $size.  '</td></tr>';
             }
 
             $table .= '</table>';
