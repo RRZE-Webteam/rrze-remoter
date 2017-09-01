@@ -20,6 +20,7 @@ class Class_Customize_List_View {
             'title'         => __( 'Title', 'rrze-remoter' ),
             'id'            => __( 'ID', 'rrze-remoter'),
             'url'           => __( 'Url', 'rrze-remoter' ),
+            'apikey'        => __( 'API-Key', 'rrze-remoter' ),
             'date'          => __( 'Datum', 'rrze-remoter' ),
 	);
 
@@ -43,6 +44,10 @@ class Class_Customize_List_View {
             case 'url':
                 $video = get_post_meta($post->ID, 'url', true);
                 echo $video;
+                break;
+            case 'apikey':
+                $apikey = get_post_meta($post->ID, 'apikey', true);
+                echo $apikey;
                 break;
         }
         

@@ -54,9 +54,11 @@ require_once( __DIR__ . '/includes/posttype/Class_Metaboxes_Data.php' );
 require_once( __DIR__ . '/includes/posttype/Class_Create_Metaboxes.php' );
 require_once( __DIR__ . '/includes/posttype/Class_Create_Custom_Post_Type_Server.php' );
 require_once( __DIR__ . '/includes/posttype/Class_Custom_Post_Type_Server.php' );
+require_once( __DIR__ . '/includes/posttype/Class_Create_Post_Type_Submenu_Page.php' );
 
 require_once( __DIR__ . '/includes/remote/Class_Grab_Remote_Files.php' );
 require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode.php' );
+
 //require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode_Ajax.php' );
 
 //require_once( __DIR__ . '/includes/templates/table.php' );
@@ -143,6 +145,8 @@ function loaded() {
     $remoter_custom_post_type   =   new Class_Custom_Post_Type_Server();
     $remoter_create_metaboxes   =   new Class_Create_Metaboxes();
     $remoter_customize_list     =   new Class_Customize_List_View();
+    $remoter_add_submenu        =   new Class_Create_Post_Type_Submenu_Page();
+   
     
     $remoter_get_data   =   new Class_Grab_Remote_Files();
     //$remoter_get_data->get_files_from_remote_server();
@@ -179,6 +183,7 @@ function custom_libraries_scripts() {
     );*/
     
     wp_localize_script( 'mainjs', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+   
     
 }
 
