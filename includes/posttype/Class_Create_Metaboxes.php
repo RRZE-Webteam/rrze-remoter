@@ -38,6 +38,10 @@ class Class_Create_Metaboxes {
             case 'text':
                 $this->render_text( $box, $post->ID );
             break;
+        
+            case 'select':
+                $this->render_select( $box, $post->ID );
+            break;
         }
 
     }  
@@ -50,6 +54,41 @@ class Class_Create_Metaboxes {
         <label for=<?php echo $box['id']; ?>></label>
         <input type=<?php echo $box['args']['type']; ?> id=<?php echo $box['id']; ?> name=<?php echo $box['id']; ?> size="35" value=<?php echo esc_attr( $value ); ?>><?php
     }
+    
+    public function render_select( $box, $post_id ) {
+
+        wp_nonce_field( plugin_basename( __FILE__ ),
+        'meta_box_inhalt_nonce' );
+        $value = get_post_meta( $post_id, $box['id'], true ); 
+        $keys = array();
+        $values = array();
+        ?>
+
+        <label for=<?php echo $box['id']; ?>></label>
+        <select name=<?php echo $box['id'] ?> >
+        <?php 
+
+            for ($i = 0; $i < count($box['args']['elemente']); $i++) {
+                $keys[]   = $box['args']['elemente'][$i]['value'];
+                $values[]   = $box['args']['elemente'][$i]['value'];
+            }
+
+            $option_values = array_combine($keys, $values);
+
+            foreach($option_values as $key => $value) {
+
+                if($value == get_post_meta($post_id, $box['id'], true)) { ?>
+                  <option value=<?php echo $value ?> selected><?php echo $value; ?></option>
+                  <?php    
+                } else { ?>
+                  <option value=<?php echo $value ?> ><?php echo $value; ?></option>
+                  <?php
+                }
+            }
+        ?>
+        </select><?php
+      } 
+    
 
     public function save_meta_boxes( $post_id ) { 
         if( $_POST ) {

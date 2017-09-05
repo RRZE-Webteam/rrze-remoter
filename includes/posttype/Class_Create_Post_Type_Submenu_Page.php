@@ -30,6 +30,7 @@ class Class_Create_Post_Type_Submenu_Page {
         $html .=    '<form id="apikey_request_id" action="https://wordpress.dev/wp-admin/admin-ajax.php" method="post">';
         $html .=    '<input type="hidden" name="adminemail" value="' . $current_user->user_email . '"/>';
         $html .=    '<input type="hidden" name="domain" value="'. $current_blog_details->domain .'"/>';
+        $html .=    '<p><label for="server_id">ServerID:<input type="text" name="server_id"/></label></p>';
         $html .=    '<button class="button button-primary" id="sbmBtn">API-Key anfordern</button>';
         $html .=    '</form>';
         
@@ -46,6 +47,7 @@ class Class_Create_Post_Type_Submenu_Page {
                 var serverdata = {
                     'adminemail'    : $('input[name=adminemail]').val(),
                     'domain'        : $('input[name=domain]').val(),
+                    'serverid'      : $('input[name=server_id]').val(),
                 };
 
                 $.ajax({
@@ -78,11 +80,26 @@ class Class_Create_Post_Type_Submenu_Page {
         $unique_id  = $_SERVER['REMOTE_ADDR'];
         $adminemail = $_REQUEST['notices']['adminemail'];
         $domain     = $_REQUEST['notices']['domain'];
+        $serverid   = $_REQUEST['notices']['serverid'];
+        
+        
+        $domain_requested = query_posts('post_type=remote-server&p=' . $serverid);
+        while (have_posts()): the_post(); ?>
+        <?php 
+        
+        if (!empty($serverid)) {
+        
+        $meta = get_post_meta( get_the_ID(), 'domain' );
+        
+        }?>
+            
+        <?php endwhile;
         
         $response = wp_remote_get( 'http://remoter.dev/request.php?' .
             'unique_id=' . $unique_id . 
             '&email=' . $adminemail . 
-            '&domain=' . $domain, 
+            '&domain=' . $domain . 
+            '&requested_domain=' . $meta[0], 
             array( 'timeout' => 120, 'httpversion' => '1.1' )
         );
         
