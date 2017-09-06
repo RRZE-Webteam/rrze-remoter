@@ -77,7 +77,7 @@ class Class_Create_Post_Type_Submenu_Page {
     
     public function remote_request_action() {
                
-        $unique_id  = $_SERVER['REMOTE_ADDR'];
+        $ip  = '131.188.12.134'; //$_SERVER['REMOTE_ADDR'];
         $adminemail = $_REQUEST['notices']['adminemail'];
         $domain     = $_REQUEST['notices']['domain'];
         $serverid   = $_REQUEST['notices']['serverid'];
@@ -96,7 +96,7 @@ class Class_Create_Post_Type_Submenu_Page {
         <?php endwhile;
         
         $response = wp_remote_get( 'http://remoter.dev/request.php?' .
-            'unique_id=' . $unique_id . 
+            'ip=' . $ip . 
             '&email=' . $adminemail . 
             '&domain=' . $domain . 
             '&requested_domain=' . $meta[0], 

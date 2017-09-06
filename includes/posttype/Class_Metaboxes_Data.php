@@ -39,6 +39,9 @@ class Class_Metaboxes_Data {
                     '2'         => array(
                              'value' => 'nat.fau.de'
                     ),
+                    '3'         => array(
+                             'value' => 'remoter.dev'
+                    ),
                 )
             )                        
         );

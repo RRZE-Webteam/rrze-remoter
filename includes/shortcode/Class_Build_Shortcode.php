@@ -64,29 +64,34 @@ class Class_Build_Shortcode {
             while ( $the_query->have_posts() ) {
                 $the_query->the_post();
 
-                $url = get_post_meta($post->ID, 'url', true); 
+                $domain = get_post_meta($post->ID, 'domain', true); 
+                $api_key = get_post_meta($post->ID, 'apikey', true); 
 
                 $file_index = $this->remote_server_shortcode['index'];
                 $view = $this->remote_server_shortcode['view'];
                 $recursiv = $this->remote_server_shortcode['recursiv'];
                 $filetype = $this->remote_server_shortcode['filetype'];
-                $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $url);
+                $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
                 
                 /*echo '<pre>';
                 print_r($this->remote_data);
                 echo '</pre>';*/
                 
+                if($this->remote_data){
 
-                $url = parse_url(get_post_meta($post->ID, 'url', true)); 
-                
-                if ($view == 'gallery') {
-                    include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
-                } elseif($view == 'list') {
-                    include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
-                } elseif($view == 'table') {
-                    include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
+                    $url = parse_url(get_post_meta($post->ID, 'url', true)); 
+
+                    if ($view == 'gallery') {
+                        include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
+                    } elseif($view == 'list') {
+                        include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
+                    } elseif($view == 'table') {
+                        include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
+                    } else {
+                        include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
+                    }
                 } else {
-                    include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
+                    echo 'Sie sind nicht berechtigt Daten abzurufen';
                 }
                    
             }
