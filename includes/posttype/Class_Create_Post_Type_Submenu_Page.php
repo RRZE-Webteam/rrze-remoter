@@ -99,7 +99,7 @@ class Class_Create_Post_Type_Submenu_Page {
             'ip=' . $ip . 
             '&email=' . $adminemail . 
             '&domain=' . $domain . 
-            '&requested_domain=' . $meta[0], 
+            '&requested_domain=' . (isset($meta[0]) ? $meta[0] : ''), 
             array( 'timeout' => 120, 'httpversion' => '1.1' )
         );
         
