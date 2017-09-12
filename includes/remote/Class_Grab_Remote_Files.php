@@ -16,7 +16,7 @@ class Class_Grab_Remote_Files {
         $opts = self::rrze_remote_download_opts($postdata);
         $context  = stream_context_create($opts);
         
-        $response = @file_get_contents('http://' . $domain . '/remotefiles1.php', false, $context);
+        $response = @file_get_contents('http://' . $domain . '/remotefiles.php', false, $context);
         $data = json_decode($response, true);
         
         return $data;

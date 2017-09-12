@@ -124,6 +124,7 @@ class Class_Build_Shortcode {
                 var filetype = $(this).attr('data-filetype');
                 
                 $.ajax({
+                    type: 'POST',
                     url: frontendajax.ajaxurl,
                     data: {
                         'action'    :'rrze_remote_table_ajax_request',

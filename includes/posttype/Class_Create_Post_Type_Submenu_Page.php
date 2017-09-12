@@ -96,7 +96,8 @@ class Class_Create_Post_Type_Submenu_Page {
         <?php endwhile;
         
         $response = wp_remote_get( 'http://remoter.dev/request.php?' .
-            'ip=' . $ip . 
+            'ip=' . $ip .
+            '&serverid=' . $serverid .    
             '&email=' . $adminemail . 
             '&domain=' . $domain . 
             '&requested_domain=' . (isset($meta[0]) ? $meta[0] : ''), 

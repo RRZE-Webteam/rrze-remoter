@@ -4,6 +4,8 @@
 print_r($this->remote_data);
 echo '</pre>';*/
 
+date_default_timezone_set('Europe/Berlin');
+
 $url = parse_url(get_post_meta($post->ID, 'url', true)); 
 
 $number_of_chunks = (int)$this->remote_server_shortcode['chunk'];

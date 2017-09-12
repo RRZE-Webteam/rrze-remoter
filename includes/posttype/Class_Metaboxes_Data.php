@@ -8,7 +8,7 @@ class Class_Metaboxes_Data {
 
     public static function Metaboxes_Data_Loader() {
         
-        $metabox_data[] = array( 
+        /*$metabox_data[] = array( 
             'id'          => 'url',
             'title'       => __( 'Server Url', 'rrze-remoter' ),
             'post_type'   => 'remote-server',
@@ -18,7 +18,7 @@ class Class_Metaboxes_Data {
               'id'        => 'url',
               'type'      => 'text',
             )                        
-        );
+        );*/
         
         $metabox_data[] = array( 
             'id'          => 'domain',

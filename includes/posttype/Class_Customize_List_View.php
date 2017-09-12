@@ -19,7 +19,7 @@ class Class_Customize_List_View {
             'cb'            => '<input type="checkbox" />',
             'title'         => __( 'Title', 'rrze-remoter' ),
             'id'            => __( 'ID', 'rrze-remoter'),
-            'url'           => __( 'Url', 'rrze-remoter' ),
+            //'url'           => __( 'Url', 'rrze-remoter' ),
             'domain'        => __( 'Domain', 'rrze-remoter' ),
             'apikey'        => __( 'API-Key', 'rrze-remoter' ),
             'date'          => __( 'Datum', 'rrze-remoter' ),
@@ -42,10 +42,10 @@ class Class_Customize_List_View {
                 $id = get_the_ID();
                 echo $id;
                 break;
-            case 'url':
+            /*case 'url':
                 $video = get_post_meta($post->ID, 'url', true);
                 echo $video;
-                break;
+                break;*/
             case 'domain':
                 $domain = get_post_meta($post->ID, 'domain', true);
                 echo $domain;
