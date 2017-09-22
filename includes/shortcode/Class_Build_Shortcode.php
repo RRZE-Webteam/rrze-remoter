@@ -13,6 +13,11 @@ class Class_Build_Shortcode {
         add_shortcode('remoter', array($this, 'shortcode')); 
         add_action( 'wp_footer', array($this,'rrze_remote_table_script_footer'));
         
+        add_action( 'wp_ajax_rrze_remote_glossary_ajax_request', array($this, 'rrze_remote_glossary_ajax_request' ));
+        add_action( 'wp_ajax_nopriv_rrze_remote_glossary_ajax_request', array($this, 'rrze_remote_glossary_ajax_request' ));
+        
+        add_action( 'wp_footer', array($this,'rrze_remote_glossary_script_footer'));
+        
     }
     
     public function shortcode($atts) {
@@ -87,8 +92,10 @@ class Class_Build_Shortcode {
                         include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
                     } elseif($view == 'table') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
-                    } else {
+                    } elseif($view == 'imagetable') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
+                    } else {
+                        include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
                     }
                 } else {
                     echo 'Sie sind nicht berechtigt Daten abzurufen';
@@ -211,5 +218,120 @@ class Class_Build_Shortcode {
         }
        
        die();
+    }
+    
+    public function rrze_remote_glossary_script_footer() { 
+        
+        $glossary_files = $this->glossary_array;
+         
+        print_r($glossary_files);
+	 
+         ?>
+         <script>
+        jQuery(document).ready(function($) {
+            
+            var glossary = <?php echo json_encode($glossary_files); ?>;
+
+            $('a[href^="#letter-"]').click(function(){
+                var letter = $(this).attr('data-letter');
+                /*var link^ = $(this).attr('class');
+                var page = link.replace('page-', '');
+                var pagecou^nt = $(this).attr('data-pagecount-value');
+                var chunk = $(this).attr('data-chunk');*/
+                var host = $(this).attr('data-host');
+                /*var index = $(this).attr('data-index');
+                var recursiv = $(this).attr('data-recursiv');
+                var filetype = $(this).attr('data-filetype');*/
+                
+                $.ajax({
+                    type: 'POST',
+                    url: frontendajax.ajaxurl,
+                    data: {
+                        'action'    :'rrze_remote_glossary_ajax_request',
+                        //'whatever'  : 1244,
+                        'letter'    : letter,
+                        /*'p'         : page,
+                        'count'     : pagecount,
+                        'index'     : index,
+                        'recursiv'  : recursiv,
+                        'filetype'  : filetype,
+                        'chunk'     : chunk,*/
+                        'host'      : host,
+                        'glossary'  : glossary
+                    },
+                    success:function(data) {
+                        $("#glossary").html(data);
+                        //console.log(data);
+                        //alert(data);
+                    },  
+                    error: function(errorThrown){
+                        window.alert(errorThrown);
+                    }
+                }); 
+            });
+
+        });
+        </script> 
+        <?php
+    }
+    
+    public function rrze_remote_glossary_ajax_request() {
+        
+        $filenames = array(); 
+
+        foreach ($_REQUEST['glossary'] as $file) {
+            $filenames[] = $file['name'];
+        }
+        
+        array_multisort($filenames, SORT_ASC, $_REQUEST['glossary']);
+        
+        foreach ( $_REQUEST['glossary'] as $key => $value ) {
+            if ( substr($value['name'], 0, 1) != $_REQUEST['letter']) {
+                unset( $_REQUEST['glossary'][$key]);
+            }
+        }
+
+        $new_glossary = array_values($_REQUEST['glossary']);
+        
+        /*echo '<pre>';
+        print_r($new_glossary);
+        echo '</pre>';*/
+        
+        $table = '<table><tr>';
+        $table .= '<th>Name</th>';
+        $table .= '<th>Änderungsdatum</th>';
+        $table .= '<th>Dateityp</th>';
+        $table .= '<th>Dateigröße</th>';
+        $table .= '</tr>';
+        
+        foreach ($new_glossary as $key => $value) {
+                
+            $bytes = $value['size'];
+
+            if ($bytes>= 1073741824) {
+                $size = number_format($bytes / 1073741824, 2) . ' GB';
+            } elseif ($bytes >= 1048576) {
+               $size = number_format($bytes / 1048576, 2) . ' MB';
+            } elseif ($bytes >= 1024) {
+                $size = number_format($bytes / 1024, 0) . ' KB';
+            } elseif ($bytes > 1) {
+                $size = $bytes . ' bytes';
+            } elseif ($bytes == 1) {
+                $size = '1 byte';
+            } else {
+                $size = '0 bytes';
+            }
+            
+            $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">';
+            $table .=  substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a>';
+            $table .= '</td><td>' . date('Y-m-d H:i:s', $value['change_time']) . '</td>';
+            $table .= '<td>' . $value['extension'] . '</td>';
+            $table .= '<td>' . $size.  '</td></tr>';
+        }
+
+        $table .= '</table>';
+        echo $table;
+        
+        wp_die();
     }
 }
