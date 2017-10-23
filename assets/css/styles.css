@@ -37,3 +37,6 @@ a[class^="page-"] {
   line-height: 1.225rem;
   font-weight: normal;
   display: inline-block; }
+
+.download-file {
+  cursor: pointer; }

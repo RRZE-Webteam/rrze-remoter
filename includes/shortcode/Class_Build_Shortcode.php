@@ -18,6 +18,11 @@ class Class_Build_Shortcode {
         
         add_action( 'wp_footer', array($this,'rrze_remote_glossary_script_footer'));
         
+        add_action( 'wp_ajax_rrze_remote_table_without_pagination_ajax_request', array($this, 'rrze_remote_table_without_pagination_ajax_request' ));
+        add_action( 'wp_ajax_nopriv_rrze_remote_table_without_pagination_ajax_request', array($this, 'rrze_remote_table_without_pagination_ajax_request' ));
+        
+        add_action( 'wp_footer', array($this,'rrze_remote_table_without_pagination_script_footer'));
+        
     }
     
     public function shortcode($atts) {
@@ -90,8 +95,10 @@ class Class_Build_Shortcode {
                         include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
                     } elseif($view == 'list') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
-                    } elseif($view == 'table') {
+                    } elseif($view == 'pagination') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
+                    } elseif($view == 'table') {
+                        include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
                     } elseif($view == 'imagetable') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
                     } else {
@@ -333,5 +340,56 @@ class Class_Build_Shortcode {
         echo $table;
         
         wp_die();
+    }
+
+    public function rrze_remote_table_without_pagination_script_footer() { ?>
+        <script type="text/javascript" >
+        jQuery(document).ready(function($) {
+            
+            $('.download-file').click(function(){
+            
+                var host = $(this).attr('data-host');
+                var image = $(this).attr('data-image');
+                var name = $(this).attr('data-name');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: frontendajax.ajaxurl,
+                    data: {
+                        'action'    :'rrze_remote_table_without_pagination_ajax_request',
+                        'host'      :host,
+                        'image'     :image,
+                        'name'      :name
+                    },
+                    success:function(data) {
+                        alert(data);
+                    },  
+                    error: function(errorThrown){
+                        window.alert(errorThrown);
+                    }
+                }); 
+            });
+        });
+        </script> <?php
+    }
+    
+    public function rrze_remote_table_without_pagination_ajax_request() {
+        
+        /*echo '<pre>';
+        print_r($_REQUEST);
+        echo '</pre>';*/
+        
+        $file = 'http://' . $_REQUEST['host'] . $_REQUEST['image'];
+        
+        echo $file;
+        
+        /*header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=".$file."");
+        header("Content-Transfer-Encoding: binary");
+        header("Content-Type: binary/octet-stream");
+        readfile($file);*/
+
+	wp_die(); // this is required to terminate immediately and return a proper response
     }
 }
