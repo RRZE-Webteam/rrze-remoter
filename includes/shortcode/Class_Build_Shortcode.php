@@ -18,17 +18,12 @@ class Class_Build_Shortcode {
         
         add_action( 'wp_footer', array($this,'rrze_remote_glossary_script_footer'));
         
-        add_action( 'wp_ajax_rrze_remote_table_without_pagination_ajax_request', array($this, 'rrze_remote_table_without_pagination_ajax_request' ));
-        add_action( 'wp_ajax_nopriv_rrze_remote_table_without_pagination_ajax_request', array($this, 'rrze_remote_table_without_pagination_ajax_request' ));
-        
-        add_action( 'wp_footer', array($this,'rrze_remote_table_without_pagination_script_footer'));
-        
     }
     
     public function shortcode($atts) {
         
         $this->remote_server_shortcode = shortcode_atts( array(
-            'server_id' => '2212879',
+            'id'        => '',
             'file'      => '',
             'index'     => '',
             'recursiv'  => '1',
@@ -37,7 +32,8 @@ class Class_Build_Shortcode {
             'filetype'  => '',
             'view'      => 'list',
             'orderby'   => 'size',
-            'order'     => 'asc'
+            'order'     => 'asc',
+            'download'  => '0'
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -48,7 +44,7 @@ class Class_Build_Shortcode {
         
         $this->remote_server_args = array(
             'post_type'         =>  'Remote-Server',
-            'p'                 =>  $args['server_id'],
+            'p'                 =>  $args['id'],
             'posts_per_page'    =>  1,
             'orderby'           =>  'date',
             'order'             =>  'DESC'
@@ -59,9 +55,9 @@ class Class_Build_Shortcode {
     
     public function show_results_as_list($query_arguments) {
         
-        echo '<pre>';
-        print_r($query_arguments);
-        echo '</pre>';
+        /*echo '<pre>';
+        //print_r($query_arguments);
+        echo '</pre>';*/
         
         global $post;
         
@@ -81,6 +77,7 @@ class Class_Build_Shortcode {
                 $view = $this->remote_server_shortcode['view'];
                 $recursiv = $this->remote_server_shortcode['recursiv'];
                 $filetype = $this->remote_server_shortcode['filetype'];
+                $download = $this->remote_server_shortcode['download'];
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
                 
                 /*echo '<pre>';
@@ -212,11 +209,12 @@ class Class_Build_Shortcode {
                 } else {
                     $size = '0 bytes';
                 }
-
+                
+                $imageicon = $value['extension'] == 'pdf' ? '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>' : '<i class="fa fa-file-image-o" aria-hidden="true"></i>' ;
                 $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">';
                 $table .=  substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a>';
                 $table .= '</td><td>' . date('Y-m-d H:i:s', $value['change_time']) . '</td>';
-                $table .= '<td>' . $value['extension'] . '</td>';
+                $table .= '<td>'. $imageicon .' '. $value['extension'] . '</td>';
                 $table .= '<td>' . $size.  '</td></tr>';
             }
 
@@ -230,8 +228,6 @@ class Class_Build_Shortcode {
     public function rrze_remote_glossary_script_footer() { 
         
         $glossary_files = $this->glossary_array;
-         
-        print_r($glossary_files);
 	 
          ?>
          <script>
@@ -241,35 +237,19 @@ class Class_Build_Shortcode {
 
             $('a[href^="#letter-"]').click(function(){
                 var letter = $(this).attr('data-letter');
-                /*var link^ = $(this).attr('class');
-                var page = link.replace('page-', '');
-                var pagecou^nt = $(this).attr('data-pagecount-value');
-                var chunk = $(this).attr('data-chunk');*/
                 var host = $(this).attr('data-host');
-                /*var index = $(this).attr('data-index');
-                var recursiv = $(this).attr('data-recursiv');
-                var filetype = $(this).attr('data-filetype');*/
                 
                 $.ajax({
                     type: 'POST',
                     url: frontendajax.ajaxurl,
                     data: {
                         'action'    :'rrze_remote_glossary_ajax_request',
-                        //'whatever'  : 1244,
                         'letter'    : letter,
-                        /*'p'         : page,
-                        'count'     : pagecount,
-                        'index'     : index,
-                        'recursiv'  : recursiv,
-                        'filetype'  : filetype,
-                        'chunk'     : chunk,*/
                         'host'      : host,
                         'glossary'  : glossary
                     },
                     success:function(data) {
                         $("#glossary").html(data);
-                        //console.log(data);
-                        //alert(data);
                     },  
                     error: function(errorThrown){
                         window.alert(errorThrown);
@@ -300,10 +280,6 @@ class Class_Build_Shortcode {
 
         $new_glossary = array_values($_REQUEST['glossary']);
         
-        /*echo '<pre>';
-        print_r($new_glossary);
-        echo '</pre>';*/
-        
         $table = '<table><tr>';
         $table .= '<th>Name</th>';
         $table .= '<th>Änderungsdatum</th>';
@@ -329,10 +305,11 @@ class Class_Build_Shortcode {
                 $size = '0 bytes';
             }
             
+            $imageicon = $value['extension'] == 'pdf' ? '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>' : '<i class="fa fa-file-image-o" aria-hidden="true"></i>' ;
             $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">';
             $table .=  substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a>';
             $table .= '</td><td>' . date('Y-m-d H:i:s', $value['change_time']) . '</td>';
-            $table .= '<td>' . $value['extension'] . '</td>';
+            $table .= '<td>'. $imageicon .' '. $value['extension'] . '</td>';
             $table .= '<td>' . $size.  '</td></tr>';
         }
 
@@ -340,56 +317,5 @@ class Class_Build_Shortcode {
         echo $table;
         
         wp_die();
-    }
-
-    public function rrze_remote_table_without_pagination_script_footer() { ?>
-        <script type="text/javascript" >
-        jQuery(document).ready(function($) {
-            
-            $('.download-file').click(function(){
-            
-                var host = $(this).attr('data-host');
-                var image = $(this).attr('data-image');
-                var name = $(this).attr('data-name');
-                
-                $.ajax({
-                    type: 'POST',
-                    url: frontendajax.ajaxurl,
-                    data: {
-                        'action'    :'rrze_remote_table_without_pagination_ajax_request',
-                        'host'      :host,
-                        'image'     :image,
-                        'name'      :name
-                    },
-                    success:function(data) {
-                        alert(data);
-                    },  
-                    error: function(errorThrown){
-                        window.alert(errorThrown);
-                    }
-                }); 
-            });
-        });
-        </script> <?php
-    }
-    
-    public function rrze_remote_table_without_pagination_ajax_request() {
-        
-        /*echo '<pre>';
-        print_r($_REQUEST);
-        echo '</pre>';*/
-        
-        $file = 'http://' . $_REQUEST['host'] . $_REQUEST['image'];
-        
-        echo $file;
-        
-        /*header("Cache-Control: public");
-        header("Content-Description: File Transfer");
-        header("Content-Disposition: attachment; filename=".$file."");
-        header("Content-Transfer-Encoding: binary");
-        header("Content-Type: binary/octet-stream");
-        readfile($file);*/
-
-	wp_die(); // this is required to terminate immediately and return a proper response
     }
 }

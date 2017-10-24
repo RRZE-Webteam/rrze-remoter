@@ -3,12 +3,12 @@
   margin: 0; }
 
 a[class^="page-"] {
-  color: #036;
-  padding: 0px 3px; }
+  color: #036; }
 
 .pagination.pagebreaks .subpages a .number {
   background: #dde5f0;
-  border: 1px solid #dde5f0; }
+  border: 1px solid #dde5f0;
+  margin-right: 5px; }
 
 .pagination.pagebreaks .subpages a .number.active {
   background: #fff;
@@ -29,6 +29,22 @@ a[class^="page-"] {
   line-height: 19.6px;
   font-size: 0.875rem;
   line-height: 1.225rem; }
+
+.pagination.pagebreaks .subpages .muted {
+  background: #fff;
+  border: 1px solid #dfe6ec;
+  padding: 6px 10px;
+  text-decoration: none;
+  color: lightgrey;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-clip: padding-box;
+  font-size: 14px;
+  line-height: 19.6px;
+  font-size: 0.875rem;
+  line-height: 1.225rem;
+  margin-right: 5px; }
 
 .pagination.pagebreaks h3 {
   font-size: 11px;

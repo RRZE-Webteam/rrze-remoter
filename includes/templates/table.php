@@ -47,8 +47,9 @@ foreach ($data[$i] as $key => $value) {
     } else {
         $size = '0 bytes';
     }
-
-    $output .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . $value['image'] . '">' . substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a></td><td>' . date('Y-m-d H:i:s', $value['change_time']) . '</td><td>' . $value['extension'] . '</td><td>' . $size .  '</td></tr>';
+    
+    $imageicon = $value['extension'] == 'pdf' ? '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>' : '<i class="fa fa-file-image-o" aria-hidden="true"></i>' ;
+    $output .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . $value['image'] . '">' . substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a></td><td>' . date('Y-m-d H:i:s', $value['change_time']) . '</td><td>'. $imageicon .' '. $value['extension'] . '</td><td>' . $size .  '</td></tr>';
 }
 
 $output .= '</table></div>';
