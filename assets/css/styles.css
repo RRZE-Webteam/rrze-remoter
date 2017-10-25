@@ -56,3 +56,6 @@ a[class^="page-"] {
 
 .download-file {
   cursor: pointer; }
+
+i.fa.fa-arrow-circle-down {
+  font-size: 1rem; }
