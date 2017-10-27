@@ -28,7 +28,7 @@ class Class_Build_Shortcode {
             'index'     => '',
             'recursiv'  => '1',
             'max'       => '3',
-            'chunk'     => '3',
+            'itemsperpage'     => '4',
             'filetype'  => '',
             'link'      => '0',
             'view'      => 'table',
@@ -127,6 +127,7 @@ class Class_Build_Shortcode {
                 var index = $(this).attr('data-index');
                 var recursiv = $(this).attr('data-recursiv');
                 var filetype = $(this).attr('data-filetype');
+                var columns = $(this).attr('data-columns');
                 
                 $.ajax({
                     type: 'POST',
@@ -140,6 +141,7 @@ class Class_Build_Shortcode {
                         'filetype'  : filetype,
                         'chunk'     : chunk,
                         'host'      : host,
+                        'columns'   : columns,
                         'arr'       : arr
                     },
                     success:function(data) {
@@ -177,51 +179,115 @@ class Class_Build_Shortcode {
                 $i = 0;
             }
             
-            $table = '<table><tr>';
-            $table .= '<th>Name</th>';
-            $table .= '<th>Änderungsdatum</th>';
-            $table .= '<th>Dateityp</th>';
-            $table .= '<th>Dateigröße</th>';
-            $table .= '</tr>';
-
+            $columns = explode(",", $_REQUEST['columns']);
+            
             $id = uniqid();
 
-            foreach ($data[$i] as $key => $value) {
-                
-                $bytes = $value['size'];
-            
-                if ($bytes>= 1073741824) {
-                    $size = number_format($bytes / 1073741824, 2) . ' GB';
-                } elseif ($bytes >= 1048576) {
-                   $size = number_format($bytes / 1048576, 2) . ' MB';
-                } elseif ($bytes >= 1024) {
-                    $size = number_format($bytes / 1024, 0) . ' KB';
-                } elseif ($bytes > 1) {
-                    $size = $bytes . ' bytes';
-                } elseif ($bytes == 1) {
-                    $size = '1 byte';
-                } else {
-                    $size = '0 bytes';
+            $t  = '<table>';
+            $t .= '<tr>';
+
+            foreach($columns as $key => $column) {
+
+                switch($column) {
+                    case 'size':
+                        $t .= '<th>Dateigröße</th>';
+                        break;
+                    case 'type':
+                        $t .= '<th>Dateityp</th>';
+                        break;
+                    case 'download':
+                        $t .= '<th>Download</th>';
+                        break;
+                    case 'folder':
+                        $t .= '<th>Ordner</th>';
+                        break;
+                    case 'name':
+                        $t .= '<th>Name</th>';
+                        break;
+                    case 'date':
+                        $t .= '<th>Datum</th>';
+                        break;   
                 }
-                
-                $imageicon = $value['extension'] == 'pdf' ? '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>' : '<i class="fa fa-file-image-o" aria-hidden="true"></i>' ;
-                $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">';
-                $table .=  substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a>';
-                $table .= '</td><td>' . date('Y-m-d H:i:s', $value['change_time']) . '</td>';
-                $table .= '<td>'. $imageicon .' '. $value['extension'] . '</td>';
-                $table .= '<td>' . $size.  '</td></tr>';
+            }
+            
+            $t .= '</tr>';
+
+            foreach ($data[$i] as $key => $value) {
+
+                $t .= '</tr>';
+
+                foreach($columns as $key => $column) {
+
+                    $dir = pathinfo($value['image']);
+                    $titel = explode("/", $dir['dirname']);
+                    $folder = $titel[count($titel)-1];
+
+                    $bytes = $value['size'];
+
+                    if ($bytes>= 1073741824) {
+                        $size = number_format($bytes / 1073741824, 2) . ' GB';
+                    } elseif ($bytes >= 1048576) {
+                       $size = number_format($bytes / 1048576, 2) . ' MB';
+                    } elseif ($bytes >= 1024) {
+                        $size = number_format($bytes / 1024, 0) . ' KB';
+                    } elseif ($bytes > 1) {
+                        $size = $bytes . ' bytes';
+                    } elseif ($bytes == 1) {
+                        $size = '1 byte';
+                    } else {
+                        $size = '0 bytes';
+                    }
+
+                    switch($column) {
+                        case 'size':
+                            $t .= '<td>' . $size . '</td>';
+                            break;
+                        case 'type':
+                            $extension = $value['extension'];
+                            if($extension == 'pdf') {
+                                $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
+                            }elseif($extension == 'pptx') {
+                                $t .= '<td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
+                            }else{
+                                $t .= '<td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
+                            }
+                            break;
+                        case 'download':
+                            $t .= '<td><a href="http://' . $url['host'] . $value['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                            break;
+                        case 'folder':
+                            $t .= '<td>' . $folder . '</td>';
+                            break;
+                        case 'name':
+                            if ($link) {
+                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$z][$j]['image'] . '">' .  basename($data[$i][$j]['path']) . '</a></td>';    
+                            } else {
+                              $t .= '<td>' . basename($value['path']) .'</td>';  
+                            }
+                            break;
+                        case 'date':
+                            $t .= '<td>' . date('j F Y', $value['access_time']) .'</td>';
+                            break; 
+                    }
+
+                }
+
+            $t .= '</tr>';
             }
 
-            $table .= '</table>';
-            echo $table;
-        }
-       
-       die();
+        $t .= '</table></div>';
+        echo $t;
     }
+       
+    die();
+}
+
     
     public function rrze_remote_glossary_script_footer() { 
         
         $glossary_files = $this->glossary_array;
+        
+        print_r($glossary_files);
 	 
          ?>
          <script>
@@ -232,6 +298,7 @@ class Class_Build_Shortcode {
             $('a[href^="#letter-"]').click(function(){
                 var letter = $(this).attr('data-letter');
                 var host = $(this).attr('data-host');
+                var columns = $(this).attr('data-columns');
                 
                 $.ajax({
                     type: 'POST',
@@ -240,6 +307,7 @@ class Class_Build_Shortcode {
                         'action'    :'rrze_remote_glossary_ajax_request',
                         'letter'    : letter,
                         'host'      : host,
+                        'columns'   : columns,
                         'glossary'  : glossary
                     },
                     success:function(data) {
@@ -272,44 +340,107 @@ class Class_Build_Shortcode {
             }
         }
 
-        $new_glossary = array_values($_REQUEST['glossary']);
+        $data = array_values($_REQUEST['glossary']);
         
-        $table = '<table><tr>';
-        $table .= '<th>Name</th>';
-        $table .= '<th>Änderungsdatum</th>';
-        $table .= '<th>Dateityp</th>';
-        $table .= '<th>Dateigröße</th>';
-        $table .= '</tr>';
-        
-        foreach ($new_glossary as $key => $value) {
-                
-            $bytes = $value['size'];
+        $columns = explode(",", $_REQUEST['columns']);
 
-            if ($bytes>= 1073741824) {
-                $size = number_format($bytes / 1073741824, 2) . ' GB';
-            } elseif ($bytes >= 1048576) {
-               $size = number_format($bytes / 1048576, 2) . ' MB';
-            } elseif ($bytes >= 1024) {
-                $size = number_format($bytes / 1024, 0) . ' KB';
-            } elseif ($bytes > 1) {
-                $size = $bytes . ' bytes';
-            } elseif ($bytes == 1) {
-                $size = '1 byte';
-            } else {
-                $size = '0 bytes';
+        $t  = '<table>';
+        $t .= '<tr>';
+
+        foreach($columns as $key => $column) {
+
+            switch($column) {
+                case 'size':
+                    $t .= '<th>Dateigröße</th>';
+                    break;
+                case 'type':
+                    $t .= '<th>Dateityp</th>';
+                    break;
+                case 'download':
+                    $t .= '<th>Download</th>';
+                    break;
+                case 'folder':
+                    $t .= '<th>Ordner</th>';
+                    break;
+                case 'name':
+                    $t .= '<th>Name</th>';
+                    break;
+                case 'date':
+                    $t .= '<th>Datum</th>';
+                    break;   
             }
-            
-            $imageicon = $value['extension'] == 'pdf' ? '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>' : '<i class="fa fa-file-image-o" aria-hidden="true"></i>' ;
-            $table .= '<tr><td><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $_REQUEST['host']  . $value['image'] . '">';
-            $table .=  substr($value['basename'], 0, strrpos($value['basename'], '.')) . '</a>';
-            $table .= '</td><td>' . date('Y-m-d H:i:s', $value['change_time']) . '</td>';
-            $table .= '<td>'. $imageicon .' '. $value['extension'] . '</td>';
-            $table .= '<td>' . $size.  '</td></tr>';
         }
 
-        $table .= '</table>';
-        echo $table;
+        $t .= '</tr>';
+        //echo $t;
         
-        wp_die();
+          for($i = 0; $i < sizeof($data); $i++) {
+            
+            $t .= '</tr>';
+        
+            foreach($columns as $key => $column) {
+                
+                $dir = pathinfo($data[$i]['image']);
+                $titel = explode("/", $dir['dirname']);
+                $folder = $titel[count($titel)-1];
+                
+                $bytes = $value['size'];
+
+                if ($bytes>= 1073741824) {
+                    $size = number_format($bytes / 1073741824, 2) . ' GB';
+                } elseif ($bytes >= 1048576) {
+                   $size = number_format($bytes / 1048576, 2) . ' MB';
+                } elseif ($bytes >= 1024) {
+                    $size = number_format($bytes / 1024, 0) . ' KB';
+                } elseif ($bytes > 1) {
+                    $size = $bytes . ' bytes';
+                } elseif ($bytes == 1) {
+                    $size = '1 byte';
+                } else {
+                    $size = '0 bytes';
+                }
+
+                switch($column) {
+                    case 'size':
+                        $t .= '<td>' . $size . '</td>';
+                        break;
+                    case 'type':
+                        $extension = $data[$i]['extension'];
+                        if($extension == 'pdf') {
+                            $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
+                        }elseif($extension == 'pptx') {
+                            $t .= '<td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
+                        }else{
+                            $t .= '<td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
+                        }
+                        break;
+                    case 'download':
+                        $t .= '<td><a href="http://' . $url['host'] . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                        break;
+                    case 'folder':
+                        $t .= '<td>' . $folder. '</td>';
+                        break;
+                    case 'name':
+                        if ($link) {
+                          $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$i]['image'] . '">' .  basename($data[$i]['image']) . '</a></td>';    
+                        } else {
+                          $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
+                        }
+                        break;
+                    case 'date':
+                        $t .= '<td>' . date('j F Y', $data[$i]['access_time']) .'</td>';
+                        break; 
+                }
+
+            }
+            
+            $t .= '</tr>';
+            
+        }
+        
+        $t .= '</table></div>';
+        echo $t;
+        
+    wp_die();
     }
 }

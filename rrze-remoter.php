@@ -59,20 +59,6 @@ require_once( __DIR__ . '/includes/posttype/Class_Create_Post_Type_Submenu_Page.
 require_once( __DIR__ . '/includes/remote/Class_Grab_Remote_Files.php' );
 require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode.php' );
 
-//require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode_Ajax.php' );
-
-//require_once( __DIR__ . '/includes/templates/table.php' );
-
-
-
-//add_action( 'wp_ajax_example_ajax_request', 'RRZE\Remoter\example_ajax_request' );
-//add_action( 'wp_ajax_nopriv_example_ajax_request', 'RRZE\Remoter\example_ajax_request' );
-
-//add_action( 'wp_ajax_example_ajax_request', array($this, 'RRZE\Remoter\example_ajax_request' ));
-//add_action( 'wp_ajax_nopriv_example_ajax_request', array($this, 'RRZE\Remoter\example_ajax_request' ));
-
-
-
 /*
  * Einbindung der Sprachdateien.
  * @return void
@@ -149,9 +135,7 @@ function loaded() {
    
     
     $remoter_get_data   =   new Class_Grab_Remote_Files();
-    //$remoter_get_data->get_files_from_remote_server();
     $remoter_shortcode  =   new Class_Build_Shortcode();
-    //$remoter_shortcode_ajax  =   new Class_Build_Shortcode_Ajax();
     
 }
 
@@ -176,38 +160,7 @@ function custom_libraries_scripts() {
     wp_register_style( 'rstylescss', plugins_url( 'rrze-remoter/assets/css/styles.css', dirname(__FILE__) ) );
     wp_enqueue_style( 'rstylescss' );
     
-    /*wp_localize_script( 'ajax-script', 'rrze-remoter_ajax_table_object',
-        array( 
-            'ajax_url' => admin_url( 'admin-ajax.php' ) 
-        ) 
-    );*/
-    
     wp_localize_script( 'mainjs', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
    
     
 }
-
-/*function example_ajax_request() {
-  
-    // The $_REQUEST contains all the data sent via AJAX from the Javascript call
-    if ( isset($_REQUEST) ) {
-        
-        print_r($_REQUEST);
-      
-        $fruit = $_REQUEST['fruit'];
-          
-        // This bit is going to process our fruit variable into an Apple
-        if ( $fruit == 'Banana' ) {
-            $fruit = 'Apple';
-        }
-      
-        // Now let's return the result to the Javascript function (The Callback) 
-        echo $fruit;        
-    }
-      
-    // Always die in functions echoing AJAX content
-   die();
-   
-//add_action( 'wp_ajax_example_ajax_request', 'example_ajax_request' );
-//add_action( 'wp_ajax_nopriv_example_ajax_request', 'example_ajax_request' );
-}*/
