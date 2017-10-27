@@ -34,12 +34,7 @@ class Class_Build_Shortcode {
             'view'      => 'table',
             'orderby'   => 'name',
             'order'     => 'asc',
-            'download'  => '0',
-            'folder'    => '0',
-            'date'      => '0',
-            'type'      => '0',
-            'filesize'  => '0',
-            'show'      => 'folder,download,type,size,date,name'
+            'show'      => 'name,download'
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -61,10 +56,6 @@ class Class_Build_Shortcode {
     
     public function show_results_as_list($query_arguments) {
         
-        /*echo '<pre>';
-        //print_r($query_arguments);
-        echo '</pre>';*/
-        
         global $post;
         
         $shortcode_values = array();
@@ -83,18 +74,9 @@ class Class_Build_Shortcode {
                 $view = $this->remote_server_shortcode['view'];
                 $recursiv = $this->remote_server_shortcode['recursiv'];
                 $filetype = $this->remote_server_shortcode['filetype'];
-                /*$download = $this->remote_server_shortcode['download'];
-                $folder_column = $this->remote_server_shortcode['folder'];
-                $date_column = $this->remote_server_shortcode['date'];
-                $type_column = $this->remote_server_shortcode['type'];
-                $size_column = $this->remote_server_shortcode['filesize'];*/
                 $show_columns = $this->remote_server_shortcode['show'];
-                //$link = $this->remote_server_shortcode['link'];
+                $link = $this->remote_server_shortcode['link'];
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
-                
-                /*echo '<pre>';
-                print_r($this->remote_data);
-                echo '</pre>';*/
                 
                 if($this->remote_data){
 

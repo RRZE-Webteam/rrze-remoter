@@ -2,6 +2,7 @@
 echo '<h3>Normale Tabellenansicht</h3>';
 
 $data = $this->remote_data;
+sort($data);
 
 if (!function_exists('getHeaderData')) {
     function getHeaderData($columns) {
@@ -12,8 +13,10 @@ if (!function_exists('getHeaderData')) {
 
 $headerColumns = getHeaderData($show_columns);
 
-if (!function_exists('createHeader')) {
-    function createHeader($columns, $data) {
+if (!function_exists('createTable')) {
+    function createTable($columns, $data, $link, $url) {
+        
+        $id = uniqid();
         
         $t  = '<div>';
         $t .= '<table>';
@@ -23,23 +26,23 @@ if (!function_exists('createHeader')) {
         
             switch($column) {
                 case 'size':
-                    $t .= '<th>'. ucfirst($column) .'</th>';
+                    $t .= '<th>Dateigröße</th>';
                     break;
                 case 'type':
-                    $t .= '<th>'. ucfirst($column) .'</th>';
+                    $t .= '<th>Dateityp</th>';
                     break;
                 case 'download':
-                    $t .= '<th>'. ucfirst($column) .'</th>';
+                    $t .= '<th>Download</th>';
                     break;
                 case 'folder':
-                    $t .= '<th>'. ucfirst($column) .'</th>';
+                    $t .= '<th>Ordner</th>';
                     break;
                 case 'name':
-                    $t .= '<th>'. ucfirst($column) .'</th>';
-                    echo '';
+                    $t .= '<th>Name</th>';
+                    break;
                 case 'date':
-                    $t .= '<th>'. ucfirst($column) .'</th>';
-                    echo '';    
+                    $t .= '<th>Datum</th>';
+                    break;   
             }
         }
         
@@ -56,20 +59,31 @@ if (!function_exists('createHeader')) {
                         $t .= '<td>' . formatSize($data[$i]['size']) . '</td>';
                         break;
                     case 'type':
-                        $t .= '<td>' . $data[$i]['extension'] .'</td>';
+                        $extension = $data[$i]['extension'];
+                        if($extension == 'pdf') {
+                            $t .= '<td><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
+                        }elseif($extension == 'pptx') {
+                            $t .= '<td><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
+                        }else{
+                            $t .= '<td><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
+                        }
                         break;
                     case 'download':
-                        $t .= '<td><a href=""  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                        $t .= '<td><a href="http://' . $url['host'] . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                         break;
                     case 'folder':
                         $t .= '<td>' . getFolder($data[$i]['dir']) . '</td>';
                         break;
                     case 'name':
-                        $t .= '<td>' . basename($data[$i]['path']) .'</td>';
-                        echo ''; 
+                        if ($link) {
+                          $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$i]['image'] . '">' .  basename($data[$i]['path']) . '</a></td>';    
+                        } else {
+                          $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
+                        }
+                        break;
                     case 'date':
-                        $t .= '<td>' . $data[$i]['access_time'] .'</td>';
-                        echo ''; 
+                        $t .= '<td>' . date('j F Y', $data[$i]['access_time']) .'</td>';
+                        break; 
                 }
 
             }
@@ -118,4 +132,4 @@ if (!function_exists('getFolder')) {
 }
       
 $headerColumns = getHeaderData($show_columns);
-$header = createHeader($headerColumns, $data);
+$header = createTable($headerColumns, $data, $link, $url);
