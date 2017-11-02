@@ -272,7 +272,7 @@ class Class_Build_Shortcode {
                             }
                             break;
                         case 'date':
-                            $t .= '<td>' . date('j F Y', $value['access_time']) .'</td>';
+                            $t .= '<td>' . date('j F Y', $value['change_time']) .'</td>';
                             break; 
                     }
 
@@ -292,8 +292,6 @@ class Class_Build_Shortcode {
     public function rrze_remote_glossary_script_footer() { 
         
         $glossary_files = $this->glossary_array;
-        
-        print_r($glossary_files);
 	 
          ?>
          <script>
@@ -439,7 +437,7 @@ class Class_Build_Shortcode {
                         }
                         break;
                     case 'date':
-                        $t .= '<td>' . date('j F Y', $data[$i]['access_time']) .'</td>';
+                        $t .= '<td>' . date('j F Y', $data[$i]['change_time']) .'</td>';
                         break; 
                 }
 

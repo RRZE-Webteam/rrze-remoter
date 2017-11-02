@@ -31,12 +31,14 @@ function getActiveLetters($letters, $unique, $url, $columns, $link) {
     
     $html  = '<h3>Glossar</h3>';
     $html .= '<nav class="pagination pagebreaks" role="navigation"><span class="subpages">';
+    
+    $array_without_numbers = checkforfigures($unique);
 
     foreach ($letters as $key => $value) {
         
-        if (in_array($value, $unique)) {
+        if (in_array($value, $array_without_numbers)) {
 
-            $html .= '<a href="#letter-' . $value . '"data-link="' . $link . '"data-columns="' . $columns . '"data-host="' . $url['host'] . '" data-letter="' . $value . '"><span class="'. ($value == $unique[0] ? 'number active' : 'number') .'">'.$value.'</span></a>';
+            $html .= '<a href="#letter-' . $value . '"data-link="' . $link . '"data-columns="' . $columns . '"data-host="' . $url['host'] . '" data-letter="' . $value . '"><span class="'. ($value == $array_without_numbers[0] ? 'number active' : 'number') .'">'.$value.'</span></a>';
 
         } else {
 
@@ -59,9 +61,11 @@ function sortArray($data, $unique) {
     }
 
     array_multisort($filenames, SORT_ASC, $data);
+    
+    $array_without_numbers = checkforfigures($unique);
 
     foreach ( $data as $key => $value ) {
-        if ( substr($value['name'], 0, 1) != $unique[0]) {
+        if ( substr($value['name'], 0, 1) !=  $array_without_numbers[0] ) {
             unset( $data[$key]);
         }
     }
@@ -145,7 +149,7 @@ if (!function_exists('createTableGlossary')) {
                         }
                         break;
                     case 'date':
-                        $t .= '<td>' . date('j F Y', $data[$i]['access_time']) .'</td>';
+                        $t .= '<td>' . date('j F Y', $data[$i]['change_time']) .'</td>';
                         break; 
                 }
 
@@ -190,6 +194,22 @@ if (!function_exists('getFolder')) {
         
         return $folder;
     
+    }
+}
+
+if (!function_exists('checkforfigures')) {
+    function checkforfigures($array) {
+        
+        foreach($array as $key => $value) {
+            
+            if(is_numeric($value) || ctype_lower($value)) {
+                unset($array[$key]);
+            }       
+        }
+        
+        $newindex = array_values($array);
+        
+        return $newindex;
     }
 }
         
