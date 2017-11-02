@@ -109,6 +109,7 @@ $table_var['url']       = $url['host'];
 $table_var['chunks']    = $number_of_chunks;
 $table_var['pagecount'] = $pagecount;
 $table_var['columns']   = $show_columns;
+$table_var['link']      = $link;
 
 
 
@@ -125,6 +126,7 @@ function createNavigation(array $table_var) {
         $html .= 'data-chunk="' . $table_var['chunks'] . '"';
         $html .= 'data-pagecount-value= "' . $table_var['pagecount'] . '"'; 
         $html .= 'data-columns= "' . $table_var['columns'] . '"'; 
+        $html .= 'data-link= "' . $table_var['link'] . '"'; 
         $html .= 'class="page-'. $i.'">';
         $html .= '<span class="'. ($i==1 ? 'number active' : 'number') .'">'.$i.'</span>';
         $html .= '</a>';

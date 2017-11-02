@@ -27,7 +27,7 @@ function getUsedLetters($data) {
     
 }
 
-function getActiveLetters($letters, $unique, $url, $columns) {
+function getActiveLetters($letters, $unique, $url, $columns, $link) {
     
     $html  = '<h3>Glossar</h3>';
     $html .= '<nav class="pagination pagebreaks" role="navigation"><span class="subpages">';
@@ -36,7 +36,7 @@ function getActiveLetters($letters, $unique, $url, $columns) {
         
         if (in_array($value, $unique)) {
 
-            $html .= '<a href="#letter-' . $value . '"data-columns="' . $columns . '"data-host="' . $url['host'] . '" data-letter="' . $value . '"><span class="'. ($value == $unique[0] ? 'number active' : 'number') .'">'.$value.'</span></a>';
+            $html .= '<a href="#letter-' . $value . '"data-link="' . $link . '"data-columns="' . $columns . '"data-host="' . $url['host'] . '" data-letter="' . $value . '"><span class="'. ($value == $unique[0] ? 'number active' : 'number') .'">'.$value.'</span></a>';
 
         } else {
 
@@ -196,6 +196,6 @@ if (!function_exists('getFolder')) {
 $columns = getHeaderDataGlossary($show_columns);
 $letters = createLetters();
 $unique = getUsedLetters($data);
-getActiveLetters($letters, $unique, $url, $show_columns);
+getActiveLetters($letters, $unique, $url, $show_columns, $link);
 $array_reindexed = sortArray($data, $unique);
 createTableGlossary($columns, $array_reindexed, $url, $link);

@@ -128,6 +128,7 @@ class Class_Build_Shortcode {
                 var recursiv = $(this).attr('data-recursiv');
                 var filetype = $(this).attr('data-filetype');
                 var columns = $(this).attr('data-columns');
+                var link    = $(this).attr('data-link');
                 
                 $.ajax({
                     type: 'POST',
@@ -142,6 +143,7 @@ class Class_Build_Shortcode {
                         'chunk'     : chunk,
                         'host'      : host,
                         'columns'   : columns,
+                        'link'      : link,
                         'arr'       : arr
                     },
                     success:function(data) {
@@ -166,6 +168,10 @@ class Class_Build_Shortcode {
         if ( isset($_REQUEST) ) {
             
             $number_of_chunks = $_REQUEST['chunk'];
+            
+            $host = $_REQUEST['host'];
+            
+            $link = $_REQUEST['link'];
 
             $data = array_chunk($_REQUEST['arr'], $number_of_chunks);
             
@@ -253,14 +259,14 @@ class Class_Build_Shortcode {
                             }
                             break;
                         case 'download':
-                            $t .= '<td><a href="http://' . $url['host'] . $value['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                            $t .= '<td><a href="http://' . $host . $value['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                             break;
                         case 'folder':
                             $t .= '<td>' . $folder . '</td>';
                             break;
                         case 'name':
                             if ($link) {
-                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$z][$j]['image'] . '">' .  basename($data[$i][$j]['path']) . '</a></td>';    
+                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">' .  basename($value['path']) . '</a></td>';    
                             } else {
                               $t .= '<td>' . basename($value['path']) .'</td>';  
                             }
@@ -299,6 +305,7 @@ class Class_Build_Shortcode {
                 var letter = $(this).attr('data-letter');
                 var host = $(this).attr('data-host');
                 var columns = $(this).attr('data-columns');
+                var link    = $(this).attr('data-link');
                 
                 $.ajax({
                     type: 'POST',
@@ -308,6 +315,7 @@ class Class_Build_Shortcode {
                         'letter'    : letter,
                         'host'      : host,
                         'columns'   : columns,
+                        'link'      : link,
                         'glossary'  : glossary
                     },
                     success:function(data) {
@@ -325,6 +333,9 @@ class Class_Build_Shortcode {
     }
     
     public function rrze_remote_glossary_ajax_request() {
+        
+        $link = $_REQUEST['link'];
+        $host = $_REQUEST['host'];
         
         $filenames = array(); 
 
@@ -415,14 +426,14 @@ class Class_Build_Shortcode {
                         }
                         break;
                     case 'download':
-                        $t .= '<td><a href="http://' . $url['host'] . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                        $t .= '<td><a href="http://' . $host . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                         break;
                     case 'folder':
                         $t .= '<td>' . $folder. '</td>';
                         break;
                     case 'name':
                         if ($link) {
-                          $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$i]['image'] . '">' .  basename($data[$i]['image']) . '</a></td>';    
+                          $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['image'] . '">' .  basename($data[$i]['path']) . '</a></td>';    
                         } else {
                           $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
                         }
