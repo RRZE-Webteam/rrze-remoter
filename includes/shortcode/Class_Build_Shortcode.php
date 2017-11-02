@@ -291,7 +291,7 @@ class Class_Build_Shortcode {
     
     public function rrze_remote_glossary_script_footer() { 
         
-        $glossary_files = $this->glossary_array;
+        $glossary_files = (isset($this->glossary_array) ? $this->glossary_array : '') ;
 	 
          ?>
          <script>
