@@ -1,8 +1,44 @@
 <?php
 echo '<h3>Normale Tabellenansicht</h3>';
+//sort($data);
+//$data = $this->remote_data;
 
-$data = $this->remote_data;
-sort($data);
+/*echo '<pre>';
+print_r($data);
+echo '</pre>';*/
+//sort($data);
+
+
+
+/*if (!function_exists('filterEnglish')) {
+    function filterEnglish($data) {
+       
+        $items = array();
+       
+        foreach($data as $key => $value) {
+           
+            if ( preg_match('/englisch/i', $value['basename'], $matches)) {
+                $items[$key] = $matches[0];
+            } else {
+                echo '';
+            }
+        }
+        
+        $contains_english = array_intersect_key($data, $items);
+        
+        $new = array_values($contains_english);
+      
+        return $new;
+     
+    }
+}
+
+if ($language) {
+    $data = filterEnglish($data);
+} else {
+    $data = $this->remote_data;
+    sort($data);
+}*/
 
 if (!function_exists('getHeaderData')) {
     function getHeaderData($columns) {
@@ -50,7 +86,7 @@ if (!function_exists('createTable')) {
         
         for($i = 0; $i < sizeof($data); $i++) {
             
-            $t .= '</tr>';
+            $t .= '<tr>';
         
             foreach($columns as $key => $column) {
 
@@ -82,7 +118,7 @@ if (!function_exists('createTable')) {
                         }
                         break;
                     case 'date':
-                        $t .= '<td>' . date('j F Y', $data[$i]['access_time']) .'</td>';
+                        $t .= '<td>' . date('j F Y', $data[$i]['change_time']) .'</td>';
                         break; 
                 }
 

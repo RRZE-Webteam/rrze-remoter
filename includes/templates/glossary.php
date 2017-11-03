@@ -1,6 +1,6 @@
 <?php
 
-$data = $this->remote_data;
+//$data = $this->remote_data;
 $this->glossary_array = $this->remote_data;
 
 function createLetters() {

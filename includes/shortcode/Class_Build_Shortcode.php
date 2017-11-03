@@ -23,18 +23,19 @@ class Class_Build_Shortcode {
     public function shortcode($atts) {
         
         $this->remote_server_shortcode = shortcode_atts( array(
-            'id'        => '',
-            'file'      => '',
-            'index'     => '',
-            'recursiv'  => '1',
-            'max'       => '3',
-            'itemsperpage'     => '4',
-            'filetype'  => '',
-            'link'      => '0',
-            'view'      => 'table',
-            'orderby'   => 'name',
-            'order'     => 'asc',
-            'show'      => 'name,download'
+            'id'                => '',
+            'file'              => '',
+            'index'             => '',
+            'recursiv'          => '1',
+            'max'               => '3',
+            'itemsperpage'      => '4',
+            'filetype'          => '',
+            'link'              => '0',
+            'englisch'          => '0',
+            'view'              => 'table',
+            'orderby'           => 'name',
+            'order'             => 'asc',
+            'show'              => 'name,download'
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -76,9 +77,19 @@ class Class_Build_Shortcode {
                 $filetype = $this->remote_server_shortcode['filetype'];
                 $show_columns = $this->remote_server_shortcode['show'];
                 $link = $this->remote_server_shortcode['link'];
+                $language = $this->remote_server_shortcode['englisch'];
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
                 
-                if($this->remote_data){
+                $data = $this->remote_data;
+                
+                if ($language) {
+                    $data = $this->getEnglischContent($data);
+                } else {
+                    $data = $this->remote_data;
+                    
+                }
+                
+                if($data){
 
                     $url = parse_url(get_post_meta($post->ID, 'url', true)); 
 
@@ -105,6 +116,27 @@ class Class_Build_Shortcode {
         } else {
                 echo 'no posts found';
         }
+    }
+    
+    public function getEnglischContent($data) {
+        
+        $items = array();
+       
+        foreach($data as $key => $value) {
+           
+            if ( preg_match('/englisch/i', $value['basename'], $matches)) {
+                $items[$key] = $matches[0];
+            } else {
+                echo '';
+            }
+        }
+        
+        $contains_english = array_intersect_key($data, $items);
+        
+        $new = array_values($contains_english);
+      
+        return $new;
+        
     }
     
     public function rrze_remote_table_script_footer(){ 
@@ -393,7 +425,7 @@ class Class_Build_Shortcode {
                 $titel = explode("/", $dir['dirname']);
                 $folder = $titel[count($titel)-1];
                 
-                $bytes = $value['size'];
+                $bytes = $data[$i]['size'];
 
                 if ($bytes>= 1073741824) {
                     $size = number_format($bytes / 1073741824, 2) . ' GB';
