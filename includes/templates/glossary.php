@@ -30,7 +30,7 @@ function getUsedLetters($data) {
 function getActiveLetters($letters, $unique, $url, $columns, $link) {
     
     $html  = '<h3>Glossar</h3>';
-    $html .= '<nav class="pagination pagebreaks" role="navigation"><span class="subpages">';
+    $html .= '<div class="fau-glossar"><ul class="letters" aria-hidden="true">';
     
     $array_without_numbers = checkforfigures($unique);
 
@@ -38,16 +38,16 @@ function getActiveLetters($letters, $unique, $url, $columns, $link) {
         
         if (in_array($value, $array_without_numbers)) {
 
-            $html .= '<a href="#letter-' . $value . '"data-link="' . $link . '"data-columns="' . $columns . '"data-host="' . $url['host'] . '" data-letter="' . $value . '"><span class="'. ($value == $array_without_numbers[0] ? 'number active' : 'number') .'">'.$value.'</span></a>';
+            $html .= '<li><a href="#letter-' . $value . '"data-link="' . $link . '"data-columns="' . $columns . '"data-host="' . $url['host'] . '" data-letter="' . $value . '">'.$value.'</a></li>';
 
         } else {
 
-           $html .= '<span class="muted">'.$value.'</span>';
+           $html .= '<li class="muted">'.$value.'</li>';
 
         }
     }
 
-    $html .= '</span></nav>';
+    $html .= '</span></div>';
     echo $html; 
     
 }
