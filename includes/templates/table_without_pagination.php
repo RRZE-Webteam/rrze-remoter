@@ -1,6 +1,6 @@
 <?php
 echo '<h3>Normale Tabellenansicht</h3>';
-//sort($data);
+sort($data);
 //$data = $this->remote_data;
 
 /*echo '<pre>';

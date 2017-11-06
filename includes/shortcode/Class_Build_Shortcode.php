@@ -31,7 +31,7 @@ class Class_Build_Shortcode {
             'itemsperpage'      => '4',
             'filetype'          => '',
             'link'              => '0',
-            'englisch'          => '0',
+            'language'          => '0',
             'view'              => 'table',
             'orderby'           => 'name',
             'order'             => 'asc',
@@ -77,13 +77,13 @@ class Class_Build_Shortcode {
                 $filetype = $this->remote_server_shortcode['filetype'];
                 $show_columns = $this->remote_server_shortcode['show'];
                 $link = $this->remote_server_shortcode['link'];
-                $language = $this->remote_server_shortcode['englisch'];
+                $language = $this->remote_server_shortcode['language'];
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
                 
                 $data = $this->remote_data;
                 
                 if ($language) {
-                    $data = $this->getEnglischContent($data);
+                    $data = $this->getEnglischContent($data, $language);
                 } else {
                     $data = $this->remote_data;
                     
@@ -118,7 +118,7 @@ class Class_Build_Shortcode {
         }
     }
     
-    public function getEnglischContent($data) {
+    public function getEnglischContent($data, $language) {
         
         $items = array();
        
@@ -131,12 +131,17 @@ class Class_Build_Shortcode {
             }
         }
         
-        $contains_english = array_intersect_key($data, $items);
-        
-        $new = array_values($contains_english);
-      
-        return $new;
-        
+        if($language == 0) {
+            return $data;
+        } elseif($language == 1) {
+            $only_english = array_intersect_key($data, $items);
+            $new = array_values($only_english);
+            return $new;
+        } else {
+            $without_english = array_diff_key($data, $items);
+            $new = array_values($without_english);
+            return $new;
+        }
     }
     
     public function rrze_remote_table_script_footer(){ 
