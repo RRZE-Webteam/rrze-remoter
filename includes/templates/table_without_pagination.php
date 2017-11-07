@@ -1,88 +1,52 @@
 <?php
-echo '<h3>Normale Tabellenansicht</h3>';
-sort($data);
-//$data = $this->remote_data;
-
-/*echo '<pre>';
-print_r($data);
-echo '</pre>';*/
-//sort($data);
-
-
-
-/*if (!function_exists('filterEnglish')) {
-    function filterEnglish($data) {
-       
-        $items = array();
-       
-        foreach($data as $key => $value) {
-           
-            if ( preg_match('/englisch/i', $value['basename'], $matches)) {
-                $items[$key] = $matches[0];
-            } else {
-                echo '';
-            }
-        }
-        
-        $contains_english = array_intersect_key($data, $items);
-        
-        $new = array_values($contains_english);
-      
-        return $new;
-     
-    }
-}
-
-if ($language) {
-    $data = filterEnglish($data);
-} else {
-    $data = $this->remote_data;
-    sort($data);
-}*/
 
 if (!function_exists('getHeaderData')) {
     function getHeaderData($columns) {
-        $columns = explode(",", $columns);
-        return $columns;
+        $shortcodeColumns = explode(",", $columns);
+        return $shortcodeColumns;
     }
 }
 
-$headerColumns = getHeaderData($show_columns);
-
 if (!function_exists('createTable')) {
-    function createTable($columns, $data, $link, $url) {
+    function createTable($columns, $data, $link, $url, $showheader) {
         
         $id = uniqid();
         
-        $t  = '<div>';
-        $t .= '<table>';
-        $t .= '<tr>';
-        
-        foreach($columns as $key => $column) {
-        
-            switch($column) {
-                case 'size':
-                    $t .= '<th>Dateigröße</th>';
-                    break;
-                case 'type':
-                    $t .= '<th>Dateityp</th>';
-                    break;
-                case 'download':
-                    $t .= '<th>Download</th>';
-                    break;
-                case 'folder':
-                    $t .= '<th>Ordner</th>';
-                    break;
-                case 'name':
-                    $t .= '<th>Name</th>';
-                    break;
-                case 'date':
-                    $t .= '<th>Datum</th>';
-                    break;   
+        if($showheader) {
+            
+            $t = '<table>';
+            $t .= '<tr>';
+
+            foreach($columns as $key => $column) {
+
+                switch($column) {
+                    case 'size':
+                        $t .= '<th>Dateigröße</th>';
+                        break;
+                    case 'type':
+                        $t .= '<th>Dateityp</th>';
+                        break;
+                    case 'download':
+                        $t .= '<th>Download</th>';
+                        break;
+                    case 'folder':
+                        $t .= '<th>Ordner</th>';
+                        break;
+                    case 'name':
+                        $t .= '<th>Name</th>';
+                        break;
+                    case 'date':
+                        $t .= '<th>Datum</th>';
+                        break;   
+                }
             }
+
+            $t .= '</tr>';
         }
         
-        $t .= '</tr>';
+        if(!$showheader) {
+            $t = '';
+        }
         
         for($i = 0; $i < sizeof($data); $i++) {
             
@@ -127,9 +91,12 @@ if (!function_exists('createTable')) {
             $t .= '</tr>';
             
         }
-       
-        $t .= '</table></div>';
-        echo $t;
+        
+        if($showheader) {
+            $t .= '</table>';
+        }
+        
+        return $t;
         
     }
 }
@@ -168,4 +135,4 @@ if (!function_exists('getFolder')) {
 }
       
 $headerColumns = getHeaderData($show_columns);
-$header = createTable($headerColumns, $data, $link, $url);
+echo createTable($headerColumns, $data, $link, $url, $header);

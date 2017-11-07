@@ -35,7 +35,8 @@ class Class_Build_Shortcode {
             'view'              => 'table',
             'orderby'           => 'name',
             'order'             => 'asc',
-            'show'              => 'name,download'
+            'show'              => 'name,download',
+            'showheader'        => '0'
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -78,6 +79,7 @@ class Class_Build_Shortcode {
                 $show_columns = $this->remote_server_shortcode['show'];
                 $link = $this->remote_server_shortcode['link'];
                 $language = $this->remote_server_shortcode['language'];
+                $showheader = $this->remote_server_shortcode['showheader'];
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
                 
                 $data = $this->remote_data;
@@ -100,7 +102,11 @@ class Class_Build_Shortcode {
                     } elseif($view == 'pagination') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
                     } elseif($view == 'table') {
+                        ob_start();
+                        $header = $showheader;
                         include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
+                        $content = ob_get_clean();
+                        return $content;
                     } elseif($view == 'imagetable') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
                     } else {
