@@ -7,46 +7,43 @@ if (!function_exists('getHeaderData')) {
     }
 }
 
-if (!function_exists('createTable')) {
-    function createTable($columns, $data, $link, $url, $showheader) {
+if (!function_exists('createTableHeader')) {
+    function createTableHeader($columns) {
         
-        $id = uniqid();
+        $header = '';
         
-        if($showheader) {
-            
-            $t = '<table>';
-            $t .= '<tr>';
+        foreach($columns as $key => $column) {
 
-            foreach($columns as $key => $column) {
-
-                switch($column) {
-                    case 'size':
-                        $t .= '<th>Dateigröße</th>';
-                        break;
-                    case 'type':
-                        $t .= '<th>Dateityp</th>';
-                        break;
-                    case 'download':
-                        $t .= '<th>Download</th>';
-                        break;
-                    case 'folder':
-                        $t .= '<th>Ordner</th>';
-                        break;
-                    case 'name':
-                        $t .= '<th>Name</th>';
-                        break;
-                    case 'date':
-                        $t .= '<th>Datum</th>';
-                        break;   
-                }
+            switch($column) {
+                case 'size':
+                    $header .= '<th>Dateigröße</th>';
+                    break;
+                case 'type':
+                    $header .= '<th>Dateityp</th>';
+                    break;
+                case 'download':
+                    $header .= '<th>Download</th>';
+                    break;
+                case 'folder':
+                    $header .= '<th>Ordner</th>';
+                    break;
+                case 'name':
+                    $header .= '<th>Name</th>';
+                    break;
+                case 'date':
+                    $header .= '<th>Datum</th>';
+                    break;   
             }
-
-            $t .= '</tr>';
         }
         
-        if(!$showheader) {
-            $t = '';
-        }
+        return $header;
+    }
+}
+
+if (!function_exists('createTableBody')) {
+    function createTableBody($columns, $data, $link, $url, $id) {
+        
+        $t = '';
         
         for($i = 0; $i < sizeof($data); $i++) {
             
@@ -54,37 +51,7 @@ if (!function_exists('createTable')) {
         
             foreach($columns as $key => $column) {
 
-               switch($column) {
-                    case 'size':
-                        $t .= '<td>' . formatSize($data[$i]['size']) . '</td>';
-                        break;
-                    case 'type':
-                        $extension = $data[$i]['extension'];
-                        if($extension == 'pdf') {
-                            $t .= '<td><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
-                        }elseif($extension == 'pptx') {
-                            $t .= '<td><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
-                        }else{
-                            $t .= '<td><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
-                        }
-                        break;
-                    case 'download':
-                        $t .= '<td><a href="http://' . $url['host'] . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
-                        break;
-                    case 'folder':
-                        $t .= '<td>' . getFolder($data[$i]['dir']) . '</td>';
-                        break;
-                    case 'name':
-                        if ($link) {
-                          $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$i]['image'] . '">' .  basename($data[$i]['path']) . '</a></td>';    
-                        } else {
-                          $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
-                        }
-                        break;
-                    case 'date':
-                        $t .= '<td>' . date('j F Y', $data[$i]['change_time']) .'</td>';
-                        break; 
-                }
+                $t .= createTableRows($column, $data, $link, $url, $key, $i, $id);
 
             }
             
@@ -92,12 +59,95 @@ if (!function_exists('createTable')) {
             
         }
         
-        if($showheader) {
-            $t .= '</table>';
+        return $t;
+     
+    }
+}
+
+if (!function_exists('createTableRows')) {
+    function createTableRows($column, $data, $link, $url, $key, $i, $id) {
+        
+        $t = '';
+        
+        switch($column) {
+        
+            case 'size':
+                
+                $t .= '<td>' . formatSize($data[$i]['size']) . '</td>';
+                break;
+            
+            case 'type':
+                
+                $extension = $data[$i]['extension'];
+                
+                if ($extension == 'pdf') {
+                    $t .= '<td><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
+                    
+                } elseif($extension == 'pptx') {
+                    $t .= '<td><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
+                    
+                } else{
+                    $t .= '<td><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
+                }
+                break;
+            
+            case 'download':
+                
+                $t .= '<td><a href="http://' . $url['host'] . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                
+                break;
+            
+            case 'folder':
+                
+                $t .= '<td>' . getFolder($data[$i]['dir']) . '</td>';
+                break;
+            
+            case 'name':
+                
+                if ($link) {
+                  
+                    $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$i]['image'] . '">' .  basename($data[$i]['path']) . '</a></td>';    
+                    
+                } else {
+                    
+                    $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
+                }
+                break;
+                
+            case 'date':
+                
+                $t .= '<td>' . date('j F Y', $data[$i]['change_time']) .'</td>';
+                break; 
         }
         
         return $t;
+    }
+}
+
+if (!function_exists('createTable')) {
+    function createTable($columns, $data, $link, $url, $header) {
         
+        $id = uniqid();
+        
+        if(!$header) {
+            
+            $t = '';
+            $t .= createTableBody($columns, $data, $link, $url, $id);
+            
+            return $t;
+            
+        } else {   
+            
+            $t  = '<table>';
+            $t .= '<tr>';
+            $t .= createTableHeader($columns);
+            $t .= '</tr>';
+            $t .= createTableBody($columns, $data, $link, $url, $id);
+            $t .= '</table>';
+            
+            return $t;
+            
+        }
     }
 }
 
