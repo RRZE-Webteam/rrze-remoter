@@ -1,5 +1,32 @@
-<?php
+<?php $meta = $data ?>
+<?php $meta_store = array(); ?>
+<?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
 
+    <?php if(!empty($meta[$i]['meta']) && $header == 1) { ?>
+        
+        <table>
+
+            <tr><td colspan="2"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?><br/>
+            <?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?></td></tr>
+
+                <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
+            
+                    <?php $meta_store[] = array(
+                        'key'   => $value,
+                        'value' => $key
+                    )
+                    ?>
+                    <tr><td><strong>Dateiname:</strong> <?php echo $key ?></td><td><strong> beinhaltet:</strong> <?php echo $value ?></td></tr>
+
+                <?php } ?>
+                    
+        </table>
+
+    <?php } ?>
+
+<?php } ?>
+        
+<?php
 if (!function_exists('getHeaderData')) {
     function getHeaderData($columns) {
         $shortcodeColumns = explode(",", $columns);
@@ -11,8 +38,9 @@ $tableHeader = getHeaderData($show_columns);
 
 if($header) { ?>
 
-    <table>
-        <tr>
+<table>
+    
+    <tr>
     
     <?php foreach($tableHeader as $key => $column) { ?>
 
@@ -46,7 +74,7 @@ if($header) { ?>
         
 <?php } ?>
 
-    <pre><?php echo print_r($data) ?></pre>    
+    
     
 <?php for($i = 0; $i <sizeof($data); $i++) { ?> 
         
@@ -91,7 +119,19 @@ if($header) { ?>
                 case 'name': ?>
                 <?php if ($link) { ?>
                   
-                    <td><a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i]['image'] ?>"><?php echo basename($data[$i]['path']) ?></a></td>    
+                    <td><a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
+                        
+                    <?php
+
+                    $key = array_search(basename($data[$i]['path']), array_column($meta_store, 'value'));
+
+                    if($key) {
+                        echo $meta_store[$key]['key'];
+                    } else {
+                        echo basename($data[$i]['path']); 
+                    }
+
+                    ?></a></td>    
                     
                 <?php } else { ?>
                     

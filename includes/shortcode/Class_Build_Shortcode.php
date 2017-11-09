@@ -375,6 +375,7 @@ class Class_Build_Shortcode {
     
     public function rrze_remote_glossary_ajax_request() {
         
+        $id = uniqid();
         $link = $_REQUEST['link'];
         $host = $_REQUEST['host'];
         
