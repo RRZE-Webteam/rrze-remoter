@@ -1,3 +1,11 @@
+<?php
+
+/*
+* Die Ausgabe der Datei .meta.txt
+* Es wird eine Tabelle überhalb der Dateien ausgegeben
+*/
+?>
+
 <?php $meta = $data ?>
 <?php $meta_store = array(); ?>
 <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
@@ -16,7 +24,7 @@
                         'value' => $key
                     )
                     ?>
-                    <tr><td><strong>Dateiname:</strong> <?php echo $key ?></td><td><strong> beinhaltet:</strong> <?php echo $value ?></td></tr>
+                    <tr><td><strong>Dateiname:</strong> <?php echo $key ?></td><td><strong> Anzeigename:</strong> <?php echo $value ?></td></tr>
 
                 <?php } ?>
                     
@@ -25,8 +33,15 @@
     <?php } ?>
 
 <?php } ?>
-        
+
+
 <?php
+/*
+* Die Spaltennamen werden zurückgegenben
+* z. B. date,name,download
+*/    
+
+
 if (!function_exists('getHeaderData')) {
     function getHeaderData($columns) {
         $shortcodeColumns = explode(",", $columns);
@@ -35,6 +50,11 @@ if (!function_exists('getHeaderData')) {
 }
 
 $tableHeader = getHeaderData($show_columns);
+
+/*
+* Der Tabellenkopf wird erstellt
+* Ist $header 1, dann wird der Tabellenkopf automatisch erzeugt
+*/    
 
 if($header) { ?>
 
@@ -73,11 +93,33 @@ if($header) { ?>
     </tr>
         
 <?php } ?>
+    
+<?php 
 
+/*
+* Der Tabelleneintrag .meta.txt wird aus den Tabelleneinträgen entfernt
+*/ 
+
+for($i = 0; $i <sizeof($meta); $i++) { ?> 
+
+    <?php if(($key = array_search('.meta.txt', $meta[$i])) !== false) { ?>
+
+        <?php unset($meta[$i]);  ?>
+
+        <?php $data = array_values($meta); ?>
+
+    <?php } ?>
+
+<?php } ?>
     
-    
-<?php for($i = 0; $i <sizeof($data); $i++) { ?> 
-        
+<?php 
+
+/*
+* Ausgabe der Tabelleneinträge gemäß der Sortierung $tableHeader
+*/ 
+
+for($i = 0; $i <sizeof($data); $i++) { ?> 
+
     <tr>    
 
     <?php foreach($tableHeader as $key => $column) { ?>
