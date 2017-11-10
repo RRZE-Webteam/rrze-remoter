@@ -31,7 +31,7 @@
         
         <table>
             
-            <tr><td colspan="2"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?></td></tr>
+            <tr><td colspan="2"><strong>Beschreibung: </strong><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?></td></tr>
 
             <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
 
@@ -121,19 +121,13 @@ if($header) { ?>
 /*
 * Der Tabelleneintrag .meta.txt wird aus den Tabelleneinträgen entfernt
 */ 
-
-for($i = 0; $i <sizeof($meta); $i++) { ?> 
-
-    <?php if(($key = array_search('.meta.txt', $meta[$i])) !== false) { ?>
-
-        <?php unset($meta[$i]);  ?>
-
-        <?php $data = array_values($meta); ?>
-
+    foreach($meta as $key => $value) { ?>
+        <?php if($value['name'] === '.meta.txt'){ ?>
+            <?php unset($meta[$key]); ?>
+            <?php $data = array_values($meta); ?>
+        <?php } ?>
     <?php } ?>
-
-<?php } ?>
-    
+        
 <?php 
 
 /*
