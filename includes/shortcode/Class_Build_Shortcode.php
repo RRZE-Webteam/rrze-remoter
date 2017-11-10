@@ -117,7 +117,8 @@ class Class_Build_Shortcode {
                 }
                    
             }
-         
+            
+            delete_transient( 'rrze-remoter-transient');
             wp_reset_postdata();
         } else {
                 echo 'no posts found';

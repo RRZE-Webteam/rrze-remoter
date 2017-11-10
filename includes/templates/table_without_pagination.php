@@ -11,29 +11,51 @@
 <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
 
     <?php if(!empty($meta[$i]['meta']) && $header == 1) { ?>
+
+        <?php $transient = get_transient('rrze-remoter-transient'); 
+
+            if(empty($transient)) {
+                $j = 1;
+            } else {
+                $j = $transient;
+                $j++;
+            }
+
+        ?>
+        
+        <div class="accordion" id="accordion-1">
+        <div class="accordion-group">
+        <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $j ?>" href="#collapse_<?php echo $j ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
+        <div id="collapse_<?php echo $j ?>" class="accordion-body" style="display: none;">
+        <div class="accordion-inner clearfix">
         
         <table>
-
-            <tr><td colspan="2"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?><br/>
-            <?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?></td></tr>
-
-                <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
             
-                    <?php $meta_store[] = array(
-                        'key'   => $value,
-                        'value' => $key
-                    )
-                    ?>
-                    <tr><td><strong>Dateiname:</strong> <?php echo $key ?></td><td><strong> Anzeigename:</strong> <?php echo $value ?></td></tr>
+            <tr><td colspan="2"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?></td></tr>
 
-                <?php } ?>
+            <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
+
+                <?php $meta_store[] = array(
+                    'key'   => $value,
+                    'value' => $key
+                )
+                ?>
+                <tr><td><strong>Dateiname:</strong> <?php echo $key ?></td><td><strong> Anzeigename:</strong> <?php echo $value ?></td></tr>
+
+            <?php } ?>
                     
         </table>
+            
+        </div>
+        </div>
+        </div>
+        </div>  
 
+        <?php set_transient( 'rrze-remoter-transient', $j, DAY_IN_SECONDS ); ?>
+    
     <?php } ?>
 
 <?php } ?>
-
 
 <?php
 /*
@@ -196,7 +218,14 @@ for($i = 0; $i <sizeof($data); $i++) { ?>
     
     </tr>
 
-<?php }
+<?php } ?>
+
+<?php
+
+/*
+* Formatierung der Dateigröße
+* return $size
+*/ 
             
 if (!function_exists('formatSize')) {
     function formatSize($bytes) {
@@ -219,6 +248,10 @@ if (!function_exists('formatSize')) {
     }
 }
 
+/*
+* Verzeichnis wird ermittelt
+* return $folder
+*/
 
 if (!function_exists('getFolder')) {
     function getFolder($directory) {
