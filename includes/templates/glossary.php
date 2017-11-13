@@ -123,7 +123,7 @@ if (!function_exists('createTableGlossary')) {
 
                 switch($column) {
                     case 'size':
-                        $t .= '<td>' . formatSize($data[$i]['size']) . '</td>';
+                        //$t .= '<td>' . formatSize($data[$i]['size']) . '</td>';
                         break;
                     case 'type':
                         $extension = $data[$i]['extension'];
@@ -139,7 +139,7 @@ if (!function_exists('createTableGlossary')) {
                         $t .= '<td><a href="http://' . $url['host'] . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                         break;
                     case 'folder':
-                        $t .= '<td>' . getFolder($data[$i]['dir']) . '</td>';
+                        //$t .= '<td>' . getFolder($data[$i]['dir']) . '</td>';
                         break;
                     case 'name':
                         if ($link) {
@@ -164,7 +164,7 @@ if (!function_exists('createTableGlossary')) {
     }
 }
 
-if (!function_exists('formatSize')) {
+/*if (!function_exists('formatSize')) {
     function formatSize($bytes) {
 
         if ($bytes>= 1073741824) {
@@ -183,9 +183,9 @@ if (!function_exists('formatSize')) {
         
         return $size;
     }
-}
+}*/
 
-
+/*
 if (!function_exists('getFolder')) {
     function getFolder($directory) {
  
@@ -196,7 +196,7 @@ if (!function_exists('getFolder')) {
     
     }
 }
-
+*/
 if (!function_exists('checkforfigures')) {
     function checkforfigures($array) {
         
@@ -213,9 +213,9 @@ if (!function_exists('checkforfigures')) {
     }
 }
         
-$columns = getHeaderDataGlossary($show_columns);
+$columns = getHeaderDataGlossary($shortcodeValues['showColumns']);
 $letters = createLetters();
 $unique = getUsedLetters($data);
-getActiveLetters($letters, $unique, $url, $show_columns, $link);
+getActiveLetters($letters, $unique, $url, $shortcodeValues['showColumns'], $shortcodeValues['link']);
 $array_reindexed = sortArray($data, $unique);
-createTableGlossary($columns, $array_reindexed, $url, $link);
+createTableGlossary($columns, $array_reindexed, $url, $shortcodeValues['link']);

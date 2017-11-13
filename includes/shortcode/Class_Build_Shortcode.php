@@ -56,11 +56,65 @@ class Class_Build_Shortcode {
         return $this->show_results_as_list($this->remote_server_args);
     }
     
+    public static function formatSize($bytes) {
+
+        if ($bytes>= 1073741824) {
+            $size = number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+           $size = number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            $size = number_format($bytes / 1024, 0) . ' KB';
+        } elseif ($bytes > 1) {
+            $size = $bytes . ' bytes';
+        } elseif ($bytes == 1) {
+            $size = '1 byte';
+        } else {
+            $size = '0 bytes';
+        }
+        
+        return $size;
+    }
+  
+    public static function getFolder($directory) {
+ 
+        $titel = explode("/", $directory);
+        $folder = $titel[count($titel)-1];
+        
+        return $folder;
+    }
+   
+    public static function getHeaderData($columns) {
+        $shortcodeColumns = explode(",", $columns);
+        return $shortcodeColumns;
+    }
+    
+    public static function deleteMetaTxtEntries($meta) {
+        foreach($meta as $key => $value) {
+            if($value['name'] === '.meta.txt') {
+                unset($meta[$key]);
+            }
+        }
+        
+        $data = array_values($meta);
+        
+        return $data;
+    }
+    
     public function show_results_as_list($query_arguments) {
         
         global $post;
         
-        $shortcode_values = array();
+        $shortcodeValues = array(
+            'fileIndex'     => $this->remote_server_shortcode['index'],
+            'view'          => $this->remote_server_shortcode['view'],
+            'recursive'     => $this->remote_server_shortcode['recursiv'],
+            'filetype'      => $this->remote_server_shortcode['filetype'],
+            'showColumns'   => $this->remote_server_shortcode['show'],
+            'link'          => $this->remote_server_shortcode['link'],
+            'language'      => $this->remote_server_shortcode['language'],
+            'showHeader'    => $this->remote_server_shortcode['showheader'],
+            'file'          => $this->remote_server_shortcode['file']
+        );
         
         $the_query = new \WP_Query( $query_arguments);
         
@@ -72,20 +126,12 @@ class Class_Build_Shortcode {
                 $domain = get_post_meta($post->ID, 'domain', true); 
                 $api_key = get_post_meta($post->ID, 'apikey', true); 
 
-                $file_index = $this->remote_server_shortcode['index'];
-                $view = $this->remote_server_shortcode['view'];
-                $recursiv = $this->remote_server_shortcode['recursiv'];
-                $filetype = $this->remote_server_shortcode['filetype'];
-                $show_columns = $this->remote_server_shortcode['show'];
-                $link = $this->remote_server_shortcode['link'];
-                $language = $this->remote_server_shortcode['language'];
-                $showheader = $this->remote_server_shortcode['showheader'];
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
                 
                 $data = $this->remote_data;
                 
-                if ($language) {
-                    $data = $this->getEnglischContent($data, $language);
+                if ($shortcodeValues['language']) {
+                    $data = $this->getEnglischContent($data, $shortcodeValues['language']);
                 } else {
                     $data = $this->remote_data;
                     
@@ -95,19 +141,22 @@ class Class_Build_Shortcode {
 
                     $url = parse_url(get_post_meta($post->ID, 'url', true)); 
 
-                    if ($view == 'gallery') {
+                    if ($shortcodeValues['view'] == 'gallery') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
-                    } elseif($view == 'list') {
+                    } elseif($shortcodeValues['view'] == 'list') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
-                    } elseif($view == 'pagination') {
+                    } elseif($shortcodeValues['view'] == 'pagination') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
-                    } elseif($view == 'table') {
+                    } elseif($shortcodeValues['view'] == 'table') {
                         ob_start();
-                        $header = $showheader;
+                        $header = $shortcodeValues['showHeader'];
+                        $tableHeader = self::getHeaderData($shortcodeValues['showColumns']);
+                        $meta = $data;
+                        $meta_store = array();
                         include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
                         $content = ob_get_clean();
                         return $content;
-                    } elseif($view == 'imagetable') {
+                    } elseif($shortcodeValues['view'] == 'imagetable') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
                     } else {
                         include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
@@ -118,7 +167,8 @@ class Class_Build_Shortcode {
                    
             }
             
-            delete_transient( 'rrze-remoter-transient');
+            delete_transient('rrze-remoter-transient');
+           
             wp_reset_postdata();
         } else {
                 echo 'no posts found';
@@ -154,6 +204,9 @@ class Class_Build_Shortcode {
     public function rrze_remote_table_script_footer(){ 
         
         $arr = (isset($this->res)) ? $this->res : '';
+        $meta = (isset($this->meta)) ? $this->meta : '';
+        //$meta = $this->meta;
+        //print_r($meta);
         
         ?>
   
@@ -161,6 +214,7 @@ class Class_Build_Shortcode {
         jQuery(document).ready(function($) {
 
             var arr = <?php echo json_encode($arr); ?>;
+            var meta = <?php echo json_encode($meta); ?>;
 
             $('a[href="#get_list"]').click(function(){
                 var link = $(this).attr('class');
@@ -188,7 +242,8 @@ class Class_Build_Shortcode {
                         'host'      : host,
                         'columns'   : columns,
                         'link'      : link,
-                        'arr'       : arr
+                        'arr'       : arr,
+                        'meta'      : meta
                     },
                     success:function(data) {
                         $( "#result" ).html(data);
@@ -211,13 +266,24 @@ class Class_Build_Shortcode {
         
         if ( isset($_REQUEST) ) {
             
+            $meta       = $_REQUEST['meta'];
+            $dataArray  = $_REQUEST['arr'];
+            
             $number_of_chunks = $_REQUEST['chunk'];
             
             $host = $_REQUEST['host'];
             
             $link = $_REQUEST['link'];
+            
+            
+            foreach($dataArray as $key => $value) {
+                if($value['name'] === '.meta.txt') { 
+                    unset($dataArray[$key]);
+                    $dataChunk = array_values($dataArray);
+                }
+            }
 
-            $data = array_chunk($_REQUEST['arr'], $number_of_chunks);
+            $data = array_chunk($dataChunk, $number_of_chunks);
             
             if (null !== $_REQUEST['p']) {
                 if ($_REQUEST['p'] > $_REQUEST['count']) {
@@ -310,9 +376,16 @@ class Class_Build_Shortcode {
                             break;
                         case 'name':
                             if ($link) {
-                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">' .  basename($value['path']) . '</a></td>';    
+                            
+                            $key = array_search(basename($value['path']), array_column($meta, 'value'));
+                            
+                                if($key == 0 || $key > 0) {
+                                  $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">' . $meta[$key]['key'] . '</a></td>';
+                                } else {
+                                  $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">' . basename($value['path'])  . '</a></td>';
+                                }
                             } else {
-                              $t .= '<td>' . basename($value['path']) .'</td>';  
+                                $t .= '<td>' . $value['path'] .'</td>';  
                             }
                             break;
                         case 'date':

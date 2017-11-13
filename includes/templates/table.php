@@ -1,3 +1,54 @@
+<?php $meta = $data; ?>
+<?php $meta_store = array(); ?>
+<?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
+
+    <?php if(!empty($meta[$i]['meta'])) { ?>
+
+        <?php $transient = get_transient('rrze-remoter-transient-table'); 
+
+            if(empty($transient)) {
+                $j = 1;
+            } else {
+                $j = $transient;
+                $j++;
+            }
+
+        ?>
+        
+        <div class="accordion" id="accordion-1">
+        <div class="accordion-group">
+        <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $j ?>" href="#collapse_<?php echo $j ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
+        <div id="collapse_<?php echo $j ?>" class="accordion-body" style="display: none;">
+        <div class="accordion-inner clearfix">
+        
+        <table>
+            
+            <tr><td colspan="2"><strong>Beschreibung: </strong><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?></td></tr>
+
+            <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
+
+                <?php $meta_store[] = array(
+                    'key'   => $value,
+                    'value' => $key
+                )
+                ?>
+                <tr><td><strong>Dateiname:</strong> <?php echo $key ?></td><td><strong> Anzeigename:</strong> <?php echo $value ?></td></tr>
+
+            <?php } ?>
+                    
+        </table>
+            
+        </div>
+        </div>
+        </div>
+        </div>  
+
+        <?php set_transient( 'rrze-remoter-transient-table', $j, DAY_IN_SECONDS ); ?>
+    
+    <?php } ?>
+
+<?php } ?>
+
 <?php
 
 date_default_timezone_set('Europe/Berlin');
@@ -6,9 +57,20 @@ $url = parse_url(get_post_meta($post->ID, 'url', true));
 
 $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
 
-$data = array_chunk($this->remote_data, $number_of_chunks);
+$dataFirstPage = $this->remote_data;
+
+foreach($dataFirstPage as $key => $value) {
+    if($value['name'] === '.meta.txt') { 
+        unset($dataFirstPage[$key]);
+        $dataChunk = array_values($dataFirstPage);
+    }
+}
+
+$data = array_chunk($dataChunk, $number_of_chunks);
 
 $this->res = $this->remote_data; 
+
+$this->meta = $meta_store;
 
 $pagecount = count($data);
 
@@ -17,8 +79,8 @@ function getHeaderDataPagination($columns) {
     return $columns;
 }
 
-function createTablePagination($columns, $data, $link, $url, $itemsperpage) {
-
+function createTablePagination($columns, $data, $link, $url, $itemsperpage, $meta_store) {
+    
     $id = uniqid();
     $itemscount = count($data[0]);
 
@@ -59,36 +121,42 @@ function createTablePagination($columns, $data, $link, $url, $itemsperpage) {
           
             foreach($columns as $key => $column) {
 
-              switch($column) {
-                  case 'size':
-                      $t .= '<td>' . formatSize($data[$i][$j]['size']) . '</td>';
-                      break;
-                  case 'type':
-                      $extension = $data[$i][$j]['extension'];
-                      if($extension == 'pdf') {
-                          $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
-                      }elseif($extension == 'pptx') {
-                          $t .= '<td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
-                      }else{
-                          $t .= '<td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
-                      }
-                      break;
-                  case 'download':
-                      $t .= '<td><a href="http://' . $url['host'] . $data[$i][$j]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
-                      break;
-                  case 'folder':
-                      $t .= '<td>' . getFolder($data[$i][$j]['dir']) . '</td>';
-                      break;
-                  case 'name':
-                      if ($link) {
-                        $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$i][$j]['image'] . '">' .  basename($data[$i][$j]['path']) . '</a></td>';    
-                      } else {
-                        $t .= '<td>' . basename($data[$i][$j]['path']) .'</td>';  
-                      }
-                      break;
+                switch($column) {
+                    case 'size':
+                        //$t .= '<td>' . formatSize($data[$i][$j]['size']) . '</td>';
+                        break;
+                    case 'type':
+                        $extension = $data[$i][$j]['extension'];
+                        if($extension == 'pdf') {
+                            $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
+                        }elseif($extension == 'pptx') {
+                            $t .= '<td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
+                        }else{
+                            $t .= '<td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
+                        }
+                        break;
+                    case 'download':
+                        $t .= '<td><a href="http://' . $url['host'] . $data[$i][$j]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                        break;
+                    case 'folder':
+                        //$t .= '<td>' . getFolder($data[$i][$j]['dir']) . '</td>';
+                        break;
+                    case 'name':
+                        if ($link) {
+                            $key = array_search(basename($data[$i][$j]['path']), array_column($meta_store, 'value'));
+                            
+                            if($key == 0 || $key > 0) {
+                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$i][$j]['image'] . '">' . $meta_store[$key]['key'] . '</a></td>';
+                            } else {
+                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$i][$j]['image'] . '">' . basename($data[$i][$j]['path']) . '</a></td>';; 
+                            }
+                        } else {
+                            $t .= '<td>' . basename($data[$i][$j]['path']) .'</td>';  
+                        }
+                        break;
                   case 'date':
-                      $t .= '<td>' . date('j. F Y', $data[$i][$j]['change_time']) .'</td>';
-                      break; 
+                        $t .= '<td>' . date('j. F Y', $data[$i][$j]['change_time']) .'</td>';
+                         break; 
               }
 
           }
@@ -102,16 +170,14 @@ function createTablePagination($columns, $data, $link, $url, $itemsperpage) {
 }
 
 $table_var = array();
-$table_var['filetype']  = $filetype;
-$table_var['recursive'] = $recursiv;
-$table_var['fileindex'] = $file_index;
-$table_var['url']       = $url['host'];
+$table_var['filetype']  = $shortcodeValues['filetype'];
+$table_var['recursive'] = $shortcodeValues['recursive'];
+$table_var['fileindex'] = $shortcodeValues['fileIndex'];
 $table_var['chunks']    = $number_of_chunks;
 $table_var['pagecount'] = $pagecount;
-$table_var['columns']   = $show_columns;
-$table_var['link']      = $link;
-
-
+$table_var['columns']   = $shortcodeValues['showColumns'];
+$table_var['link']      = $shortcodeValues['link'];
+$table_var['url']       = $url['host'];
 
 function createNavigation(array $table_var) {
     
@@ -138,12 +204,12 @@ function createNavigation(array $table_var) {
     
 }
 
-$headerColumns = getHeaderDataPagination($show_columns);
-$header = createTablePagination($headerColumns, $data, $link, $url, $number_of_chunks);
+$headerColumns = getHeaderDataPagination($table_var['columns']);
+$header = createTablePagination($headerColumns, $data, $table_var['link'], $url, $number_of_chunks, $meta_store);
 createNavigation($table_var);
 
 
-function formatSize($bytes) {
+/*function formatSize($bytes) {
 
     if ($bytes>= 1073741824) {
         $size = number_format($bytes / 1073741824, 2) . ' GB';
@@ -160,8 +226,8 @@ function formatSize($bytes) {
     }
 
     return $size;
-}
-
+}*/
+/*
 function getFolder($directory) {
 
     $titel = explode("/", $directory);
@@ -169,4 +235,4 @@ function getFolder($directory) {
 
     return $folder;
 
-}
+}*/
