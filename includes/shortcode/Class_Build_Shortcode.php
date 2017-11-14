@@ -31,12 +31,13 @@ class Class_Build_Shortcode {
             'itemsperpage'      => '4',
             'filetype'          => '',
             'link'              => '0',
-            'language'          => '0',
+            //'language'          => '0',
             'view'              => 'table',
             'orderby'           => 'name',
             'order'             => 'asc',
             'show'              => 'name,download',
-            'showheader'        => '0'
+            'showheader'        => '0',
+            'filter'             => ''
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -100,6 +101,66 @@ class Class_Build_Shortcode {
         return $data;
     }
     
+    public static function createLetters() {
+        $letters = array(
+            'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+    );
+    
+        return $letters;
+    }
+    
+    public static function getUsedLetters($data) {
+   
+        foreach ($data as $file) {
+            $files[] = substr($file['name'], 0, 1);
+        }
+
+        $unique = array_unique($files);
+
+        sort($unique);
+
+        return $unique;
+
+    }
+    
+    public function checkforfigures($array) {
+        
+        foreach($array as $key => $value) {
+            
+            if(is_numeric($value) || ctype_lower($value) || substr($value, 0, 1) === '.') {
+                unset($array[$key]);
+            }       
+        }
+        
+        $newindex = array_values($array);
+        
+        return $newindex;
+    }
+    
+    public function sortArray($data, $unique) {
+    
+        $filenames = array(); 
+
+        foreach ($data as $file) {
+            $filenames[] = $file['name'];
+        }
+
+        array_multisort($filenames, SORT_ASC, $data);
+
+        $array_without_numbers = self::checkforfigures($unique);
+
+        foreach ( $data as $key => $value ) {
+            if ( substr($value['name'], 0, 1) !=  $array_without_numbers[0] ) {
+                unset( $data[$key]);
+            }
+        }
+
+        $array_reindexed = array_values($data);
+
+        return $array_reindexed;
+
+    }
+    
     public function show_results_as_list($query_arguments) {
         
         global $post;
@@ -111,7 +172,7 @@ class Class_Build_Shortcode {
             'filetype'      => $this->remote_server_shortcode['filetype'],
             'showColumns'   => $this->remote_server_shortcode['show'],
             'link'          => $this->remote_server_shortcode['link'],
-            'language'      => $this->remote_server_shortcode['language'],
+            //'language'      => $this->remote_server_shortcode['language'],
             'showHeader'    => $this->remote_server_shortcode['showheader'],
             'file'          => $this->remote_server_shortcode['file']
         );
@@ -130,12 +191,12 @@ class Class_Build_Shortcode {
                 
                 $data = $this->remote_data;
                 
-                if ($shortcodeValues['language']) {
+                /*if ($shortcodeValues['language']) {
                     $data = $this->getEnglischContent($data, $shortcodeValues['language']);
                 } else {
                     $data = $this->remote_data;
                     
-                }
+                }*/
                 
                 if($data){
 
@@ -146,6 +207,23 @@ class Class_Build_Shortcode {
                     } elseif($shortcodeValues['view'] == 'list') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
                     } elseif($shortcodeValues['view'] == 'pagination') {
+                        $meta = $data;
+                        $meta_store = array();
+                        date_default_timezone_set('Europe/Berlin');
+                        $url = parse_url(get_post_meta($post->ID, 'url', true)); 
+                        $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
+                        $dataFirstPage = $this->remote_data;
+                        foreach($dataFirstPage as $key => $value) {
+                            if($value['name'] === '.meta.txt') { 
+                                unset($dataFirstPage[$key]);
+                                $dataChunk = array_values($dataFirstPage);
+                            }
+                        }
+                        $data = array_chunk($dataChunk, $number_of_chunks);
+                        $pagecount = count($data);
+                        $tableHeader = self::getHeaderData($shortcodeValues['showColumns']);
+                        $id = uniqid();
+                        $itemscount = count($data[0]);
                         include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
                     } elseif($shortcodeValues['view'] == 'table') {
                         ob_start();
@@ -159,10 +237,18 @@ class Class_Build_Shortcode {
                     } elseif($shortcodeValues['view'] == 'imagetable') {
                         include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
                     } else {
+                        $id = uniqid();
+                        $meta = $data;
+                        $meta_store = array();
+                        $tableHeader = self::getHeaderData($shortcodeValues['showColumns']);
+                        $letters = self::createLetters();
+                        $unique = self::getUsedLetters($meta);
+                        $array_without_numbers = self::checkforfigures($unique);
+                        $dataSorted = self::sortArray($meta, $unique);
                         include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
                     }
                 } else {
-                    echo 'Sie sind nicht berechtigt Daten abzurufen';
+                    echo 'Überprüfen Sie Ihren Shortcode!';
                 }
                    
             }
@@ -175,7 +261,7 @@ class Class_Build_Shortcode {
         }
     }
     
-    public function getEnglischContent($data, $language) {
+    /*public function getEnglischContent($data, $language) {
         
         $items = array();
        
@@ -199,7 +285,7 @@ class Class_Build_Shortcode {
             $new = array_values($without_english);
             return $new;
         }
-    }
+    }*/
     
     public function rrze_remote_table_script_footer(){ 
         
@@ -379,7 +465,7 @@ class Class_Build_Shortcode {
                             
                             $key = array_search(basename($value['path']), array_column($meta, 'value'));
                             
-                                if($key == 0 || $key > 0) {
+                                if($key === 0 || $key > 0) {
                                   $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">' . $meta[$key]['key'] . '</a></td>';
                                 } else {
                                   $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">' . basename($value['path'])  . '</a></td>';

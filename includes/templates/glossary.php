@@ -1,221 +1,150 @@
-<?php
+<?php $this->glossary_array = $this->remote_data ?>
+<?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
 
-//$data = $this->remote_data;
-$this->glossary_array = $this->remote_data;
+    <?php if(!empty($meta[$i]['meta'])) { ?>
 
-function createLetters() {
-   
-    $letters = array(
-        'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
-    );
-    
-    return $letters;
-    
-}
+        <?php $transient = get_transient('rrze-remoter-transient-table'); 
 
-function getUsedLetters($data) {
-   
-    foreach ($data as $file) {
-        $files[] = substr($file['name'], 0, 1);
-    }
-
-    $unique = array_unique($files);
-
-    sort($unique);
-    
-    return $unique;
-    
-}
-
-function getActiveLetters($letters, $unique, $url, $columns, $link) {
-    
-    $html  = '<h3>Glossar</h3>';
-    $html .= '<div class="fau-glossar"><ul class="letters" aria-hidden="true">';
-    
-    $array_without_numbers = checkforfigures($unique);
-
-    foreach ($letters as $key => $value) {
-        
-        if (in_array($value, $array_without_numbers)) {
-
-            $html .= '<li><a href="#letter-' . $value . '"data-link="' . $link . '"data-columns="' . $columns . '"data-host="' . $url['host'] . '" data-letter="' . $value . '">'.$value.'</a></li>';
-
-        } else {
-
-           $html .= '<li class="muted">'.$value.'</li>';
-
-        }
-    }
-
-    $html .= '</span></div>';
-    echo $html; 
-    
-}
-
-function sortArray($data, $unique) {
-    
-    $filenames = array(); 
-    
-    foreach ($data as $file) {
-        $filenames[] = $file['name'];
-    }
-
-    array_multisort($filenames, SORT_ASC, $data);
-    
-    $array_without_numbers = checkforfigures($unique);
-
-    foreach ( $data as $key => $value ) {
-        if ( substr($value['name'], 0, 1) !=  $array_without_numbers[0] ) {
-            unset( $data[$key]);
-        }
-    }
-    
-    $array_reindexed = array_values($data);
-    
-    return $array_reindexed;
-    
-}
-
-if (!function_exists('getHeaderDataGlossary')) {
-    function getHeaderDataGlossary($columns) {
-        $columns = explode(",", $columns);
-        return $columns;
-    }
-}
-
-if (!function_exists('createTableGlossary')) {
-    function createTableGlossary($columns, $data, $url, $link) {
-        $id = uniqid();
-        $t  = '<div id="glossary"><table>';
-        $t .= '<tr>';
-
-        foreach($columns as $key => $column) {
-
-            switch($column) {
-                case 'size':
-                    $t .= '<th>Dateigröße</th>';
-                    break;
-                case 'type':
-                    $t .= '<th>Dateityp</th>';
-                    break;
-                case 'download':
-                    $t .= '<th>Download</th>';
-                    break;
-                case 'folder':
-                    $t .= '<th>Ordner</th>';
-                    break;
-                case 'name':
-                    $t .= '<th>Name</th>';
-                    break;
-                case 'date':
-                    $t .= '<th>Datum</th>';
-                    break;   
+            if(empty($transient)) {
+                $j = 1;
+            } else {
+                $j = $transient;
+                $j++;
             }
-        }
 
-        $t .= '</tr>';
+        ?>
         
-        for($i = 0; $i < sizeof($data); $i++) {
-            
-            $t .= '</tr>';
-        
-            foreach($columns as $key => $column) {
+        <div class="accordion" id="accordion-1">
+            <div class="accordion-group">
+            <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $j ?>" href="#collapse_<?php echo $j ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
+                <div id="collapse_<?php echo $j ?>" class="accordion-body" style="display: none;">
+                    <div class="accordion-inner clearfix">
+                    <table>
+                        <tr>
+                            <td colspan="2"><strong>Beschreibung: </strong><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?></td>
+                        </tr>
+                        <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
+                            <?php $meta_store[] = array(
+                                'key'   => $value,
+                                'value' => $key
+                            )
+                            ?>
+                            <tr>
+                                <td>
+                                    <strong>Dateiname:</strong> <?php echo $key ?></td>
+                                <td><strong> Anzeigename:</strong> <?php echo $value ?></td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        <?php set_transient( 'rrze-remoter-transient-table', $j, DAY_IN_SECONDS ); ?>
+    <?php } ?>
+<?php } ?>
+<h3>Glossar</h3>
+<div class="fau-glossar"><ul class="letters" aria-hidden="true">
+<?php foreach ($letters as $key => $value) { ?>
+
+   <?php if (in_array($value, $array_without_numbers)) { ?>
+
+        <li><a href="#letter-<?php echo $value ?>"data-link="<?php echo $shortcodeValues['link'] ?>"data-columns="<?php echo $shortcodeValues['showColumns'] ?>"data-host="<?php echo $url['host'] ?>" data-letter="<?php echo $value ?>"><?php echo $value ?></a></li>
+
+   <?php } else { ?>
+
+       <li class="muted"><?php echo $value ?></li>
+
+   <?php } ?>
+<?php } ?>
+</ul>
+</div>
+<div id="glossary">
+    <table>
+        <tr>
+            <?php foreach($tableHeader as $key => $column) {
 
                 switch($column) {
-                    case 'size':
-                        //$t .= '<td>' . formatSize($data[$i]['size']) . '</td>';
+                    case 'size': ?>
+                        <th>Dateigröße</th>
+                    <?php break;
+                    case 'type': ?>
+                        <th>Dateityp</th>
+                    <?php break;
+                    case 'download': ?>
+                        <th>Download</th>
+                    <?php break;
+                    case 'folder': ?>
+                        <th>Ordner</th>
+                    <?php break;
+                    case 'name': ?>
+                        <th>Name</th>
+                    <?php break;
+                    case 'date': ?>
+                        <th>Datum</th>
+                    <?php break;   
+                }
+            } ?>
+        </tr>
+       <?php for($i = 0; $i < sizeof($dataSorted); $i++) { ?>
+            
+            <tr>
+        
+            <?php foreach($tableHeader as $key => $column) { ?>
+
+                <?php switch($column) { 
+                    case 'size': ?>
+                        <td><?php echo self::formatSize($data[$i]['size']) ?></td>
+                        <?php  
                         break;
-                    case 'type':
-                        $extension = $data[$i]['extension'];
-                        if($extension == 'pdf') {
-                            $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
-                        }elseif($extension == 'pptx') {
-                            $t .= '<td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
-                        }else{
-                            $t .= '<td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
-                        }
+                    case 'type': ?>
+                        <?php $extension = $data[$i]['extension']; ?>
+                        <?php if($extension == 'pdf') { ?>
+                            <td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>
+                        <?php } elseif($extension == 'pptx') { ?>
+                            <td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>
+                        <?php } else { ?>
+                            <td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>
+                        <?php }
                         break;
-                    case 'download':
-                        $t .= '<td><a href="http://' . $url['host'] . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
-                        break;
-                    case 'folder':
-                        //$t .= '<td>' . getFolder($data[$i]['dir']) . '</td>';
-                        break;
-                    case 'name':
-                        if ($link) {
-                          $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $url['host'] . $data[$i]['image'] . '">' .  basename($data[$i]['image']) . '</a></td>';    
+                    case 'download': ?>
+                        <td><a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                        <?php break;
+                    case 'folder': ?>
+                        <td><?php echo self::getFolder($data[$i]['dir']) ?></td>
+                        <?php break;
+                    case 'name': ?>
+                        <?php if ($shortcodeValues['link']) { ?>
+                  
+                        <td><a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
+
+                        <?php
+
+                        $key = array_search(basename($data[$i]['path']), array_column($meta_store, 'value'));
+
+                        if($key > 0 || $key === 0 && $shortcodeValues['file'] == '' && !empty($meta_store)) {
+                            echo $meta_store[$key]['key'];
                         } else {
-                          $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
+                            echo basename($data[$i]['path']); 
                         }
+
+                        ?></a></td>    
+
+                    <?php } else { ?>
+
+                        <td><?php echo basename($data[$i]['path']) ?></td>  
+                    <?php  } 
                         break;
-                    case 'date':
-                        $t .= '<td>' . date('j F Y', $data[$i]['change_time']) .'</td>';
-                        break; 
+                    case 'date': ?>
+                        <td><?php echo date('j F Y', $data[$i]['change_time']) ?></td>
+                        <?php break; 
                 }
 
-            }
+            } ?>
             
-            $t .= '</tr>';
+            </tr>
             
-        }
+       <?php } ?>
        
-        $t .= '</table></div>';
-        echo $t;
-    }
-}
-
-/*if (!function_exists('formatSize')) {
-    function formatSize($bytes) {
-
-        if ($bytes>= 1073741824) {
-            $size = number_format($bytes / 1073741824, 2) . ' GB';
-        } elseif ($bytes >= 1048576) {
-           $size = number_format($bytes / 1048576, 2) . ' MB';
-        } elseif ($bytes >= 1024) {
-            $size = number_format($bytes / 1024, 0) . ' KB';
-        } elseif ($bytes > 1) {
-            $size = $bytes . ' bytes';
-        } elseif ($bytes == 1) {
-            $size = '1 byte';
-        } else {
-            $size = '0 bytes';
-        }
-        
-        return $size;
-    }
-}*/
-
-/*
-if (!function_exists('getFolder')) {
-    function getFolder($directory) {
- 
-        $titel = explode("/", $directory);
-        $folder = $titel[count($titel)-1];
-        
-        return $folder;
-    
-    }
-}
-*/
-if (!function_exists('checkforfigures')) {
-    function checkforfigures($array) {
-        
-        foreach($array as $key => $value) {
-            
-            if(is_numeric($value) || ctype_lower($value)) {
-                unset($array[$key]);
-            }       
-        }
-        
-        $newindex = array_values($array);
-        
-        return $newindex;
-    }
-}
-        
-$columns = getHeaderDataGlossary($shortcodeValues['showColumns']);
-$letters = createLetters();
-$unique = getUsedLetters($data);
-getActiveLetters($letters, $unique, $url, $shortcodeValues['showColumns'], $shortcodeValues['link']);
-$array_reindexed = sortArray($data, $unique);
-createTableGlossary($columns, $array_reindexed, $url, $shortcodeValues['link']);
+    </table>
+</div>

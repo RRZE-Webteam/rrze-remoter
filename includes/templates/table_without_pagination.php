@@ -25,7 +25,7 @@
                                 <?php $meta_store[] = array(
                                     'key'   => $value,
                                     'value' => $key
-                                )
+                                );
                                 ?>
                                 <tr>
                                     <td><strong>Dateiname:</strong>
@@ -124,7 +124,7 @@ if($header) { ?>
 
                     $key = array_search(basename($data[$i]['path']), array_column($meta_store, 'value'));
                     
-                    if($key >= 0 && $shortcodeValues['file'] == '' && !empty($meta_store)) {
+                    if($key > 0 || $key === 0 && $shortcodeValues['file'] == '' && !empty($meta_store)) {
                         echo $meta_store[$key]['key'];
                     } else {
                         echo basename($data[$i]['path']); 
