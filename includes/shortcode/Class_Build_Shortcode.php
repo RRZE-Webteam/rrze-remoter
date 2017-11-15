@@ -37,7 +37,7 @@ class Class_Build_Shortcode {
             'order'             => 'asc',
             'show'              => 'name,download',
             'showheader'        => '0',
-            'filter'             => ''
+            'filter'            => ''
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -242,9 +242,9 @@ class Class_Build_Shortcode {
                         $meta_store = array();
                         $tableHeader = self::getHeaderData($shortcodeValues['showColumns']);
                         $letters = self::createLetters();
-                        $unique = self::getUsedLetters($meta);
+                        $unique = self::getUsedLetters($data);
                         $array_without_numbers = self::checkforfigures($unique);
-                        $dataSorted = self::sortArray($meta, $unique);
+                        $dataSorted = self::sortArray($data, $unique);
                         include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
                     }
                 } else {
@@ -253,9 +253,10 @@ class Class_Build_Shortcode {
                    
             }
             
-            delete_transient('rrze-remoter-transient');
-           
+            //delete_transient('rrze-remoter-transient');
+            //delete_transient('rrze-remoter-transient-table');
             wp_reset_postdata();
+            
         } else {
                 echo 'no posts found';
         }
@@ -424,25 +425,9 @@ class Class_Build_Shortcode {
                     $titel = explode("/", $dir['dirname']);
                     $folder = $titel[count($titel)-1];
 
-                    $bytes = $value['size'];
-
-                    if ($bytes>= 1073741824) {
-                        $size = number_format($bytes / 1073741824, 2) . ' GB';
-                    } elseif ($bytes >= 1048576) {
-                       $size = number_format($bytes / 1048576, 2) . ' MB';
-                    } elseif ($bytes >= 1024) {
-                        $size = number_format($bytes / 1024, 0) . ' KB';
-                    } elseif ($bytes > 1) {
-                        $size = $bytes . ' bytes';
-                    } elseif ($bytes == 1) {
-                        $size = '1 byte';
-                    } else {
-                        $size = '0 bytes';
-                    }
-
                     switch($column) {
                         case 'size':
-                            $t .= '<td>' . $size . '</td>';
+                            $t .= '<td>' . self::formatSize($value['size']) . '</td>';
                             break;
                         case 'type':
                             $extension = $value['extension'];
@@ -495,12 +480,15 @@ class Class_Build_Shortcode {
     public function rrze_remote_glossary_script_footer() { 
         
         $glossary_files = (isset($this->glossary_array) ? $this->glossary_array : '') ;
+        $glossary_meta = (isset($this->meta)) ? $this->meta : '';
+        //print_r($glossary_meta);
 	 
          ?>
          <script>
         jQuery(document).ready(function($) {
             
             var glossary = <?php echo json_encode($glossary_files); ?>;
+            var meta = <?php echo json_encode($glossary_meta); ?>;
 
             $('a[href^="#letter-"]').click(function(){
                 var letter = $(this).attr('data-letter');
@@ -517,7 +505,8 @@ class Class_Build_Shortcode {
                         'host'      : host,
                         'columns'   : columns,
                         'link'      : link,
-                        'glossary'  : glossary
+                        'glossary'  : glossary,
+                        'meta'      : meta
                     },
                     success:function(data) {
                         $("#glossary").html(data);
@@ -538,6 +527,10 @@ class Class_Build_Shortcode {
         $id = uniqid();
         $link = $_REQUEST['link'];
         $host = $_REQUEST['host'];
+        
+        //echo '<pre>';
+        $meta = $_REQUEST['meta'];
+        //echo '</pre>';
         
         $filenames = array(); 
 
@@ -597,25 +590,9 @@ class Class_Build_Shortcode {
                 $titel = explode("/", $dir['dirname']);
                 $folder = $titel[count($titel)-1];
                 
-                $bytes = $data[$i]['size'];
-
-                if ($bytes>= 1073741824) {
-                    $size = number_format($bytes / 1073741824, 2) . ' GB';
-                } elseif ($bytes >= 1048576) {
-                   $size = number_format($bytes / 1048576, 2) . ' MB';
-                } elseif ($bytes >= 1024) {
-                    $size = number_format($bytes / 1024, 0) . ' KB';
-                } elseif ($bytes > 1) {
-                    $size = $bytes . ' bytes';
-                } elseif ($bytes == 1) {
-                    $size = '1 byte';
-                } else {
-                    $size = '0 bytes';
-                }
-
                 switch($column) {
                     case 'size':
-                        $t .= '<td>' . $size . '</td>';
+                        $t .= '<td>' . self::formatSize($data[$i]['size']) . '</td>';
                         break;
                     case 'type':
                         $extension = $data[$i]['extension'];
@@ -635,9 +612,16 @@ class Class_Build_Shortcode {
                         break;
                     case 'name':
                         if ($link) {
-                          $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['image'] . '">' .  basename($data[$i]['path']) . '</a></td>';    
+
+                        $key = array_search(basename($data[$i]['path']), array_column($meta, 'value'));
+
+                            if($key === 0 || $key > 0) {
+                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['image']. '">' . $meta[$key]['key'] . '</a></td>';
+                            } else {
+                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['image'] . '">' . basename($data[$i]['path'])  . '</a></td>';
+                            }
                         } else {
-                          $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
+                            $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
                         }
                         break;
                     case 'date':

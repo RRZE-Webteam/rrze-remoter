@@ -1,9 +1,10 @@
 <?php   $this->res = $this->remote_data; ?>
+<?php array_multisort(array_column($meta, 'name'), SORT_ASC, $meta); ?>
 <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
 
     <?php if(!empty($meta[$i]['meta'])) { ?>
 
-        <?php $transient = get_transient('rrze-remoter-transient-table'); 
+        <?php $transient = get_transient('rrze-remoter-transient'); 
 
             if(empty($transient)) {
                 $j = 1;
@@ -40,7 +41,7 @@
                 </div>
             </div>
         </div>  
-        <?php set_transient( 'rrze-remoter-transient-table', $j, DAY_IN_SECONDS ); ?>
+        <?php set_transient( 'rrze-remoter-transient', $j, DAY_IN_SECONDS ); ?>
     <?php } ?>
 <?php } ?>
 <?php  $this->meta = $meta_store; ?>

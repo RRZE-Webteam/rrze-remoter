@@ -1,3 +1,4 @@
+<?php array_multisort(array_column($meta, 'name'), SORT_ASC, $meta); ?>
 <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
     <?php if(!empty($meta[$i]['meta']) && $header == 1) { ?>
         <?php $transient = get_transient('rrze-remoter-transient'); 

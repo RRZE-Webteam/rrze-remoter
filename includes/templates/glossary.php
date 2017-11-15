@@ -1,9 +1,22 @@
 <?php $this->glossary_array = $this->remote_data ?>
+ <?php 
+ 
+    foreach($data as $key => $value) {
+        if($value['name'] === '.meta.txt') { 
+            unset($data[$key]);
+            $data_new = array_values($data);
+        }
+    }
+ 
+ 
+ 
+ ?>
+<?php array_multisort(array_column($meta, 'name'), SORT_ASC, $meta); ?>
 <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
 
     <?php if(!empty($meta[$i]['meta'])) { ?>
 
-        <?php $transient = get_transient('rrze-remoter-transient-table'); 
+        <?php $transient = get_transient('rrze-remoter-transient'); 
 
             if(empty($transient)) {
                 $j = 1;
@@ -29,6 +42,7 @@
                                 'value' => $key
                             )
                             ?>
+                       
                             <tr>
                                 <td>
                                     <strong>Dateiname:</strong> <?php echo $key ?></td>
@@ -40,9 +54,10 @@
                 </div>
             </div>
         </div>  
-        <?php set_transient( 'rrze-remoter-transient-table', $j, DAY_IN_SECONDS ); ?>
+        <?php set_transient( 'rrze-remoter-transient', $j, DAY_IN_SECONDS ); ?>
     <?php } ?>
 <?php } ?>
+<?php  $this->meta = $meta_store; ?>
 <h3>Glossar</h3>
 <div class="fau-glossar"><ul class="letters" aria-hidden="true">
 <?php foreach ($letters as $key => $value) { ?>
@@ -86,7 +101,7 @@
                 }
             } ?>
         </tr>
-       <?php for($i = 0; $i < sizeof($dataSorted); $i++) { ?>
+        <?php for($i = 0; $i < sizeof($dataSorted); $i++) { ?>
             
             <tr>
         
@@ -94,11 +109,11 @@
 
                 <?php switch($column) { 
                     case 'size': ?>
-                        <td><?php echo self::formatSize($data[$i]['size']) ?></td>
+                        <td><?php echo self::formatSize($data_new[$i]['size']) ?></td>
                         <?php  
                         break;
                     case 'type': ?>
-                        <?php $extension = $data[$i]['extension']; ?>
+                        <?php $extension = $data_new[$i]['extension']; ?>
                         <?php if($extension == 'pdf') { ?>
                             <td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>
                         <?php } elseif($extension == 'pptx') { ?>
@@ -108,35 +123,35 @@
                         <?php }
                         break;
                     case 'download': ?>
-                        <td><a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                        <td><a href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                         <?php break;
                     case 'folder': ?>
-                        <td><?php echo self::getFolder($data[$i]['dir']) ?></td>
+                        <td><?php echo self::getFolder($data_new[$i]['dir']) ?></td>
                         <?php break;
                     case 'name': ?>
                         <?php if ($shortcodeValues['link']) { ?>
                   
-                        <td><a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
+                        <td><a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>">
 
                         <?php
-
-                        $key = array_search(basename($data[$i]['path']), array_column($meta_store, 'value'));
-
+                        
+                        $key = array_search(basename($data_new[$i]['path']), array_column($meta_store, 'value'));
+                      
                         if($key > 0 || $key === 0 && $shortcodeValues['file'] == '' && !empty($meta_store)) {
                             echo $meta_store[$key]['key'];
                         } else {
-                            echo basename($data[$i]['path']); 
+                            echo 'berni'. basename($data[$i]['path']); 
                         }
 
                         ?></a></td>    
 
                     <?php } else { ?>
 
-                        <td><?php echo basename($data[$i]['path']) ?></td>  
+                        <td><?php echo basename($data_new[$i]['path']) ?></td>  
                     <?php  } 
                         break;
                     case 'date': ?>
-                        <td><?php echo date('j F Y', $data[$i]['change_time']) ?></td>
+                        <td><?php echo date('j F Y', $data_new[$i]['change_time']) ?></td>
                         <?php break; 
                 }
 
