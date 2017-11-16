@@ -35,6 +35,7 @@ class Class_Grab_Remote_Files {
                 'orderby'   =>  $index['orderby'],
                 'order'     =>  $index['order'],
                 'filter'    =>  $index['filter'],
+                'alias'     =>  $index['alias'],
                 'api_key'   =>  $api_key,
                 
             )

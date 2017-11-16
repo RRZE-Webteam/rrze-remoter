@@ -1,36 +1,11 @@
 <?php $this->glossary_array = $this->remote_data ?>
- <?php 
- 
-    foreach($data as $key => $value) {
-        if($value['name'] === '.meta.txt') { 
-            unset($data[$key]);
-            $data_new = array_values($data);
-        }
-    }
- 
- 
- 
- ?>
-<?php array_multisort(array_column($meta, 'name'), SORT_ASC, $meta); ?>
 <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
-
     <?php if(!empty($meta[$i]['meta'])) { ?>
-
-        <?php $transient = get_transient('rrze-remoter-transient'); 
-
-            if(empty($transient)) {
-                $j = 1;
-            } else {
-                $j = $transient;
-                $j++;
-            }
-
-        ?>
-        
+        <?php $accordionId = uniqid(); ?>
         <div class="accordion" id="accordion-1">
             <div class="accordion-group">
-            <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $j ?>" href="#collapse_<?php echo $j ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
-                <div id="collapse_<?php echo $j ?>" class="accordion-body" style="display: none;">
+            <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $accordionId ?>" href="#collapse_<?php echo $accordionId ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
+                <div id="collapse_<?php echo  $accordionId ?>" class="accordion-body" style="display: none;">
                     <div class="accordion-inner clearfix">
                     <table>
                         <tr>
@@ -54,7 +29,6 @@
                 </div>
             </div>
         </div>  
-        <?php set_transient( 'rrze-remoter-transient', $j, DAY_IN_SECONDS ); ?>
     <?php } ?>
 <?php } ?>
 <?php  $this->meta = $meta_store; ?>
@@ -129,27 +103,37 @@
                         <td><?php echo self::getFolder($data_new[$i]['dir']) ?></td>
                         <?php break;
                     case 'name': ?>
-                        <?php if ($shortcodeValues['link']) { ?>
-                  
-                        <td><a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>">
+                        <?php $extension = $data_new[$i]['extension']; ?>
+                        <?php if ($shortcodeValues['link']) { ?> 
+                            <?php $path = basename($data_new[$i]['path']); ?>
+                            <?php $store = $meta_store; ?> 
+                            <?php $file = $shortcodeValues['file'] ?>
 
-                        <?php
-                        
-                        $key = array_search(basename($data_new[$i]['path']), array_column($meta_store, 'value'));
-                      
-                        if($key > 0 || $key === 0 && $shortcodeValues['file'] == '' && !empty($meta_store)) {
-                            echo $meta_store[$key]['key'];
-                        } else {
-                            echo 'berni'. basename($data[$i]['path']); 
-                        }
+                                <?php if ($extension == 'pdf') { ?>
+                                <td>
+                                    <a href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>">
+                                        <?php
+                                            echo self::getMetafileNames($path, $store, $file);
+                                        ?>
+                                    </a>
+                                </td> 
 
-                        ?></a></td>    
+                            <?php } else { ?>
+                                <td>
+                                    <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>">
+                                        <?php
+                                            echo self::getMetafileNames($path, $store, $file);
+                                        ?>
+                                    </a>
+                                </td>  
+                            <?php } ?>
 
                     <?php } else { ?>
 
                         <td><?php echo basename($data_new[$i]['path']) ?></td>  
-                    <?php  } 
-                        break;
+
+                    <?php  }
+                            break;
                     case 'date': ?>
                         <td><?php echo date('j F Y', $data_new[$i]['change_time']) ?></td>
                         <?php break; 

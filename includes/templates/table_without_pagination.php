@@ -1,45 +1,35 @@
-<?php array_multisort(array_column($meta, 'name'), SORT_ASC, $meta); ?>
 <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
     <?php if(!empty($meta[$i]['meta']) && $header == 1) { ?>
-        <?php $transient = get_transient('rrze-remoter-transient'); 
-            if(empty($transient)) {
-                $j = 1;
-            } else {
-                $j = $transient;
-                $j++;
-            }
-
-        ?>
+      <?php $accordionId = uniqid(); ?>
         <div class="accordion" id="accordion-1">
-            <div class="accordion-group">
-                 <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $j ?>" href="#collapse_<?php echo $j ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
-                    <div id="collapse_<?php echo $j ?>" class="accordion-body" style="display: none;">
-                        <div class="accordion-inner clearfix">
-                            <table>
-                                <tr>
-                                    <td colspan="2">
-                                        <strong>Beschreibung: </strong>
-                                            <?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?>
-                                    </td>
-                                </tr>
-                                <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
-                                <?php $meta_store[] = array(
-                                    'key'   => $value,
-                                    'value' => $key
-                                );
-                                ?>
-                                <tr>
-                                    <td><strong>Dateiname:</strong>
-                                        <?php echo $key ?></td><td><strong> Anzeigename:</strong> <?php echo $value ?>
-                                    </td>
-                                </tr>
-                                <?php } ?>
-                            </table>
-                        </div>
+        <div class="accordion-group">
+             <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $accordionId ?>" href="#collapse_<?php echo $accordionId ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
+                <div id="collapse_<?php echo $accordionId ?>" class="accordion-body" style="display: none;">
+                    <div class="accordion-inner clearfix">
+                        <table>
+                            <tr>
+                                <td colspan="2">
+                                    <strong>Beschreibung: </strong>
+                                        <?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?>
+                                </td>
+                            </tr>
+                            <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
+                            <?php $meta_store[] = array(
+                                'key'   => $value,
+                                'value' => $key
+                            );
+                            ?>
+                            <tr>
+                                <td><strong>Dateiname:</strong>
+                                    <?php echo $key ?></td><td><strong> Anzeigename:</strong> <?php echo $value ?>
+                                </td>
+                            </tr>
+                            <?php } ?>
+                        </table>
                     </div>
                 </div>
-            </div>  
-        <?php set_transient( 'rrze-remoter-transient', $j, DAY_IN_SECONDS ); ?>
+            </div>
+        </div>  
     <?php } ?>
 <?php } ?>
 <?php
@@ -75,7 +65,6 @@ if($header) { ?>
 <?php } ?>
       
 <?php $data = self::deleteMetaTxtEntries($meta); ?>
-
 <?php for($i = 0; $i <sizeof($data); $i++) { ?> 
 
     <tr>    
@@ -87,7 +76,7 @@ if($header) { ?>
         
                     <td><?php echo self::formatSize($data[$i]['size']) ?></td>
                     
-            <?php break;
+                <?php break;
                 case 'type': ?>
                     <?php $extension = $data[$i]['extension']; ?>
                 
@@ -105,44 +94,54 @@ if($header) { ?>
                         
                     <?php } ?>
                         
-            <?php break;
+                <?php break;
                 case 'download': ?>
                         
                     <td><a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
             
-            <?php break;
+                <?php break;
                 case 'folder': ?>
                     
                     <td><?php echo self::getFolder($data[$i]['dir']) ?></td>
                     
-            <?php break;
+                <?php break;
                 case 'name': ?>
-                <?php if ($shortcodeValues['link']) { ?>
-                  
-                    <td><a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
-                        
-                    <?php
+                    <?php $extension = $data[$i]['extension']; ?>
+                    <?php if ($shortcodeValues['link']) { ?> 
+                        <?php $path = basename($data[$i]['path']); ?>
+                        <?php $store = $meta_store; ?> 
+                        <?php $file = $shortcodeValues['file'] ?>
 
-                    $key = array_search(basename($data[$i]['path']), array_column($meta_store, 'value'));
-                    
-                    if($key > 0 || $key === 0 && $shortcodeValues['file'] == '' && !empty($meta_store)) {
-                        echo $meta_store[$key]['key'];
-                    } else {
-                        echo basename($data[$i]['path']); 
-                    }
+                        <?php if ($extension == 'pdf') { ?>
+                        <td>
+                            <a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
+                                <?php
+                                    echo self::getMetafileNames($path, $store, $file);
+                                ?>
+                            </a>
+                        </td> 
 
-                    ?></a></td>    
-                    
-                <?php } else { ?>
-                    
+                    <?php } else { ?>
+                        <td>
+                            <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
+                                <?php
+                                    echo self::getMetafileNames($path, $store, $file);
+                                ?>
+                            </a>
+                        </td>  
+                    <?php } ?>
+
+                    <?php } else { ?>
+
                     <td><?php echo basename($data[$i]['path']) ?></td>  
-                <?php  } ?>
-            <?php break;
+
+                    <?php  }
+                break;
                 case 'date': ?>
                 
                     <td><?php echo date('j F Y', $data[$i]['change_time']) ?></td>
                     
-            <?php break;
+                <?php break;
         
                 case 'default': ?>
                     

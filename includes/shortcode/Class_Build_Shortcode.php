@@ -31,7 +31,7 @@ class Class_Build_Shortcode {
             'itemsperpage'      => '4',
             'filetype'          => '',
             'link'              => '0',
-            //'language'          => '0',
+            'alias'             => '',
             'view'              => 'table',
             'orderby'           => 'name',
             'order'             => 'asc',
@@ -161,6 +161,20 @@ class Class_Build_Shortcode {
 
     }
     
+    public static function getMetafileNames($path, $store, $file) {
+        
+        $key = array_search($path , array_column($store, 'value'));
+
+        if($key > 0 || $key === 0 && $file == '' && !empty($store)) {
+            $name = $store[$key]['key'];
+        } else {
+            $name = $path;
+        }
+        
+        return $name;
+        
+    }
+    
     public function show_results_as_list($query_arguments) {
         
         global $post;
@@ -172,7 +186,6 @@ class Class_Build_Shortcode {
             'filetype'      => $this->remote_server_shortcode['filetype'],
             'showColumns'   => $this->remote_server_shortcode['show'],
             'link'          => $this->remote_server_shortcode['link'],
-            //'language'      => $this->remote_server_shortcode['language'],
             'showHeader'    => $this->remote_server_shortcode['showheader'],
             'file'          => $this->remote_server_shortcode['file']
         );
@@ -191,70 +204,60 @@ class Class_Build_Shortcode {
                 
                 $data = $this->remote_data;
                 
-                /*if ($shortcodeValues['language']) {
-                    $data = $this->getEnglischContent($data, $shortcodeValues['language']);
-                } else {
-                    $data = $this->remote_data;
-                    
-                }*/
-                
                 if($data){
-
                     $url = parse_url(get_post_meta($post->ID, 'url', true)); 
-
-                    if ($shortcodeValues['view'] == 'gallery') {
-                        include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
-                    } elseif($shortcodeValues['view'] == 'list') {
-                        include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
-                    } elseif($shortcodeValues['view'] == 'pagination') {
-                        $meta = $data;
-                        $meta_store = array();
-                        date_default_timezone_set('Europe/Berlin');
-                        $url = parse_url(get_post_meta($post->ID, 'url', true)); 
-                        $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
-                        $dataFirstPage = $this->remote_data;
-                        foreach($dataFirstPage as $key => $value) {
-                            if($value['name'] === '.meta.txt') { 
-                                unset($dataFirstPage[$key]);
-                                $dataChunk = array_values($dataFirstPage);
-                            }
-                        }
-                        $data = array_chunk($dataChunk, $number_of_chunks);
-                        $pagecount = count($data);
-                        $tableHeader = self::getHeaderData($shortcodeValues['showColumns']);
-                        $id = uniqid();
-                        $itemscount = count($data[0]);
-                        include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
-                    } elseif($shortcodeValues['view'] == 'table') {
-                        ob_start();
-                        $header = $shortcodeValues['showHeader'];
-                        $tableHeader = self::getHeaderData($shortcodeValues['showColumns']);
-                        $meta = $data;
-                        $meta_store = array();
-                        include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
-                        $content = ob_get_clean();
-                        return $content;
-                    } elseif($shortcodeValues['view'] == 'imagetable') {
-                        include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
-                    } else {
-                        $id = uniqid();
-                        $meta = $data;
-                        $meta_store = array();
-                        $tableHeader = self::getHeaderData($shortcodeValues['showColumns']);
-                        $letters = self::createLetters();
-                        $unique = self::getUsedLetters($data);
-                        $array_without_numbers = self::checkforfigures($unique);
-                        $dataSorted = self::sortArray($data, $unique);
-                        include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
+                    
+                    $view = $shortcodeValues['view'];
+                    $tableHeader = self::getHeaderData($shortcodeValues['showColumns']);
+                    $meta = $data;
+                    $meta_store = array();
+                    array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
+                    
+                    switch ($view) {
+                        case 'gallery':
+                            include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
+                            break;
+                        case 'glossary':
+                            $id = uniqid();
+                            $letters = self::createLetters();
+                            $unique = self::getUsedLetters($data);
+                            $array_without_numbers = self::checkforfigures($unique);
+                            $dataSorted = self::sortArray($data, $unique);
+                            $data_new = self::deleteMetaTxtEntries($data);
+                            include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
+                            break;
+                        case 'pagination':
+                            date_default_timezone_set('Europe/Berlin');
+                            $url = parse_url(get_post_meta($post->ID, 'url', true)); 
+                            $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
+                            $dataFirstPage = $this->remote_data;
+                            $dataChunk = self::deleteMetaTxtEntries($dataFirstPage);
+                            $data = array_chunk($dataChunk, $number_of_chunks);
+                            $pagecount = count($data);
+                            $id = uniqid();
+                            $itemscount = (isset($data[0]) ? count($data[0]) : '');
+                            include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
+                            break;
+                        case 'table':
+                            ob_start();
+                            $header = $shortcodeValues['showHeader'];
+                            include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
+                            $content = ob_get_clean();
+                            return $content;
+                            break;
+                        case 'imagetable':
+                            include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
+                            break;
+                        default:
+                            include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
                     }
+                    
                 } else {
                     echo 'Überprüfen Sie Ihren Shortcode!';
                 }
                    
             }
             
-            //delete_transient('rrze-remoter-transient');
-            //delete_transient('rrze-remoter-transient-table');
             wp_reset_postdata();
             
         } else {
@@ -262,38 +265,10 @@ class Class_Build_Shortcode {
         }
     }
     
-    /*public function getEnglischContent($data, $language) {
-        
-        $items = array();
-       
-        foreach($data as $key => $value) {
-           
-            if ( preg_match('/englisch/i', $value['basename'], $matches)) {
-                $items[$key] = $matches[0];
-            } else {
-                echo '';
-            }
-        }
-        
-        if($language == 0) {
-            return $data;
-        } elseif($language == 1) {
-            $only_english = array_intersect_key($data, $items);
-            $new = array_values($only_english);
-            return $new;
-        } else {
-            $without_english = array_diff_key($data, $items);
-            $new = array_values($without_english);
-            return $new;
-        }
-    }*/
-    
     public function rrze_remote_table_script_footer(){ 
         
         $arr = (isset($this->res)) ? $this->res : '';
         $meta = (isset($this->meta)) ? $this->meta : '';
-        //$meta = $this->meta;
-        //print_r($meta);
         
         ?>
   
@@ -334,7 +309,6 @@ class Class_Build_Shortcode {
                     },
                     success:function(data) {
                         $( "#result" ).html(data);
-                        //console.log(data);
                     },  
                     error: function(errorThrown){
                         window.alert(errorThrown);

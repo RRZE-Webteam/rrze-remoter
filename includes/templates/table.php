@@ -1,24 +1,11 @@
-<?php   $this->res = $this->remote_data; ?>
-<?php array_multisort(array_column($meta, 'name'), SORT_ASC, $meta); ?>
+<?php $this->res = $this->remote_data; ?>
 <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
-
     <?php if(!empty($meta[$i]['meta'])) { ?>
-
-        <?php $transient = get_transient('rrze-remoter-transient'); 
-
-            if(empty($transient)) {
-                $j = 1;
-            } else {
-                $j = $transient;
-                $j++;
-            }
-
-        ?>
-        
+       <?php $accordionId = uniqid(); ?>
         <div class="accordion" id="accordion-1">
             <div class="accordion-group">
-            <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $j ?>" href="#collapse_<?php echo $j ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
-                <div id="collapse_<?php echo $j ?>" class="accordion-body" style="display: none;">
+            <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $accordionId ?>" href="#collapse_<?php echo $accordionId ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
+                <div id="collapse_<?php echo $accordionId ?>" class="accordion-body" style="display: none;">
                     <div class="accordion-inner clearfix">
                     <table>
                         <tr>
@@ -41,7 +28,6 @@
                 </div>
             </div>
         </div>  
-        <?php set_transient( 'rrze-remoter-transient', $j, DAY_IN_SECONDS ); ?>
     <?php } ?>
 <?php } ?>
 <?php  $this->meta = $meta_store; ?>
@@ -101,25 +87,35 @@
                             <td><?php echo self::getFolder($data[$i][$j]['dir']) ?></td>
                          <?php break;
                         case 'name': ?>
-                            <?php if ($shortcodeValues['link']) { ?>
-                  
-                            <td><a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
-
-                            <?php
-
-                            $key = array_search(basename($data[$i][$j]['path']), array_column($meta_store, 'value'));
-
-                            if($key > 0 || $key === 0 && $shortcodeValues['file'] == '' && !empty($meta_store)) {
-                                echo $meta_store[$key]['key'];
-                            } else {
-                                echo basename($data[$i][$j]['path']); 
-                            }
-
-                            ?></a></td>    
+                            <?php $extension = $data[$i][$j]['extension']; ?>
+                            <?php if ($shortcodeValues['link']) { ?> 
+                                <?php $path = basename($data[$i][$j]['path']); ?>
+                                <?php $store = $meta_store; ?> 
+                                <?php $file = $shortcodeValues['file'] ?>
+                                
+                                <?php if ($extension == 'pdf') { ?>
+                                <td>
+                                    <a href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
+                                        <?php
+                                            echo self::getMetafileNames($path, $store, $file);
+                                        ?>
+                                    </a>
+                                </td> 
+                            
+                            <?php } else { ?>
+                                <td>
+                                    <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
+                                        <?php
+                                            echo self::getMetafileNames($path, $store, $file);
+                                        ?>
+                                    </a>
+                                </td>  
+                            <?php } ?>
 
                         <?php } else { ?>
 
-                            <td><?php echo basename($data[$i]['path']) ?></td>  
+                        <td><?php echo basename($data[$i]['path']) ?></td>  
+                        
                         <?php  }
                             break;
                         case 'date': ?>
