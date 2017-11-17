@@ -64,7 +64,7 @@ if($header) { ?>
     </tr>
 <?php } ?>
       
-<?php $data = self::deleteMetaTxtEntries($meta); ?>
+<?php $data = RRZE\Remoter\Class_Help_Methods::deleteMetaTxtEntries($meta); ?>
 <?php for($i = 0; $i <sizeof($data); $i++) { ?> 
 
     <tr>    
@@ -74,7 +74,7 @@ if($header) { ?>
         <?php switch($column) {
                 case 'size': ?>
         
-                    <td><?php echo self::formatSize($data[$i]['size']) ?></td>
+                    <td><?php echo RRZE\Remoter\Class_Help_Methods::formatSize($data[$i]['size']) ?></td>
                     
                 <?php break;
                 case 'type': ?>
@@ -102,7 +102,7 @@ if($header) { ?>
                 <?php break;
                 case 'folder': ?>
                     
-                    <td><?php echo self::getFolder($data[$i]['dir']) ?></td>
+                    <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data[$i]['dir']) ?></td>
                     
                 <?php break;
                 case 'name': ?>
@@ -116,7 +116,7 @@ if($header) { ?>
                         <td>
                             <a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
                                 <?php
-                                    echo self::getMetafileNames($path, $store, $file);
+                                    echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                 ?>
                             </a>
                         </td> 
@@ -125,7 +125,7 @@ if($header) { ?>
                         <td>
                             <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
                                 <?php
-                                    echo self::getMetafileNames($path, $store, $file);
+                                    echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                 ?>
                             </a>
                         </td>  

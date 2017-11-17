@@ -68,7 +68,7 @@
 
                     <?php  switch($column) { 
                         case 'size': ?>
-                            <td><?php echo self::formatSize($data[$i][$j]['size']) ?></td>
+                            <td><?php echo RRZE\Remoter\Class_Help_Methods::formatSize($data[$i][$j]['size']) ?></td>
                             <?php break;
                         case 'type': ?>
                             <?php  $extension = $data[$i][$j]['extension']; ?>
@@ -84,7 +84,7 @@
                             <td><a href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                            <?php break;
                         case 'folder': ?>
-                            <td><?php echo self::getFolder($data[$i][$j]['dir']) ?></td>
+                            <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data[$i][$j]['dir']) ?></td>
                          <?php break;
                         case 'name': ?>
                             <?php $extension = $data[$i][$j]['extension']; ?>
@@ -97,7 +97,7 @@
                                 <td>
                                     <a href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
                                         <?php
-                                            echo self::getMetafileNames($path, $store, $file);
+                                            echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                         ?>
                                     </a>
                                 </td> 
@@ -106,7 +106,7 @@
                                 <td>
                                     <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
                                         <?php
-                                            echo self::getMetafileNames($path, $store, $file);
+                                            echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                         ?>
                                     </a>
                                 </td>  

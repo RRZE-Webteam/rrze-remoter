@@ -57,6 +57,7 @@ require_once( __DIR__ . '/includes/posttype/Class_Custom_Post_Type_Server.php' )
 require_once( __DIR__ . '/includes/posttype/Class_Create_Post_Type_Submenu_Page.php' );
 
 require_once( __DIR__ . '/includes/remote/Class_Grab_Remote_Files.php' );
+require_once( __DIR__ . '/includes/helper/Class_Help_Methods.php' );
 require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode.php' );
 
 /*

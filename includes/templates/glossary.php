@@ -83,7 +83,7 @@
 
                 <?php switch($column) { 
                     case 'size': ?>
-                        <td><?php echo self::formatSize($data_new[$i]['size']) ?></td>
+                        <td><?php echo RRZE\Remoter\Class_Help_Methods::formatSize($data_new[$i]['size']) ?></td>
                         <?php  
                         break;
                     case 'type': ?>
@@ -100,7 +100,7 @@
                         <td><a href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                         <?php break;
                     case 'folder': ?>
-                        <td><?php echo self::getFolder($data_new[$i]['dir']) ?></td>
+                        <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data_new[$i]['dir']) ?></td>
                         <?php break;
                     case 'name': ?>
                         <?php $extension = $data_new[$i]['extension']; ?>
@@ -113,7 +113,7 @@
                                 <td>
                                     <a href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>">
                                         <?php
-                                            echo self::getMetafileNames($path, $store, $file);
+                                            echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                         ?>
                                     </a>
                                 </td> 
@@ -122,7 +122,7 @@
                                 <td>
                                     <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>">
                                         <?php
-                                            echo self::getMetafileNames($path, $store, $file);
+                                            echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                         ?>
                                     </a>
                                 </td>  

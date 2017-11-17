@@ -56,125 +56,7 @@ class Class_Build_Shortcode {
         
         return $this->show_results_as_list($this->remote_server_args);
     }
-    
-    public static function formatSize($bytes) {
-
-        if ($bytes>= 1073741824) {
-            $size = number_format($bytes / 1073741824, 2) . ' GB';
-        } elseif ($bytes >= 1048576) {
-           $size = number_format($bytes / 1048576, 2) . ' MB';
-        } elseif ($bytes >= 1024) {
-            $size = number_format($bytes / 1024, 0) . ' KB';
-        } elseif ($bytes > 1) {
-            $size = $bytes . ' bytes';
-        } elseif ($bytes == 1) {
-            $size = '1 byte';
-        } else {
-            $size = '0 bytes';
-        }
-        
-        return $size;
-    }
   
-    public static function getFolder($directory) {
- 
-        $titel = explode("/", $directory);
-        $folder = $titel[count($titel)-1];
-        
-        return $folder;
-    }
-   
-    public static function getHeaderData($columns) {
-        $shortcodeColumns = explode(",", $columns);
-        return $shortcodeColumns;
-    }
-    
-    public static function deleteMetaTxtEntries($meta) {
-        foreach($meta as $key => $value) {
-            if($value['name'] === '.meta.txt') {
-                unset($meta[$key]);
-            }
-        }
-        
-        $data = array_values($meta);
-        
-        return $data;
-    }
-    
-    public static function createLetters() {
-        $letters = array(
-            'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
-    );
-    
-        return $letters;
-    }
-    
-    public static function getUsedLetters($data) {
-   
-        foreach ($data as $file) {
-            $files[] = substr($file['name'], 0, 1);
-        }
-
-        $unique = array_unique($files);
-
-        sort($unique);
-
-        return $unique;
-
-    }
-    
-    public function checkforfigures($array) {
-        
-        foreach($array as $key => $value) {
-            
-            if(is_numeric($value) || ctype_lower($value) || substr($value, 0, 1) === '.') {
-                unset($array[$key]);
-            }       
-        }
-        
-        $newindex = array_values($array);
-        
-        return $newindex;
-    }
-    
-    public function sortArray($data, $unique) {
-    
-        $filenames = array(); 
-
-        foreach ($data as $file) {
-            $filenames[] = $file['name'];
-        }
-
-        array_multisort($filenames, SORT_ASC, $data);
-
-        $array_without_numbers = self::checkforfigures($unique);
-
-        foreach ( $data as $key => $value ) {
-            if ( substr($value['name'], 0, 1) !=  $array_without_numbers[0] ) {
-                unset( $data[$key]);
-            }
-        }
-
-        $array_reindexed = array_values($data);
-
-        return $array_reindexed;
-
-    }
-    
-    public static function getMetafileNames($path, $store, $file) {
-        
-        $key = array_search($path , array_column($store, 'value'));
-
-        if($key > 0 || $key === 0 && $file == '' && !empty($store)) {
-            $name = $store[$key]['key'];
-        } else {
-            $name = $path;
-        }
-        
-        return $name;
-        
-    }
-    
     public function show_results_as_list($query_arguments) {
         
         global $post;
@@ -208,7 +90,7 @@ class Class_Build_Shortcode {
                     $url = parse_url(get_post_meta($post->ID, 'url', true)); 
                     
                     $view = $shortcodeValues['view'];
-                    $tableHeader = self::getHeaderData($shortcodeValues['showColumns']);
+                    $tableHeader = Class_Help_Methods::getHeaderData($shortcodeValues['showColumns']);
                     $meta = $data;
                     $meta_store = array();
                     array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
@@ -219,11 +101,11 @@ class Class_Build_Shortcode {
                             break;
                         case 'glossary':
                             $id = uniqid();
-                            $letters = self::createLetters();
-                            $unique = self::getUsedLetters($data);
-                            $array_without_numbers = self::checkforfigures($unique);
-                            $dataSorted = self::sortArray($data, $unique);
-                            $data_new = self::deleteMetaTxtEntries($data);
+                            $letters = Class_Help_Methods::createLetters();
+                            $unique = Class_Help_Methods::getUsedLetters($data);
+                            $array_without_numbers = Class_Help_Methods::checkforfigures($unique);
+                            $dataSorted = Class_Help_Methods::sortArray($data, $unique);
+                            $data_new = Class_Help_Methods::deleteMetaTxtEntries($data);
                             include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
                             break;
                         case 'pagination':
@@ -231,7 +113,7 @@ class Class_Build_Shortcode {
                             $url = parse_url(get_post_meta($post->ID, 'url', true)); 
                             $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
                             $dataFirstPage = $this->remote_data;
-                            $dataChunk = self::deleteMetaTxtEntries($dataFirstPage);
+                            $dataChunk = Class_Help_Methods::deleteMetaTxtEntries($dataFirstPage);
                             $data = array_chunk($dataChunk, $number_of_chunks);
                             $pagecount = count($data);
                             $id = uniqid();
@@ -309,6 +191,7 @@ class Class_Build_Shortcode {
                     },
                     success:function(data) {
                         $( "#result" ).html(data);
+                        //alert(data);
                     },  
                     error: function(errorThrown){
                         window.alert(errorThrown);
@@ -328,6 +211,7 @@ class Class_Build_Shortcode {
         if ( isset($_REQUEST) ) {
             
             $meta       = $_REQUEST['meta'];
+        
             $dataArray  = $_REQUEST['arr'];
             
             $number_of_chunks = $_REQUEST['chunk'];
@@ -338,13 +222,14 @@ class Class_Build_Shortcode {
             
             
             foreach($dataArray as $key => $value) {
-                if($value['name'] === '.meta.txt') { 
+                if($value['name'] === '.meta.txt') {
+                    $i == 1;
                     unset($dataArray[$key]);
                     $dataChunk = array_values($dataArray);
                 }
             }
 
-            $data = array_chunk($dataChunk, $number_of_chunks);
+            $data = array_chunk($i == 1 ? $dataChunk : $dataArray, $number_of_chunks);
             
             if (null !== $_REQUEST['p']) {
                 if ($_REQUEST['p'] > $_REQUEST['count']) {
@@ -401,7 +286,7 @@ class Class_Build_Shortcode {
 
                     switch($column) {
                         case 'size':
-                            $t .= '<td>' . self::formatSize($value['size']) . '</td>';
+                            $t .= '<td>' . Class_Help_Methods::formatSize($value['size']) . '</td>';
                             break;
                         case 'type':
                             $extension = $value['extension'];
@@ -420,17 +305,28 @@ class Class_Build_Shortcode {
                             $t .= '<td>' . $folder . '</td>';
                             break;
                         case 'name':
-                            if ($link) {
-                            
-                            $key = array_search(basename($value['path']), array_column($meta, 'value'));
-                            
-                                if($key === 0 || $key > 0) {
-                                  $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">' . $meta[$key]['key'] . '</a></td>';
+                           $extension = $value['extension'];
+                            if ($link) { 
+                                $path = basename($value['path']);
+                                if ($extension == 'pdf') {
+                                    $t .= '<td>';
+                                    $t .= '<a href="http://' . $host . $value['image'] . '">';
+                                    $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
+                                    $t .= '</a>';
+                                    $t .= '</td>'; 
+
                                 } else {
-                                  $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">' . basename($value['path'])  . '</a></td>';
+                                    $t .= '<td>';
+                                    $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">';
+                                    $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
+                                    $t .= '</a>';
+                                    $t .= '</td>';  
                                 }
-                            } else {
-                                $t .= '<td>' . $value['path'] .'</td>';  
+
+                            } else { 
+
+                            $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
+
                             }
                             break;
                         case 'date':
@@ -566,7 +462,7 @@ class Class_Build_Shortcode {
                 
                 switch($column) {
                     case 'size':
-                        $t .= '<td>' . self::formatSize($data[$i]['size']) . '</td>';
+                        $t .= '<td>' . Class_Help_Methods::formatSize($data[$i]['size']) . '</td>';
                         break;
                     case 'type':
                         $extension = $data[$i]['extension'];
@@ -585,17 +481,27 @@ class Class_Build_Shortcode {
                         $t .= '<td>' . $folder. '</td>';
                         break;
                     case 'name':
-                        if ($link) {
+                         if ($link) { 
+                            $path = basename($data[$i]['path']);
+                            if ($extension == 'pdf') {
+                                $t .= '<td>';
+                                $t .= '<a href="http://' . $host . $data[$i]['image'] . '">';
+                                $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
+                                $t .= '</a>';
+                                $t .= '</td>'; 
 
-                        $key = array_search(basename($data[$i]['path']), array_column($meta, 'value'));
-
-                            if($key === 0 || $key > 0) {
-                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['image']. '">' . $meta[$key]['key'] . '</a></td>';
                             } else {
-                              $t .= '<td><a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['image'] . '">' . basename($data[$i]['path'])  . '</a></td>';
+                                $t .= '<td>';
+                                $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['image'] . '">';
+                                $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
+                                $t .= '</a>';
+                                $t .= '</td>';  
                             }
-                        } else {
-                            $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
+
+                        } else { 
+
+                        $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
+
                         }
                         break;
                     case 'date':
