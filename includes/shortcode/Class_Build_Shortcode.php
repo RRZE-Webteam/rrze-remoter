@@ -92,6 +92,7 @@ class Class_Build_Shortcode {
                     $view = $shortcodeValues['view'];
                     $tableHeader = Class_Help_Methods::getHeaderData($shortcodeValues['showColumns']);
                     $meta = $data;
+                    
                     $meta_store = array();
                     array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
                     
@@ -104,9 +105,13 @@ class Class_Build_Shortcode {
                             $letters = Class_Help_Methods::createLetters();
                             $unique = Class_Help_Methods::getUsedLetters($data);
                             $array_without_numbers = Class_Help_Methods::checkforfigures($unique);
-                            $dataSorted = Class_Help_Methods::sortArray($data, $unique);
-                            $data_new = Class_Help_Methods::deleteMetaTxtEntries($data);
-                            include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
+                            if(empty($array_without_numbers)) {
+                                echo 'Zu diesem Dateityp gibt es keine Einträge!';
+                            } else {
+                                $dataSorted = Class_Help_Methods::sortArray($data, $unique);
+                                $data_new = Class_Help_Methods::deleteMetaTxtEntries($dataSorted);
+                                include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
+                            }
                             break;
                         case 'pagination':
                             date_default_timezone_set('Europe/Berlin');
@@ -116,9 +121,13 @@ class Class_Build_Shortcode {
                             $dataChunk = Class_Help_Methods::deleteMetaTxtEntries($dataFirstPage);
                             $data = array_chunk($dataChunk, $number_of_chunks);
                             $pagecount = count($data);
+                            if(empty($pagecount)) {
+                                echo 'Zu diesem Dateityp gibt es keine Einträge!';
+                            } else {
                             $id = uniqid();
                             $itemscount = (isset($data[0]) ? count($data[0]) : '');
                             include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
+                            }
                             break;
                         case 'table':
                             ob_start();
@@ -135,7 +144,7 @@ class Class_Build_Shortcode {
                     }
                     
                 } else {
-                    echo 'Überprüfen Sie Ihren Shortcode!';
+                    echo 'Es konnten keine Daten auf dem Server gefunden werden!';
                 }
                    
             }
