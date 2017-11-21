@@ -65,28 +65,28 @@ Die Spalten werden genau in der Reihenfolge ausgegeben, wie sie angegeben werden
 
 ### __Beispiele für mögliche Shortcodes:__
 
-_für die Galerieansicht:_
+ ___für die Galerieansicht:___
 
-[remoter id="" index="images" filetype="all" recursiv="0" view="gallery"]
+[remoter  id=""  index="**images**" filetype="**all**" recursiv="**0**" view="**gallery**"]
 
 Es wird im Verzeichnis images nach den gängisten Dateiformaten (siehe oben) gesucht.
 
-_Tabelle mit Pagination:_
+___Tabelle mit Pagination:___
 
-[remoter id="" index="universitaet" filter="englisch" filetype="pdf,jpg" recursiv="1" itemsperpage="1" view="pagination" link="1" show="folder,size,type,date,download,name" orderby="size" order="asc"]
+[remoter id="" index="**universitaet**" filter="**englisch**" filetype="**pdf,jpg**" recursiv="**1**" itemsperpage="**1**" view="**pagination**" link="**1**" show="**folder,size,type,date,download,name**" orderby="**size**" order="**asc**"]
 
 Es wird ab dem Verzeichnis univerisitaet rekursiv nach den Dateiformaten (pdf,jpg) gesucht. Da der Filter auf Englisch gesetzt wurde wird nach Dateien mit dem Wort Englisch und dem dem Dateiformat (pdf oder jpg) gesucht.
 Pro Seite wird eine Datei angezeigt.
 Die Dateinamen werden verlinkt. 
 Es werden die Spalten in der Reihenfolge Verzeichnis, Dateigröße, Dateityp, Datum, Download und Dateiname ausgegeben. Das Ergebnis wird nach der Spalte Dateigröße aufsteigend sortiert.
 
-_Tabelle ohne Pagination:_
+___Tabelle ohne Pagination:___
 
-[remoter id="" index="universitaet" filetype="pdf" link="1" recursiv="1" view="table" orderby="name" show="name,download,size,folder,date" order="asc" showheader="1"]
+[remoter id="" index="**universitaet**" filetype="**pdf**" link="**1**" recursiv="**1**" view="**table**" orderby="**name**" show="**name,download,size,folder,date**" order="**asc**" showheader="**1**"]
 
 Es wird ab dem Verzeichnis univerisitaet rekursiv nach allen Dateien mit dem Dateiformat (pdf) gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname, Download, Dateigröße, Verzeichnnis und Datum ausgegeben. Das Ergebnis wird nach der Spalte Dateiname aufsteigend sortiert.
 
-_Tabelle mit Html-Header im TinyMCE:_
+___Tabelle mit Html-Header im TinyMCE:___
 
 ```
 <div>
@@ -102,3 +102,9 @@ _Tabelle mit Html-Header im TinyMCE:_
 ```
 
 Es wird nach den beiden Dateien, welche unter file angeben sind ab dem index rekursiv gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname, Download ausgegeben.
+
+___für den Glossar:___
+
+[remoter id="" index="**universitaet**" filetype="**pdf**" recursiv="**1**" view="**glossary**" link="**1**" show="**download,type,date,size,name,folder**"]
+
+Es wird ab dem Verzeichnis univerisitaet rekursiv nach allen Dateien mit dem Dateiformat (pdf) gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge von show ausgegeben.
