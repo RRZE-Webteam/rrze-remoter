@@ -108,3 +108,22 @@ ___für den Glossar:___
 [remoter id="" index="**universitaet**" filetype="**pdf**" recursiv="**1**" view="**glossary**" link="**1**" show="**download,type,date,size,name,folder**"]
 
 Es wird ab dem Verzeichnis univerisitaet rekursiv nach allen Dateien mit dem Dateiformat (pdf) gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge von show ausgegeben.
+
+### __Ausgabe der Datei .meta.txt:__
+
+In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.txt** hinzugefügt werden. Diese Datei folgt dem **JSON Syntax** und hat eine **vordefinierte Struktur**. Mit der **.meta.txt** lassen sich **kryptische Dateinamen** in der Anzeige vermeiden. So kann jedem Dateinamen ein **alternativer Anzeigename** zugeordnet werden, welcher dann auch angezeigt wird. Darüber hinaus wird oberhalb des jeweiligen Ausgabeformates (z. B. table) ein Accordion mit den JSON-Daten angezeigt. Dies erhöht die Usability ernorm. Hier der grundlegende Aufbau der .meta.txt im JSON Syntax:
+
+```
+[{
+"directory": {
+    "titel": "Studienordnungen Buchwissenschaften",
+    "beschreibung": "In diesem Verzeichnis finden Sie die Studienordnungen für den Studiengang Buchwissenschaften",
+    "file-aliases": [{
+      "Dateiname.pdf": "Anzeigename",
+      "Buchwissenschaften 2-Fach-BA 20150815 i.d.F. 20170415 -konsolidierte Fassung.pdf": "Prüfungsordnung für Buchwissenschaft vom 15. April 2017 in der konsolidierten Fassung"
+    }]
+  }
+}]
+```
+
+Wird diesem Format **nicht strikt gefolgt**, so kann die **.meta.txt nicht ausgelesen** werden und dementsprechend keine schönen Anzeigenamen ausgegeben werden. Zur besseren Handhabung mit dem **JSON Sytax** empfielt sich die **Installation z. B. des Editors Visual Studio Code**. Hier kann auf einfach Art und Weise mit dem JSON Sytax gearbeitet werden und ein **Code Highlighting** eingestellt werden.
