@@ -113,17 +113,17 @@ Es wird ab dem Verzeichnis univerisitaet rekursiv nach allen Dateien mit dem Dat
 
 In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.txt** hinzugefügt werden. Diese Datei folgt dem **JSON Syntax** und hat eine **vordefinierte Struktur**. Mit der **.meta.txt** lassen sich **kryptische Dateinamen** in der Anzeige vermeiden. So kann jedem Dateinamen ein **alternativer Anzeigename** zugeordnet werden, welcher dann auch angezeigt wird. Darüber hinaus wird oberhalb des jeweiligen Ausgabeformates (z. B. table) ein Accordion mit den JSON-Daten angezeigt. Dies erhöht die Usability ernorm. Hier der grundlegende Aufbau der .meta.txt im JSON Syntax:
 
-```json
+<pre>
 [{
-"directory": {
-    "titel": "Studienordnungen Buchwissenschaften",
+"<b>directory</b>": {
+    "<b>titel</b>": "Studienordnungen Buchwissenschaften",
     "beschreibung": "In diesem Verzeichnis sind Studienordnungen für den Studiengang Buchwissenschaften",
-    "file-aliases": [{
-      "Dateiname.pdf": "Anzeigename",
+    "<b>file-aliases</b>": [{
+      "<b>Dateiname</b>": "<b>Anzeigename</b>",
       "Buchwissenschaften_23_5_lb_zb.pdf": "Prüfungsordnung für Buchwissenschaft vom 15. April 2017 in der konsolidierten Fassung"
     }]
   }
 }]
-```
+</pre>
 
 Wird diesem Format **nicht strikt gefolgt**, so kann die **.meta.txt nicht ausgelesen** werden und dementsprechend keine schönen Anzeigenamen ausgegeben werden. Zur besseren Handhabung mit dem **JSON Sytax** empfielt sich die **Installation z. B. des Editors [Visual Studio Code](https://code.visualstudio.com/). Mit diesem kann auf einfach Art und Weise mit dem JSON Sytax gearbeitet werden und ein **Code Highlighting** (in der blauen Fußzeile unten rechts) zur besseren Darstellung eingestellt werden.
