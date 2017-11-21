@@ -117,7 +117,7 @@ In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.txt** hinzugefügt we
 [{
 "<b>directory</b>": {
     "<b>titel</b>": "Studienordnungen Buchwissenschaften",
-    "beschreibung": "In diesem Verzeichnis sind Studienordnungen für den Studiengang Buchwissenschaften",
+    "<b>beschreibung</b>": "In diesem Verzeichnis sind Studienordnungen für den Studiengang Buchwissenschaften",
     "<b>file-aliases</b>": [{
       "<b>Dateiname</b>": "<b>Anzeigename</b>",
       "Buchwissenschaften_23_5_lb_zb.pdf": "Prüfungsordnung für Buchwissenschaft",
