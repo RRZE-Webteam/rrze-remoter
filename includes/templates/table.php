@@ -83,7 +83,7 @@
                             <?php }
                             break; 
                         case 'download': ?>
-                            <td><a href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                            <td align="center"><a href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                            <?php break;
                         case 'directory': ?>
                             <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data[$i][$j]['dir']) ?></td>

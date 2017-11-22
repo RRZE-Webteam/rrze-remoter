@@ -262,23 +262,24 @@ class Class_Build_Shortcode {
 
                 switch($column) {
                     case 'size':
-                        $t .= '<th>Dateigröße</th>';
-                        break;
+                        $t .= '<th>' . __('Dateigröße', 'rrze-remoter') . '</th>';
+                    break;
                     case 'type':
-                        $t .= '<th>Dateityp</th>';
+                        $t .= '<th>' . __('Dateityp', 'rrze-remoter') . '</th>';
                         break;
                     case 'download':
-                        $t .= '<th>Download</th>';
+                        $t .= '<th>' . __('Herunterladen', 'rrze-remoter') . '</th>';
                         break;
-                    case 'folder':
-                        $t .= '<th>Ordner</th>';
+                    case 'directory':
+                        $t .= '<th>' . __('Verzeichnisname', 'rrze-remoter') . '</th>';
                         break;
                     case 'name':
-                        $t .= '<th>Name</th>';
+                        $t .= '<th>' . __('Dateiname', 'rrze-remoter') . '</th>';
                         break;
                     case 'date':
-                        $t .= '<th>Datum</th>';
+                        $t .= '<th>' . __('Erstellungsdatum', 'rrze-remoter') . '</th>';
                         break;   
+                    
                 }
             }
             
@@ -309,9 +310,9 @@ class Class_Build_Shortcode {
                             }
                             break;
                         case 'download':
-                            $t .= '<td><a href="http://' . $host . $value['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                            $t .= '<td align="center"><a href="http://' . $host . $value['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                             break;
-                        case 'folder':
+                        case 'directory':
                             $t .= '<td>' . $folder . '</td>';
                             break;
                         case 'name':
@@ -437,22 +438,22 @@ class Class_Build_Shortcode {
 
             switch($column) {
                 case 'size':
-                    $t .= '<th>Dateigröße</th>';
+                    $t .= '<th>' . __('Dateigröße', 'rrze-remoter') . '</th>';
                     break;
                 case 'type':
-                    $t .= '<th>Dateityp</th>';
+                    $t .= '<th>' . __('Dateityp', 'rrze-remoter') . '</th>';
                     break;
                 case 'download':
-                    $t .= '<th>Download</th>';
+                    $t .= '<th>' . __('Herunterladen', 'rrze-remoter') . '</th>';
                     break;
-                case 'folder':
-                    $t .= '<th>Ordner</th>';
+                case 'directory':
+                    $t .= '<th>' . __('Verzeichnisname', 'rrze-remoter') . '</th>';
                     break;
                 case 'name':
-                    $t .= '<th>Name</th>';
+                    $t .= '<th>' . __('Dateiname', 'rrze-remoter') . '</th>';
                     break;
                 case 'date':
-                    $t .= '<th>Datum</th>';
+                    $t .= '<th>' . __('Erstellungsdatum', 'rrze-remoter') . '</th>';
                     break;   
             }
         }
@@ -485,9 +486,9 @@ class Class_Build_Shortcode {
                         }
                         break;
                     case 'download':
-                        $t .= '<td><a href="http://' . $host . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                        $t .= '<td align="center"><a href="http://' . $host . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                         break;
-                    case 'folder':
+                    case 'directory':
                         $t .= '<td>' . $folder. '</td>';
                         break;
                     case 'name':

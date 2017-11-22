@@ -98,7 +98,7 @@ if($header) { ?>
                 <?php break;
                 case 'download': ?>
                         
-                    <td><a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                    <td align="center"><a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
             
                 <?php break;
                 case 'directory': ?>
