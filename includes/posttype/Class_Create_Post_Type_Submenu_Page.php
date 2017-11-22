@@ -77,13 +77,13 @@ class Class_Create_Post_Type_Submenu_Page {
     
     public function remote_request_action() {
                
-        $ip  = '131.188.12.134'; //$_SERVER['REMOTE_ADDR'];
+        $ip  = '131.188.12.34'; //$_SERVER['REMOTE_ADDR'];
         $adminemail = $_REQUEST['notices']['adminemail'];
         $domain     = $_REQUEST['notices']['domain'];
         $serverid   = $_REQUEST['notices']['serverid'];
         
         
-        $domain_requested = query_posts('post_type=remote-server&p=' . $serverid);
+        query_posts('post_type=remote-server&p=' . $serverid);
         while (have_posts()): the_post(); ?>
         <?php 
         
@@ -95,7 +95,7 @@ class Class_Create_Post_Type_Submenu_Page {
             
         <?php endwhile;
         
-        $response = wp_remote_get( 'http://remoter.dev/request.php?' .
+        $response = wp_remote_get( 'http://' . $meta[0] . '/request.php?' .
             'ip=' . $ip .
             '&serverid=' . $serverid .    
             '&email=' . $adminemail . 
