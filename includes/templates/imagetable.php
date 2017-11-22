@@ -1,5 +1,4 @@
 <?php
-echo '<h1>ImageTable</h1>';
 
 $id = uniqid();
 

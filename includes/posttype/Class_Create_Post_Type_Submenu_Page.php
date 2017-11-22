@@ -12,7 +12,7 @@ class Class_Create_Post_Type_Submenu_Page {
  
     public function register_sub_menu() {
         add_submenu_page( 
-           'edit.php?post_type=remote-server', 'API-Key Request', 'API-Key Request', 'manage_options', 'api_key_options', array(&$this, 'submenu_page_callback')
+           'edit.php?post_type=remote-server', __( 'API-Key Anfrage', 'rrze-remoter' ), __( 'API-Key Anfrage', 'rrze-remoter' ), 'manage_options', 'api_key_options', array(&$this, 'submenu_page_callback')
         );
     }
  

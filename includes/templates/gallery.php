@@ -5,8 +5,7 @@ $data = $this->remote_data;
 
 function createSlider($data, $url, $id) {
 
-    $g = '<h3>Galerie</h3>';
-    $g .= '<div id="slider-' . $id . '" class="image-gallery-slider">';
+    $g  = '<div id="slider-' . $id . '" class="image-gallery-slider">';
     $g .= '<ul class="slides">';
     
     foreach ($data as $key => $value) {

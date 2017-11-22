@@ -34,7 +34,6 @@
     <?php } ?>
 <?php } ?>
 <?php  $this->meta = $meta_store; ?>
-<h3>Glossar</h3>
 <div class="fau-glossar"><ul class="letters" aria-hidden="true">
 <?php foreach ($letters as $key => $value) { ?>
 
