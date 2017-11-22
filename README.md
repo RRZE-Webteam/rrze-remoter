@@ -27,15 +27,15 @@ müssen auf dem Remote-Server im Root-Verzeichnis des Webservers abgelegt werden
 
 ### __Der hierfür benötigte Shortcode beinhaltet folgende Parameter:__
 
-- **id** - Wird bei der Anlage des Remote-Servers automatisch vergeben
-- **file** - Wird lediglich nach einer bestimmten Datei gesucht, so muss hier der Dateiname angeben werden.
-- **index** - Das Verzeichnis in dem oder ab welchem gesucht werden soll.
-- **recursiv** - Ist dieser werden auf 1, so werden alle Unterverzeichnisse mit durchsucht. Bei 0 wird nur das angegebene Verzeichnis ausgelesen.
-- **itemsperpage** - Die Anzahl der Dateien pro Seite (nur bei view="pagination" relevant!)
-- **filetype** - Nach welchen Dateiendungen gesucht werden soll (z. B. pdf). Wird der Parameter "all" verwendet, so wird nach folgenden Dateiendungen gesucht (jpg, jpeg, png, tif, gif, txt, doc, docx, xls, pdf).
-- **link** - Bei link="1" wird der Dateiename wird verlinkt.
-- **alias** - Wird der Parameter "file" verwendet, so kann ein alternativer Anzeigename für den Dateinamen übergeben werden.
-- **view**  - Hier wird das Ausgabeformat angegeben. Zur Auswahl stehen:
+- **id** - Wird bei der Anlage des Remote-Servers automatisch vergeben. (Default leer)
+- **file** - Wird lediglich nach einer bestimmten Datei gesucht, so muss hier der Dateiname angeben werden. (Default leer)
+- **index** - Das Verzeichnis in dem oder ab welchem gesucht werden soll. (Default leer)
+- **recursiv** - Ist dieser werden auf 1, so werden alle Unterverzeichnisse mit durchsucht. Bei 0 wird nur das angegebene Verzeichnis ausgelesen. (Default 1)
+- **itemsperpage** - Die Anzahl der Dateien pro Seite. (nur bei view="pagination" relevant!) (Default 5)
+- **filetype** - Nach welchen Dateiendungen gesucht wird. (z. B. pdf). Wird der Parameter "all" verwendet, so wird nach folgenden Dateiendungen gesucht (jpg, jpeg, png, tif, gif, txt, doc, docx, xls, pdf). (Default pdf)
+- **link** - Bei link="1" wird der Dateiename verlinkt. (Default 0)
+- **alias** - Wird der Parameter "file" verwendet, so kann ein alternativer Anzeigename für den Dateinamen übergeben werden. (Default leer)
+- **view**  - Hier wird das Ausgabeformat angegeben. Zur Auswahl stehen (Default table):
 
 ```
 - die Galerie (gallery), 
@@ -45,24 +45,24 @@ müssen auf dem Remote-Server im Root-Verzeichnis des Webservers abgelegt werden
 - ein Glossar
 ```
 
-- **orderby** - Hier kann die Spalte ausgewählt werden nach welcher sortiert wird. (siehe Tabellenspalten weiter unten)
-- **order** - Hier kann die Reihenfolge festgelegt werden asc (aufsteigend) oder desc (absteigend).
-- **show** - Hier werden die anzuzeigenden Tabellenspalten bestimmt:
+- **orderby** - Hier kann die Spalte ausgewählt werden nach welcher sortiert wird. (siehe Tabellenspalten weiter unten) (Default name)
+- **order** - Hier kann die Reihenfolge festgelegt werden asc (aufsteigend) oder desc (absteigend). (Default asc)
+- **show** - Hier werden die anzuzeigenden Tabellenspalten bestimmt (Default name und download):
 
 ```
-    -  Name (name),
+    -  Dateiname (name),
     -  Download (download),
     -  Dateigröße (size),
-    -  Verzeichnisname (folder),
+    -  Verzeichnisname (directory),
     -  Dateityp (type),
-    -  Das Datum der Datei (date)
+    -  Erstellungsdatum (date)
 ```
 
 Die Spalten werden genau in der Reihenfolge ausgegeben, wie sie angegeben werden (z. B. show="name,size,folder"
 
-- **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader=1). Bei showheader=0 wird der Tabellenkopf über den TinyMCE erzeugt.
-- **filter** - Eine zusätzliche Möglichkeit das Suchergebnis einzuschränken. Wird filter gesetzt so müssen auch ein oder mehrere filetypes gesetzt werden.
-- **showmetainfo** - Die Ausgabe der Meta.txt oberhalb z. B. der Tabelle kann ein- (1) und ausgeblendet (0) werden.
+- **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader=1). Bei showheader=0 wird der Tabellenkopf über den TinyMCE erzeugt. (Default 0)
+- **filter** - Eine zusätzliche Möglichkeit das Suchergebnis einzuschränken. Wird filter gesetzt so müssen auch ein oder mehrere filetypes gesetzt werden. (Default leer)
+- **showmetainfo** - Die Ausgabe der Meta.txt oberhalb z. B. der Tabelle kann ein- (1) und ausgeblendet (0) werden. (Default 1)
 
 ### __Beispiele für mögliche Shortcodes:__
 
@@ -130,3 +130,14 @@ In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.txt** hinzugefügt we
 </pre>
 
 Wird diesem Format **nicht strikt gefolgt**, so kann die **.meta.txt nicht ausgelesen** werden und dementsprechend keine schönen Anzeigenamen ausgegeben werden. Zur besseren Handhabung mit dem **JSON Sytax** empfielt sich die Installation z. B. des Editors [Visual Studio Code](https://code.visualstudio.com/). Mit diesem kann auf einfach Art und Weise mit dem JSON Sytax gearbeitet werden und ein **Code Highlighting** (in der blauen Fußzeile unten rechts) zur besseren Darstellung eingestellt werden. Alternativ können auch sogenannte Online JSON Formatter und Validator wie [JSON Formatter](https://jsonformatter.curiousconcept.com/) oder [JSON Viewer](https://codebeautify.org/jsonviewer) um nur ein paar, der zahlreich vorhanden aufzuzählen, verwendet werden.
+
+### __Sonstiges__:
+
+Wird eine rekursive Suche durchgeführt, so werden alle .meta.txt Dateien ausgelesen und geordnet nach den Verzeichnissen in einem Accordion oberhalb z. B. der Tabelle angezeigt. Falls ein Verzeichnis keine .meta.txt beinhaltet so ist der Anzeigename gleich dem Dateinamen. Um nicht unötig viele .meta.txt Dateien pflegen zu müssen, bietet sich an im Ausgangsverzeichnis eine einzige .meta.txt anzulegen und auch für die unterhalb dieses Verzeichnis liegende Dokumente einen Dateiennamen mit dem entsprechenden Anzeigenamen zu pflegen.
+
+### __Falls das Plugin gar nicht will - Ruhe bewahren__:
+
+- Überprüfen Sie zunächst einmal den Shortcode und die darin übergebenen Werte.
+- Beim JSON-Syntax der .meta.txt hat man sich schnell vertippt. Nutzen Sie stets einen JSON Formatter zur Kontrolle. (siehe oben)
+- Viele .meta.txt Dateien bedeuten sehr viel Pflegeaufwand. Legen Sie eine .meta.txt Datei in das Ausgangsverzeichnis. In dieser führen Sie alle Datei- und Anzeigenamen der darunterliegenden Dateien auf.
+- __Last but not least__, spielen Sie ein wenig mit dem Plugin. Viel Spass!
