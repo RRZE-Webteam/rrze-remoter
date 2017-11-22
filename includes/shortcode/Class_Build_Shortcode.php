@@ -37,7 +37,8 @@ class Class_Build_Shortcode {
             'order'             => 'asc',
             'show'              => 'name,download',
             'showheader'        => '0',
-            'filter'            => ''
+            'filter'            => '',
+            'showmetainfo'      => '1'
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -69,7 +70,8 @@ class Class_Build_Shortcode {
             'showColumns'   => $this->remote_server_shortcode['show'],
             'link'          => $this->remote_server_shortcode['link'],
             'showHeader'    => $this->remote_server_shortcode['showheader'],
-            'file'          => $this->remote_server_shortcode['file']
+            'file'          => $this->remote_server_shortcode['file'],
+            'showInfo'      => $this->remote_server_shortcode['showmetainfo']
         );
         
         $the_query = new \WP_Query( $query_arguments);
