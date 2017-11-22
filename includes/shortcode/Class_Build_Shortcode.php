@@ -233,7 +233,7 @@ class Class_Build_Shortcode {
             
             foreach($dataArray as $key => $value) {
                 if($value['name'] === '.meta.txt') {
-                    $i == 1;
+                    $i = 1;
                     unset($dataArray[$key]);
                     $dataChunk = array_values($dataArray);
                 }
