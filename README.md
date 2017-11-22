@@ -62,6 +62,7 @@ Die Spalten werden genau in der Reihenfolge ausgegeben, wie sie angegeben werden
 
 - **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader=1). Bei showheader=0 wird der Tabellenkopf über den TinyMCE erzeugt.
 - **filter** - Eine zusätzliche Möglichkeit das Suchergebnis einzuschränken. Wird filter gesetzt so müssen auch ein oder mehrere filetypes gesetzt werden.
+- **showmetainfo** - Die Ausgabe der Meta.txt oberhalb z. B. der Tabelle kann ein- (1) und ausgeblendet (0) werden.
 
 ### __Beispiele für mögliche Shortcodes:__
 
