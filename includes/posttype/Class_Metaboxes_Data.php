@@ -51,7 +51,7 @@ class Class_Metaboxes_Data {
         
         $metabox_data[] = array( 
             'id'          => 'apikey',
-            'title'       => __( 'API_Key', 'rrze-remoter' ),
+            'title'       => __( 'API-Key', 'rrze-remoter' ),
             'post_type'   => 'remote-server',
             'context'     => 'normal',
             'priority'    => 'high',

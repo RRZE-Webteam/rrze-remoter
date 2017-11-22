@@ -17,7 +17,7 @@ class Class_Customize_List_View {
 
 	$columns = array(
             'cb'            => '<input type="checkbox" />',
-            'title'         => __( 'Title', 'rrze-remoter' ),
+            'title'         => __( 'Titel', 'rrze-remoter' ),
             'id'            => __( 'ID', 'rrze-remoter'),
             //'url'           => __( 'Url', 'rrze-remoter' ),
             'domain'        => __( 'Domain', 'rrze-remoter' ),

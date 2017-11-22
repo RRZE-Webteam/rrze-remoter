@@ -56,24 +56,24 @@
             <?php foreach($tableHeader as $key => $column) {
 
                 switch($column) {
-                    case 'size': ?>
-                        <th>Dateigröße</th>
-                    <?php break;
-                    case 'type': ?>
-                        <th>Dateityp</th>
-                    <?php break;
-                    case 'download': ?>
-                        <th>Download</th>
-                    <?php break;
-                    case 'folder': ?>
-                        <th>Ordner</th>
+                    case 'directory': ?>
+                        <th><?php _e('Verzeichnisname', 'rrze-remoter');?></th>
                     <?php break;
                     case 'name': ?>
-                        <th>Name</th>
+                        <th><?php _e('Dateiname', 'rrze-remoter');?></th>
                     <?php break;
                     case 'date': ?>
-                        <th>Datum</th>
-                    <?php break;   
+                        <th><?php _e('Erstellungsdatum', 'rrze-remoter');?></th>
+                    <?php break;
+                    case 'type': ?>
+                        <th><?php _e('Dateityp', 'rrze-remoter');?></th>
+                    <?php break;
+                    case 'size':?>
+                        <th><?php _e('Dateigröße', 'rrze-remoter');?></th>
+                       <?php break;
+                    case 'download': ?>
+                        <th><?php _e('Herunterladen', 'rrze-remoter');?></th>
+                     <?php break;   
                 }
             } ?>
         </tr>
@@ -101,7 +101,7 @@
                     case 'download': ?>
                         <td><a href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                         <?php break;
-                    case 'folder': ?>
+                    case 'directory': ?>
                         <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data_new[$i]['dir']) ?></td>
                         <?php break;
                     case 'name': ?>

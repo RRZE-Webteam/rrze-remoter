@@ -41,27 +41,26 @@ if($header) { ?>
     <?php foreach($tableHeader as $key => $column) { ?>
 
         <?php switch($column) {
-                case 'size': ?>
-            <th>Dateigröße</th>
+            case 'directory': ?>
+                <th><?php _e('Verzeichnisname', 'rrze-remoter');?></th>
             <?php break;
-                case 'type': ?>
-            <th>Dateityp</th>
+            case 'name': ?>
+                <th><?php _e('Dateiname', 'rrze-remoter');?></th>
             <?php break;
-                case 'download': ?>
-            <th>Download</th>
+            case 'date': ?>
+                <th><?php _e('Erstellungsdatum', 'rrze-remoter');?></th>
             <?php break;
-                case 'folder': ?>
-            <th>Verzeichnisname</th>
+            case 'type': ?>
+                <th><?php _e('Dateityp', 'rrze-remoter');?></th>
             <?php break;
-                case 'name': ?>
-            <th>Dateiname</th>
-            <?php break;
-                case 'date': ?>
-            <th>Datum</th>
-            <?php break;
-                case 'default': ?>
-            <?php break; ?>
-        <?php } ?>
+            case 'size':?>
+                <th><?php _e('Dateigröße', 'rrze-remoter');?></th>
+               <?php break;
+            case 'download': ?>
+                <th><?php _e('Herunterladen', 'rrze-remoter');?></th>
+             <?php break;
+        
+        } ?>
     <?php } ?>
     </tr>
 <?php } ?>
@@ -102,7 +101,7 @@ if($header) { ?>
                     <td><a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
             
                 <?php break;
-                case 'folder': ?>
+                case 'directory': ?>
                     
                     <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data[$i]['dir']) ?></td>
                     

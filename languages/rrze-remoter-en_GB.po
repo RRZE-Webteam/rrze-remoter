@@ -1,0 +1,180 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: RRZE-Remoter\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-22 11:22+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: RRZE-Webteam <webmaster@rrze.fau.de>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
+"esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;"
+"esc_html_x:1,2c\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.3\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ..\n"
+
+#: ../includes/posttype/Class_Create_Custom_Post_Type_Server.php:35
+#, php-format
+msgid "Neuen %s hinzufügen"
+msgstr "Add new %s"
+
+#: ../includes/posttype/Class_Create_Custom_Post_Type_Server.php:36
+#, php-format
+msgid "Bearbeiten %s"
+msgstr "Edit %s"
+
+#: ../includes/posttype/Class_Create_Custom_Post_Type_Server.php:37
+#, php-format
+msgid "Neuer %s"
+msgstr "New %s"
+
+#: ../includes/posttype/Class_Create_Custom_Post_Type_Server.php:38
+#, php-format
+msgid "Alle %s"
+msgstr "All %s"
+
+#: ../includes/posttype/Class_Create_Custom_Post_Type_Server.php:39
+#, php-format
+msgid "Zeige %s"
+msgstr "Show %s"
+
+#: ../includes/posttype/Class_Create_Custom_Post_Type_Server.php:40
+#, php-format
+msgid "Suche %s"
+msgstr "Search %s"
+
+#: ../includes/posttype/Class_Create_Custom_Post_Type_Server.php:41
+#, php-format
+msgid "%s nicht gefunden"
+msgstr "%s not found"
+
+#: ../includes/posttype/Class_Create_Custom_Post_Type_Server.php:42
+#, php-format
+msgid "Keine %s im Papierkorb"
+msgstr "No %s found in Trash"
+
+#: ../includes/posttype/Class_Create_Custom_Post_Type_Server.php:43
+#, php-format
+msgid "Parent %s"
+msgstr ""
+
+#: ../includes/posttype/Class_Create_Post_Type_Submenu_Page.php:26
+msgid "API-Key Anfrage"
+msgstr "Request for an API key"
+
+#: ../includes/posttype/Class_Create_Post_Type_Submenu_Page.php:27
+msgid "Hier können Sie einen API-Key beantragen."
+msgstr "Here you can apply for an API key."
+
+#: ../includes/posttype/Class_Custom_Post_Type_Server.php:10
+msgid "Remote Servers"
+msgstr ""
+
+#: ../includes/posttype/Class_Custom_Post_Type_Server.php:10
+msgid " Remote Server"
+msgstr ""
+
+#: ../includes/posttype/Class_Customize_List_View.php:20
+msgid "Titel"
+msgstr "Title"
+
+#: ../includes/posttype/Class_Customize_List_View.php:21
+msgid "ID"
+msgstr "ID"
+
+#: ../includes/posttype/Class_Customize_List_View.php:23
+#: ../includes/posttype/Class_Metaboxes_Data.php:25
+msgid "Domain"
+msgstr "Domain"
+
+#: ../includes/posttype/Class_Customize_List_View.php:24
+#: ../includes/posttype/Class_Metaboxes_Data.php:54
+msgid "API-Key"
+msgstr "API-Key"
+
+#: ../includes/posttype/Class_Customize_List_View.php:25
+msgid "Datum"
+msgstr "Date"
+
+#: ../includes/settings.php:36
+msgid "RRZE Remoter"
+msgstr ""
+
+#: ../includes/settings.php:47
+msgid "Settings &rsaquo; RRZE Remoter"
+msgstr ""
+
+#: ../includes/settings.php:66
+msgid "API-Key Request"
+msgstr ""
+
+#: ../includes/settings.php:96
+msgid "Here comes the Context Help content."
+msgstr ""
+
+#: ../includes/settings.php:102
+msgid "Overview"
+msgstr ""
+
+#: ../includes/settings.php:106
+msgid "For more information"
+msgstr ""
+
+#: ../includes/settings.php:106
+msgid "RRZE Webteam on Github"
+msgstr ""
+
+#: ../includes/templates/glossary.php:60 ../includes/templates/table.php:44
+#: ../includes/templates/table_without_pagination.php:45
+msgid "Verzeichnisname"
+msgstr "Directory name"
+
+#: ../includes/templates/glossary.php:63 ../includes/templates/table.php:47
+#: ../includes/templates/table_without_pagination.php:48
+msgid "Dateiname"
+msgstr "Filename"
+
+#: ../includes/templates/glossary.php:66 ../includes/templates/table.php:50
+#: ../includes/templates/table_without_pagination.php:51
+msgid "Erstellungsdatum"
+msgstr "Creation Date"
+
+#: ../includes/templates/glossary.php:69 ../includes/templates/table.php:53
+#: ../includes/templates/table_without_pagination.php:54
+msgid "Dateityp"
+msgstr "Filetype"
+
+#: ../includes/templates/glossary.php:72 ../includes/templates/table.php:56
+#: ../includes/templates/table_without_pagination.php:57
+msgid "Dateigröße"
+msgstr "File size"
+
+#: ../includes/templates/glossary.php:75 ../includes/templates/table.php:59
+#: ../includes/templates/table_without_pagination.php:60
+msgid "Herunterladen"
+msgstr "Download"
+
+#: ../rrze-remoter.php:105
+#, php-format
+msgid ""
+"Your server is running PHP version %s. Please upgrade at least to PHP "
+"version %s."
+msgstr ""
+
+#: ../rrze-remoter.php:109
+#, php-format
+msgid ""
+"Your Wordpress version is %s. Please upgrade at least to Wordpress version "
+"%s."
+msgstr ""
+
+#~ msgid "Title"
+#~ msgstr "Title"

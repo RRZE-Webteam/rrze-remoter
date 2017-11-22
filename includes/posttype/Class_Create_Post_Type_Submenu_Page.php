@@ -23,14 +23,14 @@ class Class_Create_Post_Type_Submenu_Page {
         $current_blog_details = get_blog_details( array( 'blog_id' => $blog_id ) );
         
         $html =     '<div class="rrze-remoter-wrap">';
-        $html .=    '<h2>API-Key Request</h2>';
-        $html .=    '<h4>Hier können Sie einen API-Key beantragen.</h4>';
+        $html .=    '<h2>' . __( 'API-Key Anfrage', 'rrze-remoter' ) . '</h2>';
+        $html .=    '<h4>' . __( 'Hier können Sie einen API-Key beantragen.', 'rrze-remoter' ) .'</h4>';
         $html .=    '<p id="server-response"></p>';
         $html .=    '</div>';
         $html .=    '<form id="apikey_request_id" action="https://wordpress.dev/wp-admin/admin-ajax.php" method="post">';
         $html .=    '<input type="hidden" name="adminemail" value="' . $current_user->user_email . '"/>';
         $html .=    '<input type="hidden" name="domain" value="'. $current_blog_details->domain .'"/>';
-        $html .=    '<p><label for="server_id">ServerID:<input type="text" name="server_id"/></label></p>';
+        $html .=    '<p><label for="server_id">Server ID:<input type="text" name="server_id"/></label></p>';
         $html .=    '<button class="button button-primary" id="sbmBtn">API-Key anfordern</button>';
         $html .=    '</form>';
         
