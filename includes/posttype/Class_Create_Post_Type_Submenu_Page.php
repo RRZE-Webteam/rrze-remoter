@@ -27,7 +27,7 @@ class Class_Create_Post_Type_Submenu_Page {
         $html .=    '<h4>' . __( 'Hier können Sie einen API-Key beantragen.', 'rrze-remoter' ) .'</h4>';
         $html .=    '<p id="server-response"></p>';
         $html .=    '</div>';
-        $html .=    '<form id="apikey_request_id" action="https://wordpress.dev/wp-admin/admin-ajax.php" method="post">';
+        $html .=    '<form id="apikey_request_id">';
         $html .=    '<input type="hidden" name="adminemail" value="' . $current_user->user_email . '"/>';
         $html .=    '<input type="hidden" name="domain" value="'. $current_blog_details->domain .'"/>';
         $html .=    '<p><label for="server_id">Server ID:<input type="text" name="server_id"/></label></p>';
@@ -51,6 +51,7 @@ class Class_Create_Post_Type_Submenu_Page {
                 };
 
                 $.ajax({
+                    type: 'post',
                     url: ajaxurl,
                     data: {
                         'action':'remote_request_action',

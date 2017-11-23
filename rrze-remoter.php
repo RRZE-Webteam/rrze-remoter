@@ -152,16 +152,16 @@ function autoload() {
 
 function custom_libraries_scripts() {
     
-    wp_register_script( 'mainjs', plugins_url( 'rrze-remoter/assets/js/rrze-remoter-main.js', dirname(__FILE__)), array('jquery'),'', true);
-    wp_enqueue_script( 'mainjs' );
-    wp_register_script( 'scriptsjs', plugins_url( 'rrze-remoter/assets/js/rrze-remoter-scripts.js', dirname(__FILE__)), array('jquery'),'', true);
-    wp_enqueue_script( 'scriptsjs' );
+    wp_register_script( 'rrze-remoter-mainjs', plugins_url( 'rrze-remoter/assets/js/rrze-remoter-main.js', dirname(__FILE__)), array('jquery'),'', true);
+    wp_enqueue_script( 'rrze-remoter-mainjs' );
+    wp_register_script( 'rrze-remoter-scriptsjs', plugins_url( 'rrze-remoter/assets/js/rrze-remoter-scripts.js', dirname(__FILE__)), array('jquery'),'', true);
+    wp_enqueue_script( 'rrze-remoter-scriptsjs' );
     wp_register_script( 'flexsliderjs', plugins_url( 'rrze-remoter/assets/js/jquery.flexslider.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_enqueue_script( 'flexsliderjs' );
-    wp_register_style( 'rstylescss', plugins_url( 'rrze-remoter/assets/css/styles.css', dirname(__FILE__) ) );
-    wp_enqueue_style( 'rstylescss' );
+    wp_register_style( 'rrze-remoter-stylescss', plugins_url( 'rrze-remoter/assets/css/styles.css', dirname(__FILE__) ) );
+    wp_enqueue_style( 'rrze-remoter-stylescss' );
     
-    wp_localize_script( 'mainjs', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+    wp_localize_script( 'rrze-remoter-mainjs', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
    
     
 }
