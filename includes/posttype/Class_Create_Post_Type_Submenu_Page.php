@@ -82,29 +82,48 @@ class Class_Create_Post_Type_Submenu_Page {
         $domain     = $_REQUEST['notices']['domain'];
         $serverid   = $_REQUEST['notices']['serverid'];
         
-        
         query_posts('post_type=remote-server&p=' . $serverid);
-        while (have_posts()): the_post(); ?>
-        <?php 
+        while (have_posts()): the_post(); 
+            $meta = get_post_meta( get_the_ID(), 'domain' );
+        endwhile;
         
-        if (!empty($serverid)) {
+        $responseRequest = wp_remote_get('http://' . $meta[0] . '/request.php');
+        $status_code = wp_remote_retrieve_response_code( $responseRequest );
         
-        $meta = get_post_meta( get_the_ID(), 'domain' );
-        
-        }?>
+        if(!isset($meta) || !is_numeric($serverid)) {
             
-        <?php endwhile;
+            $html = 'Die Server ID ist nicht vergeben!';
+             
+        } elseif(empty($serverid)) {
+          
+            $html = 'Bitte tragen Sie eine Server ID ein!';
         
-        $response = wp_remote_get( 'http://' . $meta[0] . '/request.php?' .
-            'ip=' . $ip .
-            '&serverid=' . $serverid .    
-            '&email=' . $adminemail . 
-            '&domain=' . $domain . 
-            '&requested_domain=' . (isset($meta[0]) ? $meta[0] : ''), 
-            array( 'timeout' => 120, 'httpversion' => '1.1' )
-        );
+        } elseif(200 == $status_code) {
+            
+            $response = wp_remote_get( 'http://' . $meta[0] . '/request.php?' .
+                'ip=' . $ip .
+                '&serverid=' . $serverid .    
+                '&email=' . $adminemail . 
+                '&domain=' . $domain . 
+                '&requested_domain=' . (isset($meta[0]) ? $meta[0] : ''), 
+                array( 'timeout' => 120, 'httpversion' => '1.1' )
+            );
+
+            echo $response['body'];
         
-        echo $response['body'];
+        } else {
+            $html  = '<h4>Die notwendigen Dateien liegen noch nicht oder an der falschen Stelle auf dem Server!</h4>';
+            $html .= '<p>Bitte legen Sie zuerst folgende Dateien auf Ihren Server:</p>';
+            $html .= '<ul>';
+            $html .= '<li>request.php';
+            $html .= '<li>remotefiles.php';
+            $html .= '<li>AccessControl/';
+            $html .= '</ul>';
+            $html .= '<p>Diese finden Sie im Gitlab Respository: <a href="https://gitlab.rrze.fau.de/rrze-webteam/rrze-remoter-server-files">Link</a></p>';
+            $html .= '</div>';
+        }
+        
+        echo $html;
 
 	wp_die();
     }

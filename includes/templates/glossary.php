@@ -131,7 +131,7 @@
 
                     <?php } else { ?>
 
-                        <td><?php echo basename($data_new[$i]['path']) ?></td>  
+                        <td><?php echo str_replace('_', ' ', basename($data_new[$i]['path'])) ?></td>  
 
                     <?php  }
                             break;

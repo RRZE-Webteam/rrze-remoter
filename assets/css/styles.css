@@ -1,7 +1,6 @@
 .pagination.pagebreaks .subpages a .number {
   background: #dde5f0;
-  border: 1px solid #dde5f0;
-  margin-right: 5px; }
+  border: 1px solid #dde5f0; }
 
 .pagination.pagebreaks .subpages a .number.active {
   background: #fff;
@@ -13,3 +12,6 @@
 
 i.fa.fa-arrow-circle-down {
   font-size: 1rem; }
+
+.pagination.pagebreaks .subpages > a {
+  text-decoration: none; }

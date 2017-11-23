@@ -118,7 +118,7 @@ class Class_Help_Methods {
         if($key > 0 || $key === 0 && $file == '' && !empty($store)) {
             $name = $store[$key]['key'];
         } else {
-            $name = $path;
+            $name = str_replace('_', ' ', $path);
         }
         
         return $name;
