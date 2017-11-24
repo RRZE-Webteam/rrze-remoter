@@ -81,18 +81,18 @@ if($header) { ?>
                 case 'type': ?>
                     <?php $extension = $data[$i]['extension']; ?>
                 
-                    <?php if ($extension == 'pdf') { ?>
-                    
-                        <td><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>
-                        
-                    <?php } elseif($extension == 'pptx') { ?>
-                        
-                        <td><i class=" file-powerpoint-o" aria-hidden="true"></i></td>
-
-                    <?php } else{ ?>
-                        
-                        <td><i class="fa fa-file-image-o" aria-hidden="true"></i></td> 
-                        
+                    <?php if($extension == 'pdf') { ?>
+                        <td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>
+                    <?php }elseif($extension == 'pptx' || $extension =='ppt') { ?>
+                        <td align="center"><i class="fa fa-file-powerpoint-o" aria-hidden="true"></i></td>
+                    <?php }elseif($extension == 'docx' || $extension =='doc' ) { ?>
+                        <td align="center"><i class="fa fa-file-word-o" aria-hidden="true"></i></td>
+                    <?php }elseif($extension == 'xlsx' || $extension =='xls') { ?>
+                        <td align="center"><i class="fa fa-file-excel-o" aria-hidden="true"></i></td>
+                    <?php }elseif($extension == 'mpg' || $extension =='mpeg'|| $extension =='mp4' || $extension =='m4v') { ?>
+                        <td align="center"><i class="fa fa-file-movie-o" aria-hidden="true"></i></td>
+                    <?php }else{ ?>
+                        <td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>
                     <?php } ?>
                         
                 <?php break;
@@ -112,8 +112,9 @@ if($header) { ?>
                         <?php $path = basename($data[$i]['path']); ?>
                         <?php $store = $meta_store; ?> 
                         <?php $file = $shortcodeValues['file'] ?>
-
-                        <?php if ($extension == 'pdf') { ?>
+                        <?php $imgFormats = RRZE\Remoter\Class_Help_Methods::getImageFormats(); ?>     
+                            
+                        <?php if (!in_array($extension, $imgFormats)) { ?>
                         <td>
                             <a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
                                 <?php

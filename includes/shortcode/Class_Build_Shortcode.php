@@ -303,8 +303,14 @@ class Class_Build_Shortcode {
                             $extension = $value['extension'];
                             if($extension == 'pdf') {
                                 $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
-                            }elseif($extension == 'pptx') {
+                            }elseif($extension == 'pptx' || $extension =='ppt') {
                                 $t .= '<td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
+                            }elseif($extension == 'docx' || $extension =='doc') {
+                                $t .= '<td align="center"><i class="fa fa-file-word-o" aria-hidden="true"></i></td>'; 
+                            }elseif($extension == 'xlsx' || $extension =='xls') {
+                                $t .= '<td align="center"><i class="fa fa-file-excel-o" aria-hidden="true"></i></td>'; 
+                            }elseif($extension == 'mpg' || $extension =='mpeg'|| $extension =='mp4' || $extension =='m4v') {
+                                $t .= '<td align="center"><i class="fa fa-file-movie-o" aria-hidden="true"></i></td>'; 
                             }else{
                                 $t .= '<td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
                             }
@@ -319,7 +325,9 @@ class Class_Build_Shortcode {
                            $extension = $value['extension'];
                             if ($link) { 
                                 $path = basename($value['path']);
-                                if ($extension == 'pdf') {
+                                $imgFormats = Class_Help_Methods::getImageFormats();   
+                            
+                                if (!in_array($extension, $imgFormats)) {
                                     $t .= '<td>';
                                     $t .= '<a href="http://' . $host . $value['image'] . '">';
                                     $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
@@ -479,8 +487,14 @@ class Class_Build_Shortcode {
                         $extension = $data[$i]['extension'];
                         if($extension == 'pdf') {
                             $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
-                        }elseif($extension == 'pptx') {
+                        }elseif($extension == 'pptx' || $extension =='ppt') {
                             $t .= '<td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
+                        }elseif($extension == 'docx' || $extension =='doc') {
+                            $t .= '<td align="center"><i class="fa fa-file-word-o" aria-hidden="true"></i></td>'; 
+                        }elseif($extension == 'xlsx' || $extension =='xls') {
+                            $t .= '<td align="center"><i class="fa fa-file-excel-o" aria-hidden="true"></i></td>'; 
+                        }elseif($extension == 'mpg' || $extension =='mpeg'|| $extension =='mp4' || $extension =='m4v') {
+                            $t .= '<td align="center"><i class="fa fa-file-movie-o" aria-hidden="true"></i></td>'; 
                         }else{
                             $t .= '<td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
                         }
@@ -494,7 +508,9 @@ class Class_Build_Shortcode {
                     case 'name':
                          if ($link) { 
                             $path = basename($data[$i]['path']);
-                            if ($extension == 'pdf') {
+                            $imgFormats = Class_Help_Methods::getImageFormats();   
+                            
+                            if (!in_array($extension, $imgFormats)) {
                                 $t .= '<td>';
                                 $t .= '<a href="http://' . $host . $data[$i]['image'] . '">';
                                 $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');

@@ -11,6 +11,10 @@ class Class_Help_Methods {
         return $shortcodeColumns;
     }
     
+    public static function getImageFormats() {
+        return array('gif', 'png', 'jpg', 'jpeg', 'tiff', 'bmp');
+    }
+    
     public static function formatSize($bytes) {
 
         if ($bytes>= 1073741824) {
