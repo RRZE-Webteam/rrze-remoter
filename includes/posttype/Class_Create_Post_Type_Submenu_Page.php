@@ -91,13 +91,17 @@ class Class_Create_Post_Type_Submenu_Page {
         $responseRequest = wp_remote_get('http://' . $meta[0] . '/request.php');
         $status_code = wp_remote_retrieve_response_code( $responseRequest );
         
-        if(!isset($meta) || !is_numeric($serverid)) {
+        if(!isset($meta)) {
             
             $html = 'Die Server ID ist nicht vergeben!';
              
         } elseif(empty($serverid)) {
           
             $html = 'Bitte tragen Sie eine Server ID ein!';
+        
+        }elseif(!is_numeric($serverid)) {
+          
+            $html = 'Nur numerische Werte sind erlaubt!';
         
         } elseif(200 == $status_code) {
             
