@@ -96,7 +96,7 @@ class Class_Build_Shortcode {
                     
                     $meta_store = array();
                     array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
-                    
+                    date_default_timezone_set('Europe/Berlin');
                     switch ($view) {
                         case 'gallery':
                             include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
@@ -115,7 +115,7 @@ class Class_Build_Shortcode {
                             }
                             break;
                         case 'pagination':
-                            date_default_timezone_set('Europe/Berlin');
+                            //date_default_timezone_set('Europe/Berlin');
                             $url = parse_url(get_post_meta($post->ID, 'url', true)); 
                             $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
                             $dataFirstPage = $this->remote_data;

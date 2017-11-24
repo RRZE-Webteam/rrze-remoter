@@ -64,9 +64,9 @@ if($header) { ?>
     </tr>
 <?php } ?>
       
-<?php $data = RRZE\Remoter\Class_Help_Methods::deleteMetaTxtEntries($meta); ?>
+<?php $data = RRZE\Remoter\Class_Help_Methods::deleteMetaTxtEntries($data); ?>
+<?php array_multisort(array_column($data, 'change_time'), SORT_DESC, $data);?>
 <?php for($i = 0; $i <sizeof($data); $i++) { ?> 
-
     <tr>    
 
     <?php foreach($tableHeader as $key => $column) { ?>

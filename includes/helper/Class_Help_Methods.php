@@ -129,5 +129,24 @@ class Class_Help_Methods {
         
     }
     
+    public static function listSort(array &$files, $orderby, $order) {
+    
+        usort($files, function($a, $b) use ($orderby, $order) {
+
+            if ($a[$orderby] == $b[$orderby]) {
+                $result = 0;
+            }
+
+            $result = ($a[$orderby] < $b[$orderby]) ? -1 : 1;
+
+            if($order == 'asc') {
+                return $result;
+            }
+
+            return -$result;
+
+        });
+    }
+    
 }
 
