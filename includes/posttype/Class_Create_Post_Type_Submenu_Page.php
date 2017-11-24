@@ -83,6 +83,9 @@ class Class_Create_Post_Type_Submenu_Page {
         $domain     = $_REQUEST['notices']['domain'];
         $serverid   = $_REQUEST['notices']['serverid'];
         
+        $meta = 0;
+        $html = '';
+        
         query_posts('post_type=remote-server&p=' . $serverid);
         while (have_posts()): the_post(); 
             $meta = get_post_meta( get_the_ID(), 'domain' );
@@ -91,7 +94,7 @@ class Class_Create_Post_Type_Submenu_Page {
         $responseRequest = wp_remote_get('http://' . $meta[0] . '/request.php');
         $status_code = wp_remote_retrieve_response_code( $responseRequest );
         
-        if(!isset($meta)) {
+        if(!$meta) {
             
             $html = 'Die Server ID ist nicht vergeben!';
              
@@ -99,7 +102,7 @@ class Class_Create_Post_Type_Submenu_Page {
           
             $html = 'Bitte tragen Sie eine Server ID ein!';
         
-        }elseif(!is_numeric($serverid)) {
+        } elseif(!is_numeric($serverid)) {
           
             $html = 'Nur numerische Werte sind erlaubt!';
         

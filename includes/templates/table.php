@@ -19,8 +19,7 @@
                                 )
                                 ?>
                                 <tr>
-                                    <td>
-                                        <strong>Dateiname:</strong> <?php echo $key ?></td>
+                                    <td><strong>Dateiname:</strong> <?php echo $key ?></td>
                                     <td><strong> Anzeigename:</strong> <?php echo $value ?></td>
                                 </tr>
                             <?php } ?>
@@ -76,15 +75,15 @@
                             <?php  $extension = $data[$i][$j]['extension']; ?>
                             <?php if($extension == 'pdf') { ?>
                                 <td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>
-                            <?php }elseif($extension == 'pptx' || $extension =='ppt') { ?>
+                            <?php } elseif ($extension == 'pptx' || $extension =='ppt') { ?>
                                 <td align="center"><i class="fa fa-file-powerpoint-o" aria-hidden="true"></i></td>
-                            <?php }elseif($extension == 'docx' || $extension =='doc' ) { ?>
+                            <?php } elseif ($extension == 'docx' || $extension =='doc' ) { ?>
                                 <td align="center"><i class="fa fa-file-word-o" aria-hidden="true"></i></td>
-                            <?php }elseif($extension == 'xlsx' || $extension =='xls') { ?>
+                            <?php } elseif ($extension == 'xlsx' || $extension =='xls') { ?>
                                 <td align="center"><i class="fa fa-file-excel-o" aria-hidden="true"></i></td>
-                            <?php }elseif($extension == 'mpg' || $extension =='mpeg'|| $extension =='mp4' || $extension =='m4v') { ?>
+                            <?php } elseif ($extension == 'mpg' || $extension =='mpeg'|| $extension =='mp4' || $extension =='m4v') { ?>
                                 <td align="center"><i class="fa fa-file-movie-o" aria-hidden="true"></i></td>
-                            <?php }else{ ?>
+                            <?php } else { ?>
                                 <td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>
                             <?php }
                             break; 
@@ -103,29 +102,27 @@
                                 <?php $imgFormats = RRZE\Remoter\Class_Help_Methods::getImageFormats(); ?>     
                             
                                 <?php if (!in_array($extension, $imgFormats)) { ?>
-                                <td>
-                                    <a href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
-                                        <?php
-                                            echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
-                                        ?>
-                                    </a>
-                                </td> 
-                            
+                                    <td>
+                                        <a href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
+                                            <?php
+                                                echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
+                                            ?>
+                                        </a>
+                                    </td> 
+                                <?php } else { ?>
+                                    <td>
+                                        <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
+                                            <?php
+                                                echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
+                                            ?>
+                                        </a>
+                                    </td>  
+                                <?php } ?>
                             <?php } else { ?>
                                 <td>
-                                    <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
-                                        <?php
-                                            echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
-                                        ?>
-                                    </a>
+                                    <?php echo str_replace('_',' ', basename($data[$i]['path'])) ?>
                                 </td>  
-                            <?php } ?>
-
-                        <?php } else { ?>
-
-                        <td><?php echo str_replace('_',' ', basename($data[$i]['path'])) ?></td>  
-                        
-                        <?php  }
+                            <?php  }
                             break;
                         case 'date': ?>
                            <td><?php echo date('j. F Y', $data[$i][$j]['change_time']) ?></td>

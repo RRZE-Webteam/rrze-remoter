@@ -301,17 +301,17 @@ class Class_Build_Shortcode {
                             break;
                         case 'type':
                             $extension = $value['extension'];
-                            if($extension == 'pdf') {
+                            if ($extension == 'pdf') {
                                 $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
-                            }elseif($extension == 'pptx' || $extension =='ppt') {
+                            } elseif ($extension == 'pptx' || $extension =='ppt') {
                                 $t .= '<td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
-                            }elseif($extension == 'docx' || $extension =='doc') {
+                            } elseif ($extension == 'docx' || $extension =='doc') {
                                 $t .= '<td align="center"><i class="fa fa-file-word-o" aria-hidden="true"></i></td>'; 
-                            }elseif($extension == 'xlsx' || $extension =='xls') {
+                            } elseif ($extension == 'xlsx' || $extension =='xls') {
                                 $t .= '<td align="center"><i class="fa fa-file-excel-o" aria-hidden="true"></i></td>'; 
-                            }elseif($extension == 'mpg' || $extension =='mpeg'|| $extension =='mp4' || $extension =='m4v') {
+                            } elseif ($extension == 'mpg' || $extension =='mpeg'|| $extension =='mp4' || $extension =='m4v') {
                                 $t .= '<td align="center"><i class="fa fa-file-movie-o" aria-hidden="true"></i></td>'; 
-                            }else{
+                            } else {
                                 $t .= '<td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
                             }
                             break;
@@ -322,7 +322,7 @@ class Class_Build_Shortcode {
                             $t .= '<td>' . $folder . '</td>';
                             break;
                         case 'name':
-                           $extension = $value['extension'];
+                            $extension = $value['extension'];
                             if ($link) { 
                                 $path = basename($value['path']);
                                 $imgFormats = Class_Help_Methods::getImageFormats();   
@@ -362,7 +362,7 @@ class Class_Build_Shortcode {
         echo $t;
     }
        
-    die();
+    wp_die();
 }
 
     
@@ -485,17 +485,17 @@ class Class_Build_Shortcode {
                         break;
                     case 'type':
                         $extension = $data[$i]['extension'];
-                        if($extension == 'pdf') {
+                        if ($extension == 'pdf') {
                             $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
-                        }elseif($extension == 'pptx' || $extension =='ppt') {
+                        } elseif ($extension == 'pptx' || $extension =='ppt') {
                             $t .= '<td align="center"><i class=" file-powerpoint-o" aria-hidden="true"></i></td>'; 
-                        }elseif($extension == 'docx' || $extension =='doc') {
+                        } elseif ($extension == 'docx' || $extension =='doc') {
                             $t .= '<td align="center"><i class="fa fa-file-word-o" aria-hidden="true"></i></td>'; 
-                        }elseif($extension == 'xlsx' || $extension =='xls') {
+                        } elseif ($extension == 'xlsx' || $extension =='xls') {
                             $t .= '<td align="center"><i class="fa fa-file-excel-o" aria-hidden="true"></i></td>'; 
-                        }elseif($extension == 'mpg' || $extension =='mpeg'|| $extension =='mp4' || $extension =='m4v') {
+                        } elseif ($extension == 'mpg' || $extension =='mpeg'|| $extension =='mp4' || $extension =='m4v') {
                             $t .= '<td align="center"><i class="fa fa-file-movie-o" aria-hidden="true"></i></td>'; 
-                        }else{
+                        } else {
                             $t .= '<td align="center"><i class="fa fa-file-image-o" aria-hidden="true"></i></td>'; 
                         }
                         break;
