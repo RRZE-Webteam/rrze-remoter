@@ -45,7 +45,7 @@ müssen auf dem Remote-Server im Root-Verzeichnis des Webservers abgelegt werden
 - ein Glossar
 ```
 
-- **orderby** - Hier kann die Spalte ausgewählt werden nach welcher sortiert wird. (siehe Tabellenspalten weiter unten) (Default name)
+- **orderby** - Hier kann die Spalte ausgewählt werden nach welcher sortiert wird. (Sortierung möglich für die Spalten: name, size, date) (Default name)
 - **order** - Hier kann die Reihenfolge festgelegt werden asc (aufsteigend) oder desc (absteigend). (Default asc)
 - **show** - Hier werden die anzuzeigenden Tabellenspalten bestimmt (Default name und download):
 
