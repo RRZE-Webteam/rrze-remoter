@@ -1,4 +1,5 @@
 <?php $this->res = $this->remote_data; ?>
+<?php array_multisort(array_column($this->res, $sortOrderby), $sortOrder , $this->res); ?>
 <?php if($shortcodeValues['showInfo']) { ?>
     <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
         <?php if(!empty($meta[$i]['meta'])) { ?>
@@ -31,7 +32,7 @@
         <?php } ?>
     <?php } ?>
 <?php } ?>
-<?php  $this->meta = $meta_store; ?>
+<?php $this->a = $meta_store; ?>
 <div id="result">
     <table>
         <tr>

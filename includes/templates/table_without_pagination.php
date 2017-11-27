@@ -63,9 +63,10 @@ if($header) { ?>
     <?php } ?>
     </tr>
 <?php } ?>
-      
+<?php $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'change_time' : 'name'); ?>
+<?php $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC); ?>
 <?php $data = RRZE\Remoter\Class_Help_Methods::deleteMetaTxtEntries($data); ?>
-<?php array_multisort(array_column($data, 'change_time'), SORT_DESC, $data);?>
+<?php array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);?>
 <?php for($i = 0; $i <sizeof($data); $i++) { ?> 
     <tr>    
 

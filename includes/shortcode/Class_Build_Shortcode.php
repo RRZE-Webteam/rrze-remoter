@@ -97,6 +97,8 @@ class Class_Build_Shortcode {
                     $meta_store = array();
                     array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
                     date_default_timezone_set('Europe/Berlin');
+                    $order = $this->remote_server_shortcode['order'];
+                    $orderby = $this->remote_server_shortcode['orderby'];
                     switch ($view) {
                         case 'gallery':
                             include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
@@ -120,6 +122,9 @@ class Class_Build_Shortcode {
                             $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
                             $dataFirstPage = $this->remote_data;
                             $dataChunk = Class_Help_Methods::deleteMetaTxtEntries($dataFirstPage);
+                            $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'change_time' : 'name');
+                            $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
+                            array_multisort(array_column($dataChunk, $sortOrderby), $sortOrder , $dataChunk);
                             $data = array_chunk($dataChunk, $number_of_chunks);
                             $pagecount = count($data);
                             if(empty($pagecount)) {
@@ -133,6 +138,8 @@ class Class_Build_Shortcode {
                         case 'table':
                             ob_start();
                             $header = $shortcodeValues['showHeader'];
+                            $order = $this->remote_server_shortcode['order'];
+                            $orderby = $this->remote_server_shortcode['orderby'];
                             include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
                             $content = ob_get_clean();
                             return $content;
@@ -160,7 +167,7 @@ class Class_Build_Shortcode {
     public function rrze_remote_table_script_footer(){ 
         
         $arr = (isset($this->res)) ? $this->res : '';
-        $meta = (isset($this->meta)) ? $this->meta : '';
+        $meta = (isset($this->a)) ? $this->a : '';
         
         ?>
   
@@ -201,7 +208,7 @@ class Class_Build_Shortcode {
                     },
                     success:function(data) {
                         $( "#result" ).html(data);
-                        //alert(data);
+                        //console.log(data);
                     },  
                     error: function(errorThrown){
                         window.alert(errorThrown);
@@ -238,7 +245,7 @@ class Class_Build_Shortcode {
                     $dataChunk = array_values($dataArray);
                 }
             }
-
+            
             $data = array_chunk($i == 1 ? $dataChunk : $dataArray, $number_of_chunks);
             
             if (null !== $_REQUEST['p']) {
