@@ -32,7 +32,7 @@ müssen auf dem Remote-Server im Root-Verzeichnis des Webservers abgelegt werden
 - **index** - Das Verzeichnis in dem oder ab welchem gesucht werden soll. (Default leer)
 - **recursiv** - Ist dieser werden auf 1, so werden alle Unterverzeichnisse mit durchsucht. Bei 0 wird nur das angegebene Verzeichnis ausgelesen. (Default 1)
 - **itemsperpage** - Die Anzahl der Dateien pro Seite. (nur bei view="pagination" relevant!) (Default 5)
-- **filetype** - Nach welchen Dateiendungen gesucht wird. (z. B. pdf). Wird der Parameter "all" verwendet, so wird nach folgenden Dateiendungen gesucht (jpg, jpeg, png, tif, gif, txt, doc, docx, xls, pdf). (Default pdf)
+- **filetype** - Nach welchen Dateiendungen gesucht wird. (z. B. pdf). Wird der Parameter "all" verwendet, so wird nach folgenden Dateiendungen gesucht (jpg, jpeg, png, tif, gif, txt, doc, docx, xls, xlsx, ppt, pptx, pdf). (Default pdf)
 - **link** - Bei link="1" wird der Dateiename verlinkt. (Default 0)
 - **alias** - Wird der Parameter "file" verwendet, so kann ein alternativer Anzeigename für den Dateinamen übergeben werden. (Default leer)
 - **view**  - Hier wird das Ausgabeformat angegeben. Zur Auswahl stehen (Default table):
@@ -58,11 +58,11 @@ müssen auf dem Remote-Server im Root-Verzeichnis des Webservers abgelegt werden
     -  Erstellungsdatum (date)
 ```
 
-Die Spalten werden genau in der Reihenfolge ausgegeben, wie sie angegeben werden (z. B. show="name,size,folder"
+Die Spalten werden genau in der Reihenfolge ausgegeben, wie sie angegeben werden (z. B. show="name,size,directory"
 
-- **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader=1). Bei showheader=0 wird der Tabellenkopf über den TinyMCE erzeugt. (Default 0)
-- **filter** - Eine zusätzliche Möglichkeit das Suchergebnis einzuschränken. Wird filter gesetzt so müssen auch ein oder mehrere filetypes gesetzt werden. (Default leer)
-- **showmetainfo** - Die Ausgabe der Meta.txt oberhalb z. B. der Tabelle kann ein- (1) und ausgeblendet (0) werden. (Default 1)
+- **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader=1). Bei showheader=0 muss der Tabellenkopf selbst über den TinyMCE erzeugt werden. (Default 0)
+- **filter** - Eine zusätzliche Möglichkeit das Suchergebnis einzuschränken. Wird filter gesetzt, so müssen auch ein oder mehrere filetypes (z. B. pdf) gesetzt werden. (Default leer)
+- **showmetainfo** - Die Ausgabe der .meta.txt Datei wird oberhalb z. B. der Tabelle in einem Accrodion angezeigt und kann ein- (1) und ausgeblendet (0) werden. (Default 1)
 
 ### __Beispiele für mögliche Shortcodes:__
 
@@ -74,7 +74,7 @@ Es wird im Verzeichnis images nach den gängisten Dateiformaten (siehe oben) ges
 
 ___Tabelle mit Pagination:___
 
-[remoter id="" index="**universitaet**" filter="**englisch**" filetype="**pdf,jpg**" recursiv="**1**" itemsperpage="**1**" view="**pagination**" link="**1**" show="**folder,size,type,date,download,name**" orderby="**size**" order="**asc**"]
+[remoter id="" index="**universitaet**" filter="**englisch**" filetype="**pdf,jpg**" recursiv="**1**" itemsperpage="**1**" view="**pagination**" link="**1**" show="**directory,size,type,date,download,name**" orderby="**size**" order="**asc**"]
 
 Es wird ab dem Verzeichnis univerisitaet rekursiv nach den Dateiformaten (pdf,jpg) gesucht. Da der Filter auf Englisch gesetzt wurde wird nach Dateien mit dem Wort Englisch und dem dem Dateiformat (pdf oder jpg) gesucht.
 Pro Seite wird eine Datei angezeigt.
@@ -83,7 +83,7 @@ Es werden die Spalten in der Reihenfolge Verzeichnis, Dateigröße, Dateityp, Da
 
 ___Tabelle ohne Pagination:___
 
-[remoter id="" index="**universitaet**" filetype="**pdf**" link="**1**" recursiv="**1**" view="**table**" orderby="**name**" show="**name,download,size,folder,date**" order="**asc**" showheader="**1**"]
+[remoter id="" index="**universitaet**" filetype="**pdf**" link="**1**" recursiv="**1**" view="**table**" orderby="**name**" show="**name,download,size,directory,date**" order="**asc**" showheader="**1**"]
 
 Es wird ab dem Verzeichnis univerisitaet rekursiv nach allen Dateien mit dem Dateiformat (pdf) gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname, Download, Dateigröße, Verzeichnnis und Datum ausgegeben. Das Ergebnis wird nach der Spalte Dateiname aufsteigend sortiert.
 
@@ -102,17 +102,17 @@ ___Tabelle mit Html-Header im TinyMCE:___
 </div>
 ```
 
-Es wird nach den beiden Dateien, welche unter file angeben sind ab dem index rekursiv gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname, Download ausgegeben.
+Es wird nach den Dateinamen, welche bei file angegeben wurden rekursiv gesucht. Ausgangspunkt der Suche ist das Verzeichnis im Parameter index. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname und Download (Default) ausgegeben.
 
 ___für den Glossar:___
 
-[remoter id="" index="**universitaet**" filetype="**pdf**" recursiv="**1**" view="**glossary**" link="**1**" show="**download,type,date,size,name,folder**"]
+[remoter id="" index="**universitaet**" filetype="**pdf**" recursiv="**1**" view="**glossary**" link="**1**" show="**download,type,date,size,name,directory**"]
 
 Es wird ab dem Verzeichnis univerisitaet rekursiv nach allen Dateien mit dem Dateiformat (pdf) gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge von show ausgegeben.
 
 ### __Ausgabe der Datei .meta.txt:__
 
-In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.txt** hinzugefügt werden. Diese Datei folgt dem **JSON Syntax** und hat eine **vordefinierte Struktur**. Mit der **.meta.txt** lassen sich **kryptische Dateinamen** in der Anzeige vermeiden. So kann jedem Dateinamen ein **alternativer Anzeigename** zugeordnet werden, welcher dann auch angezeigt wird. Darüber hinaus wird oberhalb des jeweiligen Ausgabeformates (z. B. table) ein Accordion mit den JSON-Daten angezeigt. Dies erhöht die Usability ernorm. Hier der grundlegende Aufbau der .meta.txt im JSON Syntax:
+In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.txt** hinzugefügt werden. Diese Datei folgt dem **JSON Syntax** und hat eine **vordefinierte Struktur**. Mit der **.meta.txt** lassen sich **kryptische Dateinamen** in der Anzeige vermeiden. So kann jedem Dateinamen ein **alternativer Anzeigename** zugeordnet werden, welcher dann auch angezeigt wird. Darüber hinaus wird oberhalb des jeweiligen Ausgabeformates (z. B. table) ein Accordion mit den JSON-Daten angezeigt. Hier der grundlegende Aufbau der .meta.txt im JSON Syntax:
 
 <pre>
 [{
