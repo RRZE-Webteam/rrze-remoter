@@ -1,5 +1,8 @@
 <?php
 
+global $usejslibs;
+$usejslibs['flexslider'] = true;
+
 $id = uniqid();
 $data = $this->remote_data;
 
@@ -77,8 +80,8 @@ createSlider($data, $url, $id);
 createCarousel($data, $url, $id);
 
 ?>
-
-<script type="text/javascript">
+<?php function setFlexslider($id) { ?>
+<script>
 jQuery(document).ready(function($) {
   $("#carousel-<?php echo $id ?>").flexslider({
     maxItems: 7,
@@ -105,4 +108,6 @@ jQuery(document).ready(function($) {
     slideshow: false,
     sync: "#carousel-<?php echo $id ?>"
   });
-});</script>
+});
+</script>
+<?php } setFlexslider($id); ?>
