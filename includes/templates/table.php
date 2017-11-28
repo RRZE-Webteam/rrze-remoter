@@ -89,7 +89,7 @@
                             <?php }
                             break; 
                         case 'download': ?>
-                            <td align="center"><a href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                            <td align="center"><a href="http://<?php echo $domain . $data[$i][$j]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                            <?php break;
                         case 'directory': ?>
                             <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data[$i][$j]['dir']) ?></td>
@@ -104,7 +104,7 @@
                             
                                 <?php if (!in_array($extension, $imgFormats)) { ?>
                                     <td>
-                                        <a href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
+                                        <a href="http://<?php echo $domain . $data[$i][$j]['image'] ?>">
                                             <?php
                                                 echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                             ?>
@@ -112,7 +112,7 @@
                                     </td> 
                                 <?php } else { ?>
                                     <td>
-                                        <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i][$j]['image'] ?>">
+                                        <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data[$i][$j]['image'] ?>">
                                             <?php
                                                 echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                             ?>
@@ -143,7 +143,7 @@
                 <a data-filetype="<?php echo $shortcodeValues['filetype'] ?>" href="#get_list"
                 data-recursiv="<?php echo $shortcodeValues['recursive'] ?>"
                 data-index="<?php echo $shortcodeValues['fileIndex'] ?>"
-                data-host="<?php echo $url['host'] ?>"
+                data-host="<?php echo $domain ?>"
                 data-chunk="<?php echo $number_of_chunks ?>"
                 data-pagecount-value="<?php echo $pagecount ?>"
                 data-columns="<?php echo $shortcodeValues['showColumns'] ?>" 

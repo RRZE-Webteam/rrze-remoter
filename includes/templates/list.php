@@ -12,7 +12,7 @@ $id = uniqid();
 
 foreach ($this->remote_data as $key => $value) {
 
-    $list .= '<li><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $url['host'] . $value['image'] . '">' . basename($value['image']) . '</a></li>';
+    $list .= '<li><a class="lightbox" rel="lightbox-' . $id . '" href="http://'. $domain . $value['image'] . '">' . basename($value['image']) . '</a></li>';
 
 }
 

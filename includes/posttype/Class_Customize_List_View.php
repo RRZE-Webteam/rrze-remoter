@@ -8,8 +8,8 @@ class Class_Customize_List_View {
     
     public function __construct() {
         
-        add_filter('manage_edit-remote-server_columns', array($this, 'video_columns')) ;
-        add_action('manage_remote-server_posts_custom_column',  array($this,'show_video_columns'));
+        add_filter('manage_edit-remoter_columns', array($this, 'video_columns')) ;
+        add_action('manage_remoter_posts_custom_column',  array($this,'show_video_columns'));
         
     }
     

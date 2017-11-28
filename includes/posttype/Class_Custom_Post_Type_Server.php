@@ -7,7 +7,7 @@ class Class_Custom_Post_Type_Server {
     public function __construct() {
         
         if ( is_admin() ) {
-            self::register_post_type( 'Remote-Server', __( 'Remote Servers', 'rrze-remoter' ), __( ' Remote Server', 'rrze-remoter' ) );
+            self::register_post_type( 'remoter', __( 'Remote Servers', 'rrze-remoter' ), __( ' Remote Server', 'rrze-remoter' ) );
         }
     }
     

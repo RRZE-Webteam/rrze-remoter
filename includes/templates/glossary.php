@@ -38,7 +38,7 @@
 
    <?php if (in_array($value, $array_without_numbers)) { ?>
 
-        <li><a href="#letter-<?php echo $value ?>"data-link="<?php echo $shortcodeValues['link'] ?>"data-columns="<?php echo $shortcodeValues['showColumns'] ?>"data-host="<?php echo $url['host'] ?>" data-letter="<?php echo $value ?>"><?php echo $value ?></a></li>
+        <li><a href="#letter-<?php echo $value ?>"data-link="<?php echo $shortcodeValues['link'] ?>"data-columns="<?php echo $shortcodeValues['showColumns'] ?>"data-host="<?php echo $domain ?>" data-letter="<?php echo $value ?>"><?php echo $value ?></a></li>
 
    <?php } else { ?>
 
@@ -103,7 +103,7 @@
                         <?php }
                         break;
                     case 'download': ?>
-                        <td align="center"><a href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                        <td align="center"><a href="http://<?php echo $domain . $data_new[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                         <?php break;
                     case 'directory': ?>
                         <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data_new[$i]['dir']) ?></td>
@@ -118,7 +118,7 @@
                             
                             <?php if (!in_array($extension, $imgFormats)) { ?>
                                 <td>
-                                    <a href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>">
+                                    <a href="http://<?php echo $domain . $data_new[$i]['image'] ?>">
                                         <?php
                                             echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                         ?>
@@ -126,7 +126,7 @@
                                 </td> 
                             <?php } else { ?>
                                 <td>
-                                    <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data_new[$i]['image'] ?>">
+                                    <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data_new[$i]['image'] ?>">
                                         <?php
                                             echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                         ?>
