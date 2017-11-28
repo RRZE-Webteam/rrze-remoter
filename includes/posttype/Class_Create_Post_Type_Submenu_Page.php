@@ -78,7 +78,7 @@ class Class_Create_Post_Type_Submenu_Page {
     
     public function remote_request_action() {
                
-        $ip  = '131.188.12.34'; //$_SERVER['REMOTE_ADDR'];
+        //$ip  = '131.188.12.34'; //$_SERVER['REMOTE_ADDR'];
         $adminemail = $_REQUEST['notices']['adminemail'];
         $domain     = $_REQUEST['notices']['domain'];
         $serverid   = $_REQUEST['notices']['serverid'];
@@ -109,7 +109,7 @@ class Class_Create_Post_Type_Submenu_Page {
         } elseif(200 == $status_code) {
             
             $response = wp_remote_get( 'http://' . $meta[0] . '/request.php?' .
-                'ip=' . $ip .
+                //'ip=' . $ip .
                 '&serverid=' . $serverid .    
                 '&email=' . $adminemail . 
                 '&domain=' . $domain . 
