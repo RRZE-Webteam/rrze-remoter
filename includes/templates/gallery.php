@@ -6,21 +6,21 @@ $usejslibs['flexslider'] = true;
 $id = uniqid();
 $data = $this->remote_data;
 
-function createSlider($data, $url, $id) {
+function createSlider($data, $domain, $id) {
 
     $g  = '<div id="slider-' . $id . '" class="image-gallery-slider">';
     $g .= '<ul class="slides">';
     
     foreach ($data as $key => $value) {
         
-        $path       = 'http://'. $url['host'] . $value['image'] . '';
+        $path       = 'http://'. $domain . $value['image'] . '';
         $imginfo    = getimagesize($path, $info);
         $iptcdata    = iptcparse($info["APP13"]);
         
-        $g .= '<li><img src="http://'. $url['host'] . $value['image'] . '"/>';
+        $g .= '<li><img src="http://'. $domain . $value['image'] . '"/>';
         $g .= '<div class="gallery-image-caption">Bild in Originalgröße (1153px). Ausrichtung keine.<br />';
         $g .= '<span class="linkorigin">';
-        $g .= '(<a href="http://'. $url['host'] . $value['image'] . '"  title="'. $iptcdata["2#105"][0] . '<br/>' . $iptcdata["2#120"][0] . '<br/>' . $iptcdata["2#085"][0] .'" class="lightbox" rel="lightbox-601862376">Vergrößern</a>)</span></div>';
+        $g .= '(<a href="http://'. $domain . $value['image'] . '"  title="'. $iptcdata["2#105"][0] . '<br/>' . $iptcdata["2#120"][0] . '<br/>' . $iptcdata["2#085"][0] .'" class="lightbox" rel="lightbox-601862376">Vergrößern</a>)</span></div>';
         $g .= '<div>' . $iptcdata["2#105"][0] . '<br/>' . $iptcdata["2#120"][0] . '<br/>' . $iptcdata["2#085"][0] . '</div>';
         $g .= '</li>';
     
@@ -33,22 +33,22 @@ function createSlider($data, $url, $id) {
 
 
 
-function createCarousel($data, $url, $id) {
+function createCarousel($data, $domain, $id) {
         
     $c = '<div id="carousel-' . $id . '" class="image-gallery-carousel">';
     $c .= '<ul class="slides">';
     
     foreach ($data as $key => $value) {
-        $c .= '<li><img src="http://'. $url['host'] . $value['image'] . '" width="120" height="80" alt=""/></li>';
+        $c .= '<li><img src="http://'. $domain . $value['image'] . '" width="120" height="80" alt=""/></li>';
     }
         
     $c .='</ul></div>';
     echo $c;
 }
 
-/*function getIptcData($data, $url) {
+/*function getIptcData($data, $domain) {
     
-    $path       = 'http://'. $url['host'] . $value['image'] . '';
+    $path       = 'http://'. $domain . $value['image'] . '';
     $imginfo    = getimagesize($path, $info);
     $iptcdata    = iptcparse($info["APP13"]);
     
@@ -76,8 +76,8 @@ function createCarousel($data, $url, $id) {
 
 }*/
 
-createSlider($data, $url, $id);
-createCarousel($data, $url, $id);
+createSlider($data, $domain, $id);
+createCarousel($data, $domain, $id);
 
 ?>
 <?php function setFlexslider($id) { ?>

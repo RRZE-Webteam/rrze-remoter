@@ -98,7 +98,7 @@ if($header) { ?>
                 <?php break;
                 case 'download': ?>
                         
-                    <td align="center"><a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                    <td align="center"><a href="http://<?php echo $domain . $data[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
             
                 <?php break;
                 case 'directory': ?>
@@ -116,7 +116,7 @@ if($header) { ?>
                             
                         <?php if (!in_array($extension, $imgFormats)) { ?>
                         <td>
-                            <a href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
+                            <a href="http://<?php echo $domain . $data[$i]['image'] ?>">
                                 <?php
                                     echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                 ?>
@@ -124,7 +124,7 @@ if($header) { ?>
                         </td> 
                         <?php } else { ?>
                         <td>
-                            <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $url['host'] . $data[$i]['image'] ?>">
+                            <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data[$i]['image'] ?>">
                                 <?php
                                     echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                 ?>

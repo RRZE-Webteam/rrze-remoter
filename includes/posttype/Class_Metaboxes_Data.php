@@ -11,7 +11,7 @@ class Class_Metaboxes_Data {
         /*$metabox_data[] = array( 
             'id'          => 'url',
             'title'       => __( 'Server Url', 'rrze-remoter' ),
-            'post_type'   => 'remote-server',
+            'post_type'   => 'remoter',
             'context'     => 'normal',
             'priority'    => 'high',
             'args'        => array(
@@ -23,7 +23,7 @@ class Class_Metaboxes_Data {
         $metabox_data[] = array( 
             'id'          => 'domain',
             'title'       => __( 'Domain', 'rrze-remoter' ),
-            'post_type'   => 'remote-server',
+            'post_type'   => 'remoter',
             'context'     => 'normal',
             'priority'    => 'high',
             'args'        => array(
@@ -52,7 +52,7 @@ class Class_Metaboxes_Data {
         $metabox_data[] = array( 
             'id'          => 'apikey',
             'title'       => __( 'API-Key', 'rrze-remoter' ),
-            'post_type'   => 'remote-server',
+            'post_type'   => 'remoter',
             'context'     => 'normal',
             'priority'    => 'high',
             'args'        => array(

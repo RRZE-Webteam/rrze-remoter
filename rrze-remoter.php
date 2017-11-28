@@ -4,7 +4,7 @@
  * Plugin Name:     Remoter
  * Plugin URI:      https://gitlab.rrze.fau.de/rrze-webteam/rrze-remoter.git
  * Description:     Liest den DirectoryIndex eines Servers remote aus und gibt die Daten strukturiert auf einer Seite aus.
- * Version:         1.1.0
+ * Version:         1.2.0
  * Author:          RRZE-Webteam
  * Author URI:      https://blogs.fau.de/webworking/
  * License:         GNU General Public License v2
@@ -46,7 +46,6 @@ register_deactivation_hook(__FILE__, 'RRZE\Remoter\deactivation');
 add_action('plugins_loaded', 'RRZE\Remoter\loaded');
 add_action( 'wp_enqueue_scripts', 'RRZE\Remoter\custom_libraries_scripts');
 
-
 /* Includes */
 
 require_once( __DIR__ . '/includes/posttype/Class_Customize_List_View.php' );
@@ -78,6 +77,12 @@ function activation() {
 
     // Überprüft die minimal erforderliche PHP- u. WP-Version.
     system_requirements();
+    
+    //register_remoter_post_type();
+    //flush_rewrite_rules();
+    
+    //$caps_remoter = get_caps('remoter');
+    //add_caps('administrator', $caps_remoter);
 
     // Ab hier können die Funktionen hinzugefügt werden, 
     // die bei der Aktivierung des Plugins aufgerufen werden müssen.
@@ -92,6 +97,10 @@ function deactivation() {
     // Hier können die Funktionen hinzugefügt werden, die
     // bei der Deaktivierung des Plugins aufgerufen werden müssen.
     // Bspw. wp_clear_scheduled_hook, flush_rewrite_rules, etc.
+    
+    //$caps_remoter = get_caps('remoter');
+    //remove_caps('administrator',  $caps_remoter);
+    //flush_rewrite_rules();
 }
 
 /*
@@ -116,12 +125,64 @@ function system_requirements() {
     }
 }
 
+/*function register_remoter_post_type() {
+    
+    $remoter_custom_post_type   =   new Class_Custom_Post_Type_Server();
+    $remoter_create_metaboxes   =   new Class_Create_Metaboxes();
+    $remoter_customize_list     =   new Class_Customize_List_View();
+    $remoter_add_submenu        =   new Class_Create_Post_Type_Submenu_Page();
+    
+    if( get_transient('rrze-remoter-options') ) {
+        flush_rewrite_rules();
+        delete_transient('rrze-remoter-options');
+    }
+    
+}
+
+function get_caps($cap_type) {
+    $caps = array(
+        "edit_" . $cap_type,
+        "read_" . $cap_type,
+        "delete_" . $cap_type,
+        "edit_" . $cap_type . "s",
+        "edit_others_" . $cap_type . "s",
+        "publish_" . $cap_type . "s",
+        "read_private_" . $cap_type . "s",
+        "delete_" . $cap_type . "s",
+        "delete_private_" . $cap_type . "s",
+        "delete_published_" . $cap_type . "s",
+        "delete_others_" . $cap_type . "s",
+        "edit_private_" . $cap_type . "s",
+        "edit_published_" . $cap_type . "s",                
+    );
+    
+    return $caps;
+}
+
+function add_caps($role, $caps) {
+    $role = get_role($role);
+    foreach($caps as $cap) {
+        $role->add_cap($cap);
+    }        
+}
+
+function remove_caps($role, $caps) {
+    $role = get_role($role);
+    foreach($caps as $cap) {
+        $role->remove_cap($cap);
+    }        
+}    
+*/
+
 /*
  * Wird durchgeführt, nachdem das WP-Grundsystem hochgefahren
  * und alle Plugins eingebunden wurden.
  * @return void
  */
 function loaded() {
+    
+    //add_action('init', 'RRZE\Remoter\register_remoter_post_type');
+    
     // Sprachdateien werden eingebunden.
     
     load_textdomain();

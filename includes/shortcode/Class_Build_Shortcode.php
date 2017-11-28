@@ -47,7 +47,7 @@ class Class_Build_Shortcode {
     public function query_args($args) {
         
         $this->remote_server_args = array(
-            'post_type'         =>  'Remote-Server',
+            'post_type'         =>  'remoter',
             'p'                 =>  $args['id'],
             'posts_per_page'    =>  1,
             'orderby'           =>  'date',
@@ -88,7 +88,8 @@ class Class_Build_Shortcode {
                 $data = $this->remote_data;
                 
                 if($data){
-                    $url = parse_url(get_post_meta($post->ID, 'url', true)); 
+                    //$url = parse_url(get_post_meta($post->ID, 'url', true)); 
+                    //print_r( $domain);
                     
                     $view = $shortcodeValues['view'];
                     $tableHeader = Class_Help_Methods::getHeaderData($shortcodeValues['showColumns']);
