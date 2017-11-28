@@ -4,7 +4,7 @@
  * Plugin Name:     Remoter
  * Plugin URI:      https://gitlab.rrze.fau.de/rrze-webteam/rrze-remoter.git
  * Description:     Liest den DirectoryIndex eines Servers remote aus und gibt die Daten strukturiert auf einer Seite aus.
- * Version:         0.0.1
+ * Version:         1.0.0
  * Author:          RRZE-Webteam
  * Author URI:      https://blogs.fau.de/webworking/
  * License:         GNU General Public License v2
@@ -44,6 +44,21 @@ register_activation_hook(__FILE__, 'RRZE\Remoter\activation');
 register_deactivation_hook(__FILE__, 'RRZE\Remoter\deactivation');
 
 add_action('plugins_loaded', 'RRZE\Remoter\loaded');
+add_action( 'wp_enqueue_scripts', 'RRZE\Remoter\custom_libraries_scripts');
+
+
+/* Includes */
+
+require_once( __DIR__ . '/includes/posttype/Class_Customize_List_View.php' );
+require_once( __DIR__ . '/includes/posttype/Class_Metaboxes_Data.php' );
+require_once( __DIR__ . '/includes/posttype/Class_Create_Metaboxes.php' );
+require_once( __DIR__ . '/includes/posttype/Class_Create_Custom_Post_Type_Server.php' );
+require_once( __DIR__ . '/includes/posttype/Class_Custom_Post_Type_Server.php' );
+require_once( __DIR__ . '/includes/posttype/Class_Create_Post_Type_Submenu_Page.php' );
+
+require_once( __DIR__ . '/includes/remote/Class_Grab_Remote_Files.php' );
+require_once( __DIR__ . '/includes/helper/Class_Help_Methods.php' );
+require_once( __DIR__ . '/includes/shortcode/Class_Build_Shortcode.php' );
 
 /*
  * Einbindung der Sprachdateien.
@@ -108,10 +123,21 @@ function system_requirements() {
  */
 function loaded() {
     // Sprachdateien werden eingebunden.
+    
     load_textdomain();
     
     // Ab hier können weitere Funktionen bzw. Klassen angelegt werden.
     autoload();
+    
+    $remoter_custom_post_type   =   new Class_Custom_Post_Type_Server();
+    $remoter_create_metaboxes   =   new Class_Create_Metaboxes();
+    $remoter_customize_list     =   new Class_Customize_List_View();
+    $remoter_add_submenu        =   new Class_Create_Post_Type_Submenu_Page();
+   
+    
+    $remoter_get_data   =   new Class_Grab_Remote_Files();
+    $remoter_shortcode  =   new Class_Build_Shortcode();
+    
 }
 
 /*
@@ -122,4 +148,21 @@ function autoload() {
     require __DIR__ . '/includes/autoload.php';
     $main = new Main();
     $main->init(plugin_basename(__FILE__));
+}
+
+function custom_libraries_scripts() {
+    
+    global $post;
+    
+    wp_register_script( 'rrze-remoter-mainjs', plugins_url( 'rrze-remoter/assets/js/rrze-remoter-main.js', dirname(__FILE__)), array('jquery'),'', true);
+    wp_register_script( 'rrze-remoter-scriptsjs', plugins_url( 'rrze-remoter/assets/js/rrze-remoter-scripts.js', dirname(__FILE__)), array('jquery'),'', true);
+    wp_register_style( 'rrze-remoter-stylescss', plugins_url( 'rrze-remoter/assets/css/styles.css', dirname(__FILE__) ) );
+    
+    if( is_page() && has_shortcode( $post->post_content, 'remoter') ) {
+        wp_enqueue_script( 'rrze-remoter-mainjs' );
+        wp_enqueue_script( 'rrze-remoter-scriptsjs' );
+        wp_enqueue_style( 'rrze-remoter-stylescss' );
+    }
+    
+    wp_localize_script( 'rrze-remoter-mainjs', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 }

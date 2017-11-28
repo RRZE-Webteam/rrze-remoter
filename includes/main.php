@@ -15,10 +15,10 @@ class Main {
 
     public function init($plugin_basename) {
         $this->options = new Options();
-        $this->settings = new Settings($this);       
+        //$this->settings = new Settings($this);       
         
-        add_action('admin_menu', array($this->settings, 'admin_settings_page'));
-        add_action('admin_init', array($this->settings, 'admin_settings'));         
+        //add_action('admin_menu', array($this->settings, 'admin_settings_page'));
+        //add_action('admin_init', array($this->settings, 'admin_settings'));         
         
     }
     

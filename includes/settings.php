@@ -63,7 +63,7 @@ class Settings {
     public function admin_settings() {
         register_setting('rrze_remoter_options', $this->option_name, array($this, 'options_validate'));
         add_settings_section('rrze_remoter_section_1', false, '__return_false', 'rrze_remoter_options');
-        add_settings_field('rrze_remoter_field_1', __('Field 1', 'rrze-remoter'), array($this, 'rrze_remoter_field_1'), 'rrze_remoter_options', 'rrze_remoter_section_1');
+        add_settings_field('rrze_remoter_field_1', __('API-Key Request', 'rrze-remoter'), array($this, 'rrze_remoter_field_1'), 'rrze_remoter_options', 'rrze_remoter_section_1');
     }
 
     /*
