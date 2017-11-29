@@ -75,15 +75,27 @@ class Class_Build_Shortcode {
         
         $the_query = new \WP_Query( $query_arguments);
         
+        echo '<pre>';
+        //print_r($the_query);
+        echo '</pre>';
+        
         if ( $the_query->have_posts() ) {
             
             while ( $the_query->have_posts() ) {
                 $the_query->the_post();
+                
+                //print_r($the_query);
 
                 $domain = get_post_meta($post->ID, 'domain', true); 
                 $api_key = get_post_meta($post->ID, 'apikey', true); 
+                
+                echo '<pre>';
+               // print_r($this->remote_server_shortcode);
+                echo '</pre>';
 
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
+                
+               
                 
                 $data = $this->remote_data;
                 
@@ -426,7 +438,7 @@ class Class_Build_Shortcode {
         $host = $_REQUEST['host'];
         
         //echo '<pre>';
-        $meta = $_REQUEST['meta'];
+        $meta = isset($_REQUEST['meta']);
         //echo '</pre>';
         
         $filenames = array(); 

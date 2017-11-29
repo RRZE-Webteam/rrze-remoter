@@ -117,10 +117,14 @@ class Class_Help_Methods {
     
     public static function getMetafileNames($path, $store, $file) {
         
-        $key = array_search($path , array_column($store, 'value'));
+        if(!empty($store)) {
+            $key = array_search($path , array_column($store, 'value'));
 
-        if($key > 0 || $key === 0 && $file == '' && !empty($store)) {
-            $name = $store[$key]['key'];
+            if($key > 0 || $key === 0 && $file == '' && !empty($store)) {
+                $name = $store[$key]['key'];
+            } else {
+                $name = str_replace('_', ' ', $path);
+            }
         } else {
             $name = str_replace('_', ' ', $path);
         }
