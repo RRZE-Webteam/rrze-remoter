@@ -12,18 +12,18 @@ class Class_Grab_Remote_Files {
     
     public static function get_files_from_remote_server($index, $domain, $api_key) {
         
-        //$postdata = self::rrze_remote_download_query($index, $api_key);
-        //$opts = self::rrze_remote_download_opts($postdata);
-        //$context  = stream_context_create($opts);
+       /* $postdata = self::rrze_remote_download_query($index, $api_key);
+        $opts = self::rrze_remote_download_opts($postdata);
+        $context  = stream_context_create($opts);
         
-        //$response = @file_get_contents('http://' . $domain . '/remotefiles.php', false, $context);
-       /* $response = wp_remote_post( 'http://' . $domain . '/remotefiles.php?' .
+        //$response = @file_get_contents('http://wwww.' . $domain . '/remotefiles.php', false, $context);
+        /*$response = wp_remote_post( 'http://' . $domain . '/remotefiles.php?' .
             'index=' . $index['index'],
-            /*'&serverid=' . $serverid .    
+            '&serverid=' . $serverid .    
             '&email=' . $adminemail . 
             '&domain=' . $domain . 
-            '&requested_domain=' . (isset($meta[0]) ? $meta[0] : ''), */
-       /*     array( 'timeout' => 120, 'httpversion' => '1.1' )
+            '&requested_domain=' . (isset($meta[0]) ? $meta[0] : ''), 
+            array( 'timeout' => 120, 'httpversion' => '1.1' )
         );
 
         //echo $response['body'];
@@ -31,13 +31,13 @@ class Class_Grab_Remote_Files {
         
         echo '<pre>';
         print_r($response);
-        echo '</pre>';
+        echo '</pre>';*/
         
         //$data = json_decode($response, true);
         
-        //return $data;
-        */
-        $response = wp_remote_post('http://' . $domain . '/remotefiles.php', array(
+        //return $data;*/
+       
+       $response = wp_remote_post('http://' . $domain . '/remotefiles.php', array(
             'method' => 'POST',
             'timeout' => 45,
             'redirection' => 5,
@@ -63,22 +63,22 @@ class Class_Grab_Remote_Files {
             $error_message = $response->get_error_message();
             echo "Something went wrong: $error_message";
          } else {
-            echo 'Response:<pre>';
+            //echo 'Response:<pre>';
             //print_r( $response );
-            echo '</pre>';
+            //echo '</pre>';
          }
         
            
-        echo '<pre>';
+        //echo '<pre>';
         //print_r($response);
-        echo '</pre>';
+        //echo '</pre>';
         
         $data = json_decode($response['body'], true);
         
         return $data;
-    }
-    
-    /*public static function rrze_remote_download_query($index, $api_key) {
+    } 
+
+   /* public static function rrze_remote_download_query($index, $api_key) {
         
         $postdata = http_build_query(
                 

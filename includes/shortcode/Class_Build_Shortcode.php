@@ -75,9 +75,9 @@ class Class_Build_Shortcode {
         
         $the_query = new \WP_Query( $query_arguments);
         
-        echo '<pre>';
+        //echo '<pre>';
         //print_r($the_query);
-        echo '</pre>';
+        //echo '</pre>';
         
         if ( $the_query->have_posts() ) {
             
@@ -89,15 +89,19 @@ class Class_Build_Shortcode {
                 $domain = get_post_meta($post->ID, 'domain', true); 
                 $api_key = get_post_meta($post->ID, 'apikey', true); 
                 
-                echo '<pre>';
+                //echo '<pre>';
                // print_r($this->remote_server_shortcode);
-                echo '</pre>';
+                //echo '</pre>';
 
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
                 
                
                 
                 $data = $this->remote_data;
+                
+                //echo 'Response:<pre>';
+                //print_r( $data );
+                //echo '</pre>';
                 
                 if($data){
                     //$url = parse_url(get_post_meta($post->ID, 'url', true)); 
@@ -117,6 +121,7 @@ class Class_Build_Shortcode {
                             include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
                             break;
                         case 'glossary':
+                            echo 'test';
                             $id = uniqid();
                             $letters = Class_Help_Methods::createLetters();
                             $unique = Class_Help_Methods::getUsedLetters($data);
@@ -150,6 +155,7 @@ class Class_Build_Shortcode {
                             break;
                         case 'table':
                             ob_start();
+                            echo 'test';
                             $header = $shortcodeValues['showHeader'];
                             $order = $this->remote_server_shortcode['order'];
                             $orderby = $this->remote_server_shortcode['orderby'];
