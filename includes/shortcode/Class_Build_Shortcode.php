@@ -155,7 +155,6 @@ class Class_Build_Shortcode {
                             break;
                         case 'table':
                             ob_start();
-                            echo 'test';
                             $header = $shortcodeValues['showHeader'];
                             $order = $this->remote_server_shortcode['order'];
                             $orderby = $this->remote_server_shortcode['orderby'];
@@ -317,9 +316,9 @@ class Class_Build_Shortcode {
 
                 foreach($columns as $key => $column) {
 
-                    $dir = pathinfo($value['image']);
+                    /*$dir = pathinfo($value['path']);
                     $titel = explode("/", $dir['dirname']);
-                    $folder = $titel[count($titel)-1];
+                    $folder = $titel[count($titel)-1];*/
 
                     switch($column) {
                         case 'size':
@@ -342,27 +341,27 @@ class Class_Build_Shortcode {
                             }
                             break;
                         case 'download':
-                            $t .= '<td align="center"><a href="http://' . $host . $value['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                            $t .= '<td align="center"><a href="http://' . $host . $value['dir'] . $value['name'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                             break;
                         case 'directory':
-                            $t .= '<td>' . $folder . '</td>';
+                            $t .= '<td>' . Class_Help_Methods::getFolder($value['path'])  . '</td>';
                             break;
                         case 'name':
                             $extension = $value['extension'];
                             if ($link) { 
-                                $path = basename($value['path']);
+                                $path = $value['name'];
                                 $imgFormats = Class_Help_Methods::getImageFormats();   
                             
                                 if (!in_array($extension, $imgFormats)) {
                                     $t .= '<td>';
-                                    $t .= '<a href="http://' . $host . $value['image'] . '">';
+                                    $t .= '<a href="http://' . $host . $value['dir'] . $value['name'] . '">';
                                     $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
                                     $t .= '</a>';
                                     $t .= '</td>'; 
 
                                 } else {
                                     $t .= '<td>';
-                                    $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['image'] . '">';
+                                    $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['dir'] . $value['name'] .'">';
                                     $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
                                     $t .= '</a>';
                                     $t .= '</td>';  
@@ -370,12 +369,12 @@ class Class_Build_Shortcode {
 
                             } else { 
 
-                            $t .= '<td>' . basename($data[$i]['path']) .'</td>';  
+                            $t .= '<td>' . $data[$i]['name'] .'</td>';  
 
                             }
                             break;
                         case 'date':
-                            $t .= '<td>' . date('j F Y', $value['change_time']) .'</td>';
+                            $t .= '<td>' . $value['date'] .'</td>';
                             break; 
                     }
 
