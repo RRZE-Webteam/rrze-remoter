@@ -10,7 +10,75 @@ class Class_Grab_Remote_Files {
         
     }
     
+    public static function csv_to_array($filename='', $delimiter=',') {
+        if(!file_exists($filename) || !is_readable($filename))
+                return FALSE;
+
+        $header = NULL;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== FALSE)
+        {
+                while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE)
+                {
+                        if(!$header)
+                                $header = $row;
+                        else
+                                $data[] = array_combine($header, $row);
+                }
+                fclose($handle);
+        }
+        return $data;
+    }
+    
+    public static function dictionaryFilterList(array $source, array $data, string $column) : array {
+        $new     = array_column($data, $column);
+        $keep     = array_diff($new, $source);
+
+        return array_diff_key($data, $keep);
+    }
+
     public static function get_files_from_remote_server($index, $domain, $api_key) {
+        
+        $response = wp_remote_post('http://' . $domain . '/data.csv');
+        
+        if ( is_wp_error( $response ) ) {
+            $error_message = $response->get_error_message();
+            echo "Something went wrong: $error_message";
+        } else {
+            echo 'Response:<pre>';
+            //print_r( $response['body'] );
+            echo '</pre>';
+        }
+        
+        $fp = fopen('wp-content/plugins/rrze-remoter/includes/remote/result.csv', 'w+');
+        fwrite($fp, $response['body']);
+        fclose($fp);
+        
+        $result = self::csv_to_array('wp-content/plugins/rrze-remoter/includes/remote/result.csv');
+        
+        foreach ($result as $key => $array) {
+            $result[$key]['dir'] = str_replace('/proj/websource/docs/FAUWeb/www.uni-erlangen.de/websource','', $result[$key]['path'] .'/');
+        }
+        
+        
+        //$path = array_column($result, 'path', 'name');
+        //$r = preg_grep('/landesrecht/', $path);
+        //$r = self::dictionaryFilterList(['landesrecht'], $result, 'path');
+        
+        $pattern = '/universitaet\/organisation\/recht\/studiensatzungen\/NAT2/';
+        //universitaet/organisation/recht/studiensatzungen/NAT2
+        $matches = array_filter($result, function($a) use($pattern)  {
+            return preg_grep($pattern, $a);
+        });
+        echo '<pre>';
+        print_r($matches);
+        echo '</pre>';
+        
+        return $matches;
+        
+       
+        
+        
         
        /* $postdata = self::rrze_remote_download_query($index, $api_key);
         $opts = self::rrze_remote_download_opts($postdata);
@@ -37,7 +105,7 @@ class Class_Grab_Remote_Files {
         
         //return $data;*/
        
-       $response = wp_remote_post('http://' . $domain . '/remotefiles.php', array(
+       /*$response = wp_remote_post('http://' . $domain . '/remotefiles.php', array(
             'method' => 'POST',
             'timeout' => 45,
             'redirection' => 5,
@@ -75,7 +143,7 @@ class Class_Grab_Remote_Files {
         
         $data = json_decode($response['body'], true);
         
-        return $data;
+        return $data;*/
     } 
 
    /* public static function rrze_remote_download_query($index, $api_key) {
