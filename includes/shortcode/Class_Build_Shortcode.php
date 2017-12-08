@@ -393,16 +393,20 @@ class Class_Build_Shortcode {
     
     public function rrze_remote_glossary_script_footer() { 
         
-        $glossary_files = (isset($this->glossary_array) ? $this->glossary_array : '') ;
-        $glossary_meta = (isset($this->meta)) ? $this->meta : '';
-        //print_r($glossary_meta);
+        $glossary_files = (isset($this->glossary_array)) ? $this->glossary_array : '';
+        //$glossary_meta = (isset($this->meta)) ? $this->meta : '';
+        
+        $a = json_encode($glossary_files);
+        
+        //print_r($glossary_files);
+        //$glossary_files = $this->glossary_array;
 	 
          ?>
          <script>
         jQuery(document).ready(function($) {
             
-            var glossary = <?php echo json_encode($glossary_files); ?>;
-            var meta = <?php echo json_encode($glossary_meta); ?>;
+            var glossary = <?php echo $a ?>;
+            //var meta = <?php //echo json_encode($glossary_meta); ?>;
 
             $('a[href^="#letter-"]').click(function(){
                 var letter = $(this).attr('data-letter');
@@ -419,11 +423,12 @@ class Class_Build_Shortcode {
                         'host'      : host,
                         'columns'   : columns,
                         'link'      : link,
-                        'glossary'  : glossary,
-                        'meta'      : meta
+                        'glossary'  : glossary
+                        //'meta'      : meta
                     },
                     success:function(data) {
                         $("#glossary").html(data);
+                        //alert(data);
                     },  
                     error: function(errorThrown){
                         window.alert(errorThrown);
@@ -438,12 +443,14 @@ class Class_Build_Shortcode {
     
     public function rrze_remote_glossary_ajax_request() {
         
+        //print_r($_REQUEST);
+        
         $id = uniqid();
         $link = $_REQUEST['link'];
         $host = $_REQUEST['host'];
         
         //echo '<pre>';
-        $meta = isset($_REQUEST['meta']);
+       // $meta = isset($_REQUEST['meta']);
         //echo '</pre>';
         
         $filenames = array(); 
@@ -525,26 +532,26 @@ class Class_Build_Shortcode {
                         }
                         break;
                     case 'download':
-                        $t .= '<td align="center"><a href="http://' . $host . $data[$i]['image'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                        $t .= '<td align="center"><a href="http://' . $host . $data[$i]['dir'] .  $data[$i]['name'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                         break;
                     case 'directory':
-                        $t .= '<td>' . $folder. '</td>';
+                        $t .= '<td>' . Class_Help_Methods::getFolder($data[$i]['path']) . '</td>';
                         break;
                     case 'name':
                          if ($link) { 
-                            $path = basename($data[$i]['path']);
+                            $path = $data[$i]['name'];
                             $imgFormats = Class_Help_Methods::getImageFormats();   
                             
                             if (!in_array($extension, $imgFormats)) {
                                 $t .= '<td>';
-                                $t .= '<a href="http://' . $host . $data[$i]['image'] . '">';
+                                $t .= '<a href="http://' . $host . $data[$i]['dir'] . $data[$i]['name'] . '">';
                                 $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
                                 $t .= '</a>';
                                 $t .= '</td>'; 
 
                             } else {
                                 $t .= '<td>';
-                                $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['image'] . '">';
+                                $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['dir'] . $data[$i]['name'] . '">';
                                 $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
                                 $t .= '</a>';
                                 $t .= '</td>';  
@@ -557,7 +564,7 @@ class Class_Build_Shortcode {
                         }
                         break;
                     case 'date':
-                        $t .= '<td>' . date('j F Y', $data[$i]['change_time']) .'</td>';
+                        $t .= '<td>' . $data[$i]['date'] .'</td>';
                         break; 
                 }
 

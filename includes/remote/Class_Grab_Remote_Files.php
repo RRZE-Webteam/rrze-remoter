@@ -53,6 +53,11 @@ class Class_Grab_Remote_Files {
         
         $result = self::csv_to_array('wp-content/plugins/rrze-remoter/includes/remote/result.csv');
         
+        $path = $index['index'];
+        $maskjson = str_replace('/', '\/', $path);
+        $patternmeta1 = '/(' . $maskjson . ')/';
+        $patternmeta2 = '/.json$/i';
+        
         foreach ($result as $key => $array) {
             $result[$key]['dir'] = str_replace('/proj/websource/docs/FAUWeb/www.uni-erlangen.de/websource','', $result[$key]['path'] .'/');
             $result[$key]['extension'] = substr(strrchr($result[$key]['name'],'.'), 1);
@@ -64,7 +69,7 @@ class Class_Grab_Remote_Files {
         if(!empty($index['index']) && !empty($index['file'])) {
             $file = $index['file'];
             $pattern1 = '/' . $file . '/';
-             $pattern2 = '/.\.(txt|' . str_replace(',', "|", $index['filetype']) .')$/i';
+            $pattern2 = '/.\.(txt|' . str_replace(',', "|", $index['filetype']) .')$/i';
         } else {
             $directory = $index['index'];
             $mask = str_replace('/', '\/', $directory);

@@ -1,4 +1,10 @@
 <?php $this->glossary_array = $this->remote_data ?>
+<?php //
+/*$json  = json_encode($this->glossary_array);
+$error = json_last_error();
+
+var_dump($json, $error === JSON_ERROR_UTF8);
+echo '</pre>'; */?>
 <?php if($shortcodeValues['showInfo']) { ?>
     <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
         <?php if(!empty($meta[$i]['meta'])) { ?>
@@ -103,22 +109,22 @@
                         <?php }
                         break;
                     case 'download': ?>
-                        <td align="center"><a href="http://<?php echo $domain . $data_new[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                        <td align="center"><a href="http://<?php echo $domain . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                         <?php break;
                     case 'directory': ?>
-                        <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data_new[$i]['dir']) ?></td>
+                        <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data_new[$i]['path']) ?></td>
                         <?php break;
                     case 'name': ?>
                         <?php $extension = $data_new[$i]['extension']; ?>
                         <?php if ($shortcodeValues['link']) { ?> 
-                            <?php $path = basename($data_new[$i]['path']); ?>
+                            <?php $path = $data_new[$i]['name']; ?>
                             <?php $store = $meta_store; ?> 
                             <?php $file = $shortcodeValues['file'] ?>
                             <?php $imgFormats = RRZE\Remoter\Class_Help_Methods::getImageFormats(); ?>     
                             
                             <?php if (!in_array($extension, $imgFormats)) { ?>
                                 <td>
-                                    <a href="http://<?php echo $domain . $data_new[$i]['image'] ?>">
+                                    <a href="http://<?php echo $domain . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>">
                                         <?php
                                             echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                         ?>
@@ -126,7 +132,7 @@
                                 </td> 
                             <?php } else { ?>
                                 <td>
-                                    <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data_new[$i]['image'] ?>">
+                                    <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>">
                                         <?php
                                             echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                         ?>
@@ -141,7 +147,7 @@
                         <?php  }
                             break;
                     case 'date': ?>
-                        <td><?php echo date('j F Y', $data_new[$i]['change_time']) ?></td>
+                        <td><?php echo $data_new[$i]['date'] ?></td>
                         <?php break; 
                 }
 
