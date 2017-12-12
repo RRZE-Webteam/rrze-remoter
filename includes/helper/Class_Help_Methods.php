@@ -45,7 +45,7 @@ class Class_Help_Methods {
     
     public static function deleteMetaTxtEntries($meta) {
         foreach($meta as $key => $value) {
-            if($value['name'] === '.meta.txt') {
+            if($value['name'] === '.meta.json') {
                 unset($meta[$key]);
             }
         }

@@ -11,9 +11,6 @@ class Class_Grab_Remote_Files {
     }
     
     public static function csv_to_array($filename='', $delimiter=',') {
-        if(!file_exists($filename) || !is_readable($filename))
-                return FALSE;
-
         $header = NULL;
         $data = array();
         if (($handle = fopen($filename, 'r')) !== FALSE)
@@ -47,42 +44,8 @@ class Class_Grab_Remote_Files {
             echo '</pre>';*/
         }
         
-        $fp = fopen('wp-content/plugins/rrze-remoter/includes/remote/result.csv', 'w+');
-        fwrite($fp, $response['body']);
-        fclose($fp);
         
-        $result = self::csv_to_array('wp-content/plugins/rrze-remoter/includes/remote/result.csv');
-        
-        /*$path = $index['index'];
-        $maskjson = str_replace('/', '\/', $path);
-        $patternmeta1 = '/(' . $maskjson . ')/';
-        $patternmeta2 = '/.json$/i';
-        
-        $s = $result;
-        
-        $t = array_column($s, 'name');
-        $test = preg_grep($patternmeta2, $t);
-        
-        
-        
-        echo '<pre>';
-        print_r( $s[204] );
-        echo '</pre>';  */      
-        
-        //$pat = '/.*(?=.*\universitaet\)(?=.*\json\).*/';
-        
-        /*$names = array_column($result, 'name');
-        $test = preg_grep('/universitaet\/organisation\/recht\/landesrecht\/.meta.json/',$names);
-        print_r($test);*/
-        
-        /*$matchesjson = array_filter($result, function($a) use($patternmeta1, $patternmeta2)  {
-            $c = preg_grep($patternmeta1, $a) && preg_grep($patternmeta2, $a);
-            return $c;
-        });
-        
-        $files = $matchesjson;
-        
-        print_r($files);*/
+        $result = self::csv_to_array('http://'. $domain .'/data.csv');
         
         foreach ($result as $key => $array) {
             $result[$key]['dir'] = str_replace('/proj/websource/docs/FAUWeb/www.uni-erlangen.de/websource','', $result[$key]['path'] .'/');
