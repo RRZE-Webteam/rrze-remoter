@@ -1,18 +1,19 @@
-    <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
-        <?php if(!empty($metadata[$i])) { ?>
+<?php if($shortcodeValues['showInfo']) { ?>
+    <?php for($i = 0; $i < sizeof($metadata); $i++) { ?> 
+        <?php if(!empty($metadata[$i][0]) && $header == 1) { ?>
           <?php $accordionId = uniqid(); ?>
             <div class="accordion" id="accordion-1">
             <div class="accordion-group">
-                 <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $accordionId ?>" href="#collapse_<?php echo $accordionId ?>"><?php echo (!empty($metadata[$i]['directory']['titel']) ? $metadata[$i]['directory']['titel'] : '');  ?></a></div>
+                 <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $accordionId ?>" href="#collapse_<?php echo $accordionId ?>"><?php echo (!empty($metadata[$i][0]['directory']['titel']) ? $metadata[$i][0]['directory']['titel'] : '');  ?></a></div>
                     <div id="collapse_<?php echo $accordionId ?>" class="accordion-body" style="display: none;">
                         <div class="accordion-inner clearfix">
                             <table>
                                 <tr>
                                     <td colspan="2"><strong>Beschreibung: </strong>
-                                        <?php echo (!empty($metadata[$i]['directory']['titel']) ? $metadata[$i]['directory']['beschreibung'] : '');  ?>
+                                        <?php echo (!empty($metadata[$i][0]['directory']['titel']) ? $metadata[$i][0]['directory']['beschreibung'] : '');  ?>
                                     </td>
                                 </tr>
-                                <?php foreach($metadata[$i]['directory']['file-aliases'][0] as $key => $value) { ?>
+                                <?php foreach($metadata[$i][0]['directory']['file-aliases'][0] as $key => $value) { ?>
                                 <?php $meta_store[] = array(
                                     'key'   => $value,
                                     'value' => $key
@@ -31,7 +32,7 @@
             </div>  
         <?php } ?>
     <?php } ?>
-<?php //print_r($meta_store); ?>
+<?php } ?>
 <?php
 if($header) { ?>
 <table>
@@ -62,10 +63,10 @@ if($header) { ?>
     <?php } ?>
     </tr>
 <?php } ?>
-<?php $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'change_time' : 'name'); ?>
+<?php $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name'); ?>
 <?php $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC); ?>
 <?php $data = RRZE\Remoter\Class_Help_Methods::deleteMetaTxtEntries($data); ?>
-<?php //array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);?>
+<?php array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);?>
 <?php for($i = 0; $i <sizeof($data); $i++) { ?> 
     <tr>    
 

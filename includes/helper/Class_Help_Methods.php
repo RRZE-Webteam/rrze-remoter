@@ -133,5 +133,41 @@ class Class_Help_Methods {
         
     }
     
+    public static function getJsonFile($shortcodeValues, $data) {
+        
+        $path = $shortcodeValues['fileIndex'];
+        $maskjson = str_replace('/', '\/', $path);
+        $patternmeta1 = '/(' . $maskjson . ')/';
+        $patternmeta2 = '/.meta.json$/i';
+        
+        $metajson = array_filter($data, function($a) use($patternmeta1, $patternmeta2)  {
+            $c = preg_grep($patternmeta1, $a) && preg_grep($patternmeta2, $a);
+            return $c;
+        });
+        
+        array_multisort(array_column($metajson, 'dir'), SORT_ASC , $metajson);
+        
+        return $metajson;
+    }
+    
+    public static function getJsonData($metajson, $domain) {
+        
+        $meta = array();
+        $metadata = array();
+
+        foreach ($metajson as $key => $array) {
+            $meta[] = file_get_contents('http://' . $domain . $metajson[$key]['dir'] . '.meta.json');
+        }
+
+        foreach ($meta as $key => $array) {
+
+            $metadata[] = json_decode($meta[$key],true);
+
+        }
+        
+        return $metadata;
+        
+    }
+    
 }
 

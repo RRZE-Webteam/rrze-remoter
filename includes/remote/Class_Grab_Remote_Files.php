@@ -58,12 +58,12 @@ class Class_Grab_Remote_Files {
         if(!empty($index['index']) && !empty($index['file'])) {
             $file = $index['file'];
             $pattern1 = '/' . $file . '/';
-            $pattern2 = '/.\.(txt|' . str_replace(',', "|", $index['filetype']) .')$/i';
+            $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
         } else {
             $directory = $index['index'];
             $mask = str_replace('/', '\/', $directory);
             $pattern1 = '/(' . $mask . ')/';
-            $pattern2 = '/.\.(txt|' . str_replace(',', "|", $index['filetype']) .')$/i';
+            $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
         }
 
         $matches = array_filter($result, function($a) use($pattern1, $pattern2)  {

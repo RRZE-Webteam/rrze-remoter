@@ -114,7 +114,7 @@ class Class_Build_Shortcode {
                     $meta = $data;
                     
                     $meta_store = array();
-                    array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
+                    //array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
                     date_default_timezone_set('Europe/Berlin');
                     $order = $this->remote_server_shortcode['order'];
                     $orderby = $this->remote_server_shortcode['orderby'];
@@ -160,33 +160,10 @@ class Class_Build_Shortcode {
                             $header = $shortcodeValues['showHeader'];
                             $order = $this->remote_server_shortcode['order'];
                             $orderby = $this->remote_server_shortcode['orderby'];
-                            //echo 'test-table';
                             
-                            $path = $shortcodeValues['fileIndex'];
-                            $maskjson = str_replace('/', '\/', $path);
-                            $patternmeta1 = '/(' . $maskjson . ')/';
-                            $patternmeta2 = '/.meta.json$/i';
+                            $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
                             
-                            $metajson = array_filter($data, function($a) use($patternmeta1, $patternmeta2)  {
-                                $c = preg_grep($patternmeta1, $a) && preg_grep($patternmeta2, $a);
-                                return $c;
-                            });
-                            
-                            $meta = array();
-                            
-                            foreach ($metajson as $key => $array) {
-                                $meta[] = wp_remote_post('http://zuv.fau.de/universitaet/organisation/recht/landesrecht/.meta.json');
-                            }
-                            
-                            //$b = json_decode($metas);
-                            foreach ($meta as $key => $array) {
-                               
-                                $metadata = json_decode($meta[$key]['body'],true);
-                               
-                                 //echo '<pre>';
-                                //print_r($meta);
-                                 //echo '</pre>';
-                            }
+                            $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
                             
                             include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
                             $content = ob_get_clean();
