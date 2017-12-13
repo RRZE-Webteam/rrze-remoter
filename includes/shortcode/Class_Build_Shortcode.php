@@ -138,6 +138,8 @@ class Class_Build_Shortcode {
                             break;
                         case 'pagination':
                             //date_default_timezone_set('Europe/Berlin');
+                            $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
+                            $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
                             $url = parse_url(get_post_meta($post->ID, 'url', true)); 
                             $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
                             $dataFirstPage = $this->remote_data;
@@ -160,11 +162,8 @@ class Class_Build_Shortcode {
                             $header = $shortcodeValues['showHeader'];
                             $order = $this->remote_server_shortcode['order'];
                             $orderby = $this->remote_server_shortcode['orderby'];
-                            
                             $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
-                            
                             $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
-                            
                             include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
                             $content = ob_get_clean();
                             return $content;
@@ -264,7 +263,7 @@ class Class_Build_Shortcode {
             
             
             foreach($dataArray as $key => $value) {
-                if($value['name'] === '.meta.txt') {
+                if($value['name'] === '.meta.json') {
                     $i = 1;
                     unset($dataArray[$key]);
                     $dataChunk = array_values($dataArray);

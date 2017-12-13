@@ -1,19 +1,19 @@
 <?php $this->res = $this->remote_data; ?>
 <?php array_multisort(array_column($this->res, $sortOrderby), $sortOrder , $this->res); ?>
 <?php if($shortcodeValues['showInfo']) { ?>
-    <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
-        <?php if(!empty($meta[$i]['meta'])) { ?>
+    <?php for($i = 0; $i < sizeof($metadata); $i++) { ?> 
+        <?php if(!empty($metadata[$i][0])) { ?>
            <?php $accordionId = uniqid(); ?>
             <div class="accordion" id="accordion-1">
                 <div class="accordion-group">
-                <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $accordionId ?>" href="#collapse_<?php echo $accordionId ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
+                <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $accordionId ?>" href="#collapse_<?php echo $accordionId ?>"><?php echo (!empty($metadata[$i][0]['directory']['titel']) ? $metadata[$i][0]['directory']['titel'] : '');  ?></a></div>
                     <div id="collapse_<?php echo $accordionId ?>" class="accordion-body" style="display: none;">
                         <div class="accordion-inner clearfix">
                         <table>
                             <tr>
-                                <td colspan="2"><strong>Beschreibung: </strong><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?></td>
+                                <td colspan="2"><strong>Beschreibung: </strong><?php echo (!empty($metadata[$i][0]['directory']['titel']) ? $metadata[$i][0]['directory']['beschreibung'] : '');  ?></td>
                             </tr>
-                            <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
+                            <?php foreach($metadata[$i][0]['directory']['file-aliases'][0] as $key => $value) { ?>
                                 <?php $meta_store[] = array(
                                     'key'   => $value,
                                     'value' => $key

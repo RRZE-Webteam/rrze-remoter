@@ -59,10 +59,15 @@ class Class_Grab_Remote_Files {
             $file = $index['file'];
             $pattern1 = '/' . $file . '/';
             $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
-        } else {
+        } elseif(!empty($index['index']) && $index['recursiv'] == 1) {
             $directory = $index['index'];
             $mask = str_replace('/', '\/', $directory);
             $pattern1 = '/(' . $mask . ')/';
+            $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
+        } else {
+            $directory = $index['index'];
+            $mask = str_replace('/', '\/', $directory);
+            $pattern1 = '/(' . $mask . ')$/';
             $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
         }
 

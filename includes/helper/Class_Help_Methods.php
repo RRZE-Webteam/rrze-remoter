@@ -135,9 +135,10 @@ class Class_Help_Methods {
     
     public static function getJsonFile($shortcodeValues, $data) {
         
+        $recursiv = $shortcodeValues['recursive'];
         $path = $shortcodeValues['fileIndex'];
         $maskjson = str_replace('/', '\/', $path);
-        $patternmeta1 = '/(' . $maskjson . ')/';
+        $patternmeta1 = ($recursiv == 1) ? '/(' . $maskjson . ')/' : '/(' . $maskjson . ')$/';
         $patternmeta2 = '/.meta.json$/i';
         
         $metajson = array_filter($data, function($a) use($patternmeta1, $patternmeta2)  {
