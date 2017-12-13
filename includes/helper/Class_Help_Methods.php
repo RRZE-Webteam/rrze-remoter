@@ -137,8 +137,8 @@ class Class_Help_Methods {
         
         $recursiv = $shortcodeValues['recursive'];
         $path = $shortcodeValues['fileIndex'];
-        $maskjson = str_replace('/', '\/', $path);
-        $patternmeta1 = ($recursiv == 1) ? '/(' . $maskjson . ')/' : '/(' . $maskjson . ')$/';
+        $maskpath = str_replace('/', '\/', $path);
+        $patternmeta1 = ($recursiv == 1) ? '/(' . $maskpath . ')/' : '/(' . $maskpath . ')$/';
         $patternmeta2 = '/.meta.json$/i';
         
         $metajson = array_filter($data, function($a) use($patternmeta1, $patternmeta2)  {

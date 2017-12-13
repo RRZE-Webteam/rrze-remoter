@@ -63,10 +63,17 @@ if($header) { ?>
     <?php } ?>
     </tr>
 <?php } ?>
-<?php $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name'); ?>
-<?php $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC); ?>
+<?php //$sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name'); ?>
+<?php //$sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC); ?>
 <?php $data = RRZE\Remoter\Class_Help_Methods::deleteMetaTxtEntries($data); ?>
-<?php array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);?>
+<?php //array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);?>
+    <?php 
+    
+    /*echo '<pre>';
+    print_r($data);
+    echo '</pre>';*/
+    
+    ?>
 <?php for($i = 0; $i <sizeof($data); $i++) { ?> 
     <tr>    
 
@@ -116,25 +123,21 @@ if($header) { ?>
                             
                         <?php if (!in_array($extension, $imgFormats)) { ?>
                         <td>
-                            <a href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file); ?></a>
+                            <a href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file); ?></a>
                         </td> 
                         <?php } else { ?>
                         <td>
-                            <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>">
-                                <?php
-                                    echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
-                                ?>
-                            </a>
+                            <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);?></a>
                         </td>  
                         <?php } ?>
 
-                        <?php } else { ?>
-                            <td><?php echo str_replace('_',' ', $data[$i]['name']) ?></td>  
-                        <?php  }
+                    <?php } else { ?>
+                        <td><?php echo str_replace('_',' ', $data[$i]['name']) ?></td>  
+                    <?php  }
                     break;
                 case 'date': ?>
                 
-                    <td><?php echo $data[$i]['date'] ?></td>
+                        <td><?php echo $data[$i]['date'] ?></td>
                     
                 <?php break;
         

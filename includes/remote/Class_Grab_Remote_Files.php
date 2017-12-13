@@ -47,9 +47,12 @@ class Class_Grab_Remote_Files {
         
         $result = self::csv_to_array('http://'. $domain .'/data.csv');
         
+       
+        
         foreach ($result as $key => $array) {
             $result[$key]['dir'] = str_replace('/proj/websource/docs/FAUWeb/www.uni-erlangen.de/websource','', $result[$key]['path'] .'/');
             $result[$key]['extension'] = substr(strrchr($result[$key]['name'],'.'), 1);
+            //$result[$key]['date'] = strtotime( $result[$key]['date']);
             if(strpos($result[$key]['name'] , '.') === false) {
                 unset($result[$key]);
             }
@@ -59,6 +62,11 @@ class Class_Grab_Remote_Files {
             $file = $index['file'];
             $pattern1 = '/' . $file . '/';
             $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
+        } elseif(!empty($index['index']) && !empty($index['filter'])) {
+            $directory = $index['index'];
+            $mask = str_replace('/', '\/', $directory);
+            $pattern1 = '/(' . $mask . ')/';
+            $pattern2 = '/(' . $index['filter'] . ')|.json/i';
         } elseif(!empty($index['index']) && $index['recursiv'] == 1) {
             $directory = $index['index'];
             $mask = str_replace('/', '\/', $directory);

@@ -70,7 +70,8 @@ class Class_Build_Shortcode {
             'link'          => $this->remote_server_shortcode['link'],
             'showHeader'    => $this->remote_server_shortcode['showheader'],
             'file'          => $this->remote_server_shortcode['file'],
-            'showInfo'      => $this->remote_server_shortcode['showmetainfo']
+            'showInfo'      => $this->remote_server_shortcode['showmetainfo'],
+            'alias'         => $this->remote_server_shortcode['alias']
         );
         
         $the_query = new \WP_Query( $query_arguments);
@@ -84,31 +85,14 @@ class Class_Build_Shortcode {
             while ( $the_query->have_posts() ) {
                 $the_query->the_post();
                 
-                //print_r($the_query);
-
                 $domain = get_post_meta($post->ID, 'domain', true); 
                 $api_key = get_post_meta($post->ID, 'apikey', true); 
                 
-                //echo '<pre>';
-               // print_r($this->remote_server_shortcode);
-                //echo '</pre>';
-
                 $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
-                
-               
                 
                 $data = $this->remote_data;
                 
-                //echo 'berni';
-                
-                //echo 'Response:<pre>';
-                //print_r( $data );
-                //echo '</pre>';
-                
                 if($data){
-                    //$url = parse_url(get_post_meta($post->ID, 'url', true)); 
-                    //print_r( $domain);
-                    
                     $view = $shortcodeValues['view'];
                     $tableHeader = Class_Help_Methods::getHeaderData($shortcodeValues['showColumns']);
                     $meta = $data;
@@ -123,8 +107,9 @@ class Class_Build_Shortcode {
                             include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
                             break;
                         case 'glossary':
-                            echo 'test';
                             $id = uniqid();
+                            $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
+                            $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
                             $letters = Class_Help_Methods::createLetters();
                             $unique = Class_Help_Methods::getUsedLetters($data);
                             $array_without_numbers = Class_Help_Methods::checkforfigures($unique);
@@ -144,7 +129,7 @@ class Class_Build_Shortcode {
                             $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
                             $dataFirstPage = $this->remote_data;
                             $dataChunk = Class_Help_Methods::deleteMetaTxtEntries($dataFirstPage);
-                            $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'change_time' : 'name');
+                            $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
                             $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
                             array_multisort(array_column($dataChunk, $sortOrderby), $sortOrder , $dataChunk);
                             $data = array_chunk($dataChunk, $number_of_chunks);
@@ -162,8 +147,12 @@ class Class_Build_Shortcode {
                             $header = $shortcodeValues['showHeader'];
                             $order = $this->remote_server_shortcode['order'];
                             $orderby = $this->remote_server_shortcode['orderby'];
+                            $alias = $shortcodeValues['alias'];
                             $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
                             $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
+                            $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
+                            $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
+                            array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);
                             include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
                             $content = ob_get_clean();
                             return $content;
@@ -400,19 +389,14 @@ class Class_Build_Shortcode {
     public function rrze_remote_glossary_script_footer() { 
         
         $glossary_files = (isset($this->glossary_array)) ? $this->glossary_array : '';
-        //$glossary_meta = (isset($this->meta)) ? $this->meta : '';
+        $glossary_meta = (isset($this->meta)) ? $this->meta : '';
         
-        $a = json_encode($glossary_files);
-        
-        //print_r($glossary_files);
-        //$glossary_files = $this->glossary_array;
-	 
-         ?>
-         <script>
+        ?>
+        <script>
         jQuery(document).ready(function($) {
             
-            var glossary = <?php echo $a ?>;
-            //var meta = <?php //echo json_encode($glossary_meta); ?>;
+            var glossary = <?php echo json_encode($glossary_files) ?>;
+            var meta = <?php echo json_encode($glossary_meta); ?>;
 
             $('a[href^="#letter-"]').click(function(){
                 var letter = $(this).attr('data-letter');
@@ -429,8 +413,8 @@ class Class_Build_Shortcode {
                         'host'      : host,
                         'columns'   : columns,
                         'link'      : link,
-                        'glossary'  : glossary
-                        //'meta'      : meta
+                        'glossary'  : glossary,
+                        'meta'      : meta
                     },
                     success:function(data) {
                         $("#glossary").html(data);
@@ -455,9 +439,7 @@ class Class_Build_Shortcode {
         $link = $_REQUEST['link'];
         $host = $_REQUEST['host'];
         
-        //echo '<pre>';
-       // $meta = isset($_REQUEST['meta']);
-        //echo '</pre>';
+        $meta = $_REQUEST['meta'];
         
         $filenames = array(); 
 
