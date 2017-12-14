@@ -147,7 +147,7 @@ echo '</pre>'; */?>
                         <?php  }
                             break;
                     case 'date': ?>
-                        <td><?php echo $data_new[$i]['date'] ?></td>
+                        <td><?php echo date("d.m.Y", $data_new[$i]['date']) ?></td>
                         <?php break; 
                 }
 

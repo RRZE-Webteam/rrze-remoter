@@ -63,17 +63,6 @@ if($header) { ?>
     <?php } ?>
     </tr>
 <?php } ?>
-<?php //$sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name'); ?>
-<?php //$sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC); ?>
-<?php $data = RRZE\Remoter\Class_Help_Methods::deleteMetaTxtEntries($data); ?>
-<?php //array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);?>
-    <?php 
-    
-    /*echo '<pre>';
-    print_r($data);
-    echo '</pre>';*/
-    
-    ?>
 <?php for($i = 0; $i <sizeof($data); $i++) { ?> 
     <tr>    
 
@@ -137,7 +126,7 @@ if($header) { ?>
                     break;
                 case 'date': ?>
                 
-                        <td><?php echo $data[$i]['date'] ?></td>
+                        <td><?php echo date("d.m.Y", $data[$i]['date']) ?></td>
                     
                 <?php break;
         

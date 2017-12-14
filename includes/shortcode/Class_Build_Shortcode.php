@@ -152,6 +152,8 @@ class Class_Build_Shortcode {
                             $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
                             $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
                             $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
+                            $deletejson = $data;
+                            $data = Class_Help_Methods::deleteMetaTxtEntries($deletejson);
                             array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);
                             include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
                             $content = ob_get_clean();
@@ -364,12 +366,14 @@ class Class_Build_Shortcode {
 
                             } else { 
 
-                            $t .= '<td>' . $data[$i]['name'] .'</td>';  
+                            $t .= '<td>' . $value['name'] .'</td>';  
 
                             }
                             break;
                         case 'date':
-                            $t .= '<td>' . $value['date'] .'</td>';
+                            $date = date("d.m.Y", $value['date']); 
+                            $new_date = strtotime(' + 1 day', strtotime($date));
+                            $t .= '<td>' . date("d.m.Y", $new_date) .'</td>';
                             break; 
                     }
 
@@ -552,7 +556,7 @@ class Class_Build_Shortcode {
                         }
                         break;
                     case 'date':
-                        $t .= '<td>' . $data[$i]['date'] .'</td>';
+                        $t .= '<td>' . date("d.m.Y", $data[$i]['date']) .'</td>';
                         break; 
                 }
 

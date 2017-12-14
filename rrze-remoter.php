@@ -81,8 +81,8 @@ function activation() {
     //register_remoter_post_type();
     //flush_rewrite_rules();
     
-    //$caps_remoter = get_caps('remoter');
-    //add_caps('administrator', $caps_remoter);
+    $caps_remoter = get_caps('remoter');
+    add_caps('administrator', $caps_remoter);
 
     // Ab hier können die Funktionen hinzugefügt werden, 
     // die bei der Aktivierung des Plugins aufgerufen werden müssen.
@@ -98,9 +98,9 @@ function deactivation() {
     // bei der Deaktivierung des Plugins aufgerufen werden müssen.
     // Bspw. wp_clear_scheduled_hook, flush_rewrite_rules, etc.
     
-    //$caps_remoter = get_caps('remoter');
-    //remove_caps('administrator',  $caps_remoter);
-    //flush_rewrite_rules();
+    $caps_remoter = get_caps('remoter');
+    remove_caps('administrator',  $caps_remoter);
+    flush_rewrite_rules();
 }
 
 /*
@@ -138,7 +138,7 @@ function system_requirements() {
     }
     
 }
-
+*/
 function get_caps($cap_type) {
     $caps = array(
         "edit_" . $cap_type,
@@ -172,7 +172,7 @@ function remove_caps($role, $caps) {
         $role->remove_cap($cap);
     }        
 }    
-*/
+
 
 /*
  * Wird durchgeführt, nachdem das WP-Grundsystem hochgefahren

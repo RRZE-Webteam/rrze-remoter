@@ -121,12 +121,12 @@
                                 <?php } ?>
                             <?php } else { ?>
                                 <td>
-                                    <?php echo str_replace('_',' ', basename($data[$i]['path'])) ?>
+                                    <?php echo str_replace('_',' ', basename($data[$i][$j]['path'])) ?>
                                 </td>  
                             <?php  }
                             break;
                         case 'date': ?>
-                           <td><?php echo $data[$i][$j]['date'] ?></td>
+                            <td><?php echo date("d.m.Y", $data[$i][$j]['date']) ?></td>
                           <?php break; ?>
                    <?php } ?>
                 <?php } ?>

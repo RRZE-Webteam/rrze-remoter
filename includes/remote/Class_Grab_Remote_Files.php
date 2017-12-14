@@ -50,9 +50,9 @@ class Class_Grab_Remote_Files {
        
         
         foreach ($result as $key => $array) {
-            $result[$key]['dir'] = str_replace('/proj/websource/docs/FAUWeb/www.uni-erlangen.de/websource','', $result[$key]['path'] .'/');
+            $result[$key]['dir'] = '/'. $result[$key]['path'] .'/';
             $result[$key]['extension'] = substr(strrchr($result[$key]['name'],'.'), 1);
-            //$result[$key]['date'] = strtotime( $result[$key]['date']);
+            $result[$key]['date'] = strtotime( $result[$key]['date']);
             if(strpos($result[$key]['name'] , '.') === false) {
                 unset($result[$key]);
             }
