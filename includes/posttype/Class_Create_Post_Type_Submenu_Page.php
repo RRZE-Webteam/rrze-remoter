@@ -123,8 +123,9 @@ class Class_Create_Post_Type_Submenu_Page {
             $html  = '<h4>Die notwendigen Dateien liegen noch nicht oder an der falschen Stelle auf dem Server!</h4>';
             $html .= '<p>Bitte legen Sie zuerst folgende Dateien auf Ihren Server:</p>';
             $html .= '<ul>';
-            $html .= '<li>request.php';
-            $html .= '<li>remotefiles.php';
+            $html .= '<li>request.php</li>';
+            $html .= '<li>readdirectories.php</li>';
+            $html .= '<li>data.csv</li>';
             $html .= '<li>AccessControl/';
             $html .= '</ul>';
             $html .= '<p>Diese finden Sie im Gitlab Respository: <a href="https://gitlab.rrze.fau.de/rrze-webteam/rrze-remoter-server-files">Link</a></p>';

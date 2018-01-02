@@ -33,59 +33,66 @@ class Class_Grab_Remote_Files {
     
     public static function get_files_from_remote_server($index, $domain, $api_key) {
         
-        $response = wp_remote_post('http://' . $domain . '/data.csv');
+        if(self::search_for_api_key($domain, $api_key) === TRUE) {
         
-        if ( is_wp_error( $response ) ) {
-            $error_message = $response->get_error_message();
-            echo "Something went wrong: $error_message";
-        } else {
-            /*echo 'Response:<pre>';
-            //print_r( $response['body'] );
-            echo '</pre>';*/
-        }
-        
-        
-        $result = self::csv_to_array('http://'. $domain .'/data.csv');
-        
-       
-        
-        foreach ($result as $key => $array) {
-            $result[$key]['dir'] = '/'. $result[$key]['path'] .'/';
-            $result[$key]['extension'] = substr(strrchr($result[$key]['name'],'.'), 1);
-            $result[$key]['date'] = strtotime( $result[$key]['date']);
-            if(strpos($result[$key]['name'] , '.') === false) {
-                unset($result[$key]);
-            }
-        }
-        
-        if(!empty($index['index']) && !empty($index['file'])) {
-            $file = $index['file'];
-            $pattern1 = '/' . $file . '/';
-            $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
-        } elseif(!empty($index['index']) && !empty($index['filter'])) {
-            $directory = $index['index'];
-            $mask = str_replace('/', '\/', $directory);
-            $pattern1 = '/(' . $mask . ')/';
-            $pattern2 = '/(' . $index['filter'] . ')|.json/i';
-        } elseif(!empty($index['index']) && $index['recursiv'] == 1) {
-            $directory = $index['index'];
-            $mask = str_replace('/', '\/', $directory);
-            $pattern1 = '/(' . $mask . ')/';
-            $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
-        } else {
-            $directory = $index['index'];
-            $mask = str_replace('/', '\/', $directory);
-            $pattern1 = '/(' . $mask . ')$/';
-            $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
-        }
+            $result = self::csv_to_array('http://'. $domain .'/data.csv');
 
-        $matches = array_filter($result, function($a) use($pattern1, $pattern2)  {
-            $b = preg_grep($pattern1, $a) && preg_grep($pattern2, $a);
-            return $b;
-        });
-        
-        return $matches;
+            foreach ($result as $key => $array) {
+                $result[$key]['dir'] = '/'. $result[$key]['path'] .'/';
+                $result[$key]['extension'] = substr(strrchr($result[$key]['name'],'.'), 1);
+                $result[$key]['date'] = strtotime( $result[$key]['date']);
+                if(strpos($result[$key]['name'] , '.') === false) {
+                    unset($result[$key]);
+                }
+            }
+
+            if(!empty($index['index']) && !empty($index['file'])) {
+                $file = $index['file'];
+                $pattern1 = '/' . $file . '/';
+                $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
+            } elseif(!empty($index['index']) && !empty($index['filter'])) {
+                $directory = $index['index'];
+                $mask = str_replace('/', '\/', $directory);
+                $pattern1 = '/(' . $mask . ')/';
+                $pattern2 = '/(' . $index['filter'] . ')|.json/i';
+            } elseif(!empty($index['index']) && $index['recursiv'] == 1) {
+                $directory = $index['index'];
+                $mask = str_replace('/', '\/', $directory);
+                $pattern1 = '/(' . $mask . ')/';
+                $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
+            } else {
+                $directory = $index['index'];
+                $mask = str_replace('/', '\/', $directory);
+                $pattern1 = '/(' . $mask . ')$/';
+                $pattern2 = '/.\.(json|' . str_replace(',', "|", $index['filetype']) .')$/i';
+            }
+
+            $matches = array_filter($result, function($a) use($pattern1, $pattern2)  {
+                $b = preg_grep($pattern1, $a) && preg_grep($pattern2, $a);
+                return $b;
+            });
+
+            return $matches;
+            
+        } else {
+            
+            return '';
+            
+        }
         
     }
     
+    public static function search_for_api_key($domain, $api_key) {
+        $handle = fopen('http://'. $domain .'/.hash', 'r');
+        $valid = false; 
+        while (($buffer = fgets($handle)) !== false) {
+            if (strpos($buffer, trim($api_key)) !== false) {
+                $valid = TRUE;
+                break;
+            }      
+        }
+        fclose($handle);
+        
+        return $valid;
+    }
 }
