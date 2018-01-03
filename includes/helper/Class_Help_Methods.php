@@ -39,7 +39,15 @@ class Class_Help_Methods {
         $titel = explode("/", $directory);
         $folder = $titel[count($titel)-1];
         
-        return $folder;
+        $str = str_replace(
+            array('ae','oe','ue','Ae','Oe','Ue'), 
+            array( 'ä','ö','ü','Ä','Ö','Ü'),
+            $folder
+        );  
+        
+        $replaced = str_replace('_',' ', $str);
+        
+        return $replaced;
         
     }
     

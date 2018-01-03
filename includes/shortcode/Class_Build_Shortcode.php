@@ -29,7 +29,7 @@ class Class_Build_Shortcode {
             'recursiv'          => '1',
             'itemsperpage'      => '5',
             'filetype'          => 'pdf',
-            'link'              => '0',
+            'link'              => '1',
             'alias'             => '',
             'view'              => 'table',
             'orderby'           => 'name',
