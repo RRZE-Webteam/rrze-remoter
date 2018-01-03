@@ -104,9 +104,13 @@ class Class_Build_Shortcode {
                     $orderby = $this->remote_server_shortcode['orderby'];
                     switch ($view) {
                         case 'gallery':
+                            ob_start();
                             include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
+                            $content = ob_get_clean();
+                            return $content;
                             break;
                         case 'glossary':
+                            ob_start();
                             $id = uniqid();
                             $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
                             $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
@@ -120,9 +124,12 @@ class Class_Build_Shortcode {
                                 $data_new = Class_Help_Methods::deleteMetaTxtEntries($dataSorted);
                                 include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
                             }
+                            $content = ob_get_clean();
+                            return $content;
                             break;
                         case 'pagination':
                             //date_default_timezone_set('Europe/Berlin');
+                            ob_start();
                             $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
                             $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
                             $url = parse_url(get_post_meta($post->ID, 'url', true)); 
@@ -141,6 +148,8 @@ class Class_Build_Shortcode {
                             $itemscount = (isset($data[0]) ? count($data[0]) : '');
                             include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
                             }
+                            $content = ob_get_clean();
+                            return $content;
                             break;
                         case 'table':
                             ob_start();
@@ -160,7 +169,10 @@ class Class_Build_Shortcode {
                             return $content;
                             break;
                         case 'imagetable':
+                            ob_start();
                             include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
+                            $content = ob_get_clean();
+                            return $content;
                             break;
                         default:
                             include( plugin_dir_path( __DIR__ ) . '/templates/list.php');

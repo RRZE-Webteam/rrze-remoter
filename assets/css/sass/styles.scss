@@ -19,8 +19,18 @@ i.fa.fa-arrow-circle-down {
 
 .pagination.pagebreaks .subpages > a  {
    text-decoration: none;
+   padding-right: 5px;
+   outline: 0;
 }
 
 .th-center {
     text-align: center;
+}
+
+.pagination.pagebreaks > br {
+    display: none;
+}
+
+.pagination.pagebreaks > p {
+    display: inline;
 }

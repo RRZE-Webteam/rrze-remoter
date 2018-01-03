@@ -40,8 +40,8 @@ class Class_Help_Methods {
         $folder = $titel[count($titel)-1];
         
         $str = str_replace(
-            array('ae','oe','ue','Ae','Oe','Ue'), 
-            array( 'ä','ö','ü','Ä','Ö','Ü'),
+            array('ae','oe','ue','Ae','Oe','Ue','Ã'), 
+            array( 'ä','ö','ü','Ä','Ö','Ü','Ä'),
             $folder
         );  
         
