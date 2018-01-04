@@ -20,7 +20,7 @@ function createSlider($data, $domain, $id) {
         $g .= '<li><img src="http://'. $domain . $value['dir'] . $value['name'] . '"/>';
         $g .= '<div class="gallery-image-caption">Bild in Originalgröße (1153px). Ausrichtung keine.<br />';
         $g .= '<span class="linkorigin">';
-        $g .= '(<a href="http://'. $domain . $value['dir'] . $value['name'] . '"  title="'. $iptcdata["2#105"][0] . '<br/>' . $iptcdata["2#120"][0] . '<br/>' . $iptcdata["2#085"][0] .'" class="lightbox" rel="lightbox-601862376">Vergrößern</a>)</span></div>';
+        $g .= '(<a href="http://'. $domain . $value['dir'] . $value['name'] . '" title="'. $iptcdata["2#105"][0] . ' ' . $iptcdata["2#120"][0] . ' ' . $iptcdata["2#085"][0] .'" class="lightbox" rel="lightbox-' . $id . '">Vergrößern</a>)';
         $g .= '<div>' . $iptcdata["2#105"][0] . '<br/>' . $iptcdata["2#120"][0] . '<br/>' . $iptcdata["2#085"][0] . '</div>';
         $g .= '</li>';
     
