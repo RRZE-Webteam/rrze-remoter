@@ -223,35 +223,126 @@
     background-image: url("./img/fancybox/fancybox_loading@2x.gif");
     background-size: 24px 24px;
     /*The size of the normal image, half the size of the hi-res image*/ } }
-.pagination.pagebreaks .subpages a .number {
-  background: #dde5f0;
-  border: 1px solid #dde5f0; }
-
-.pagination.pagebreaks .subpages a .number.active {
-  background: #fff;
-  border: 1px solid #dde5f0;
-  text-decoration: none; }
-
-.download-file {
-  cursor: pointer; }
-
-i.fa.fa-arrow-circle-down {
-  font-size: 1.2rem; }
-
-.pagination.pagebreaks .subpages > a {
-  text-decoration: none;
-  padding-right: 5px;
-  outline: 0; }
-
-.th-center {
+/*
+ * CSS Settings for FAU Glossary
+ */
+.fau-glossar {
+  margin-top: 50px; }
+.fau-glossar .letters {
+  margin-bottom: 30px;
   text-align: center; }
+.fau-glossar .letters li {
+  border: 1px solid #e7e7eb;
+  color: #e7e7eb;
+  vertical-align: middle;
+  width: 26px;
+  height: 26px;
+  text-align: center;
+  margin: 2px;
+  border-radius: 4px;
+  list-style-type: none;
+  display: inline;
+  padding: 10px; }
+.fau-glossar .letters li a {
+  text-decoration: none;
+  outline: none; }
+.fau-glossar .letters li.filled {
+  border-color: lightgrey;
+  background: lightgrey;
+  color: #00458c; }
+.fau-glossar .letters li.filled:hover {
+  background-color: #f00000; }
 
-.pagination.pagebreaks > br {
-  display: none; }
+/*.fau-glossar {
+    margin-top: 50px;
+}
 
-.pagination.pagebreaks > p {
-  display: inline; }
+.letters {
+  list-style: none;
+  margin: 0;
+  margin-bottom: 19px;
+  padding: 0;
+  width: 100%;
+  overflow: hidden;
+}
 
+.letters li,
+.letters a {
+  padding: 5px;
+}
+
+.letters li {
+  float: left;
+  border: 1px solid $colorContentBorders;
+  color: #999;
+  margin-left: 5px;
+  margin-bottom: 15px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.letters.muted {
+    padding: 10px;
+}
+
+.letters li:first-child {
+  margin-left: 0;
+}
+
+.letters a {
+  display: block;
+  margin: -5px;
+  text-decoration: none;
+  color: $colorPrimary;
+}
+
+.letters a:hover,
+.letters .current a {
+  color: #fff;
+  background-color: $colorPrimary;
+}*/
+@media screen and (min-width: 768px) {
+  .remoter > .pagination {
+    box-shadow: none;
+    margin: 0; }
+
+  .pagination.pagebreaks .subpages a .number {
+    background: #e7e7eb;
+    border: 1px solid #e7e7eb;
+    padding: 10px; }
+
+  .pagination.pagebreaks .subpages a .number.active {
+    background: #fff;
+    border: 1px solid #dde5f0;
+    text-decoration: none; }
+
+  .download-file {
+    cursor: pointer; }
+
+  i.fa.fa-arrow-circle-down {
+    font-size: 1.2rem; }
+
+  .pagination.pagebreaks .subpages > a {
+    text-decoration: none;
+    padding-right: 5px;
+    outline: 0; }
+
+  .th-center {
+    text-align: center; }
+
+  .pagination.pagebreaks > br {
+    display: none; }
+
+  .pagination.pagebreaks > p > .subpages {
+    display: inline; }
+
+  .pagination.pagebreaks > h3 {
+    font-size: 18px;
+    display: inline-block; }
+
+  td {
+    width: 16.66%; } }
 /*
  * jQuery FlexSlider v2.3.0
  * http://www.woothemes.com/flexslider/

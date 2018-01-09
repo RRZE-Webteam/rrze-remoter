@@ -1,0 +1,100 @@
+/*
+ * CSS Settings for FAU Glossary
+ */
+
+$colorStandardHellgrau: #e7e7eb;;
+$colorContentBorders: lightgrey;
+$colorPrimary: #00458c;;
+$colorLightest: red;
+
+.fau-glossar {
+    margin-top: 50px;
+    .letters {
+        margin-bottom: 30px;
+	text-align: center;
+	
+	li {
+	    border: 1px solid $colorStandardHellgrau;
+	    color: $colorStandardHellgrau;
+	    vertical-align: middle;
+	    width: 26px;
+	    height: 26px;
+	    text-align: center;
+	    margin: 2px;
+	    border-radius:4px;
+            list-style-type: none;
+            display:inline;
+            padding:10px;
+            a {
+                text-decoration: none;
+                outline: none;
+            }
+	    
+	    
+	    &.filled {
+		border-color: $colorContentBorders;
+		background: $colorContentBorders;
+		color: $colorPrimary;
+	    }
+	    &.filled:hover {
+		background-color: darken($colorLightest, 3%);
+	    }
+	}
+	
+    }
+    
+}
+
+/*.fau-glossar {
+    margin-top: 50px;
+}
+
+.letters {
+  list-style: none;
+  margin: 0;
+  margin-bottom: 19px;
+  padding: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.letters li,
+.letters a {
+  padding: 5px;
+}
+
+.letters li {
+  float: left;
+  border: 1px solid $colorContentBorders;
+  color: #999;
+  margin-left: 5px;
+  margin-bottom: 15px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.letters.muted {
+    padding: 10px;
+}
+
+.letters li:first-child {
+  margin-left: 0;
+}
+
+.letters a {
+  display: block;
+  margin: -5px;
+  text-decoration: none;
+  color: $colorPrimary;
+}
+
+.letters a:hover,
+.letters .current a {
+  color: #fff;
+  background-color: $colorPrimary;
+}*/
+
+
+
+

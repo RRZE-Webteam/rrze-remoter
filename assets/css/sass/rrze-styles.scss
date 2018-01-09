@@ -1,8 +1,18 @@
 @import "_fancybox";
+@import "_glossar";
+
+@media screen and (min-width: 768px) {
+.remoter > .pagination {
+    box-shadow: none;
+    margin: 0;
+    //margin-bottom: 0 0 50px 0;
+}
 
 .pagination.pagebreaks .subpages a .number {
-  background: #dde5f0;
-  border: 1px solid #dde5f0; }
+  background: #e7e7eb;
+  border: 1px solid #e7e7eb; 
+  padding: 10px;
+}
 
 .pagination.pagebreaks .subpages a .number.active {
   background: #fff;
@@ -26,8 +36,19 @@ i.fa.fa-arrow-circle-down {
 .pagination.pagebreaks > br {
   display: none; }
 
-.pagination.pagebreaks > p {
+.pagination.pagebreaks > p > .subpages {
   display: inline; }
+
+.pagination.pagebreaks > h3 {
+    font-size: 18px;
+    display: inline-block;
+}
+
+td {
+    width: 16.66%
+}
+
+}
 
 
 /*

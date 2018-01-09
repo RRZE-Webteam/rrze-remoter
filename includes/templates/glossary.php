@@ -44,7 +44,7 @@ echo '</pre>'; */?>
 
    <?php if (in_array($value, $array_without_numbers)) { ?>
 
-        <li><a href="#letter-<?php echo $value ?>"data-link="<?php echo $shortcodeValues['link'] ?>"data-columns="<?php echo $shortcodeValues['showColumns'] ?>"data-host="<?php echo $domain ?>" data-letter="<?php echo $value ?>"><?php echo $value ?></a></li>
+        <li><a href="#letter-<?php echo $value ?>" data-link="<?php echo $shortcodeValues['link'] ?>" data-columns="<?php echo $shortcodeValues['showColumns'] ?>" data-host="<?php echo $domain ?>" data-letter="<?php echo $value ?>"><?php echo $value ?></a></li>
 
    <?php } else { ?>
 

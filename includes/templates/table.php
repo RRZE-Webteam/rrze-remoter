@@ -135,7 +135,7 @@
         <?php } ?>
     </table>
 </div>
- 
+<div class="remoter"> 
 <nav class="pagination pagebreaks" role="navigation"><h3>Seite:</h3><span class="subpages"><?php for ($i = 1; $i <= $pagecount; $i++) { ?><a data-filetype="<?php echo $shortcodeValues['filetype'] ?>" href="#get_list"
 data-recursiv="<?php echo $shortcodeValues['recursive'] ?>"
 data-index="<?php echo $shortcodeValues['fileIndex'] ?>"
@@ -145,3 +145,4 @@ data-pagecount-value="<?php echo $pagecount ?>"
 data-columns="<?php echo $shortcodeValues['showColumns'] ?>" 
 data-link= "<?php echo $shortcodeValues['link'] ?>"
 class="page-<?php echo $i ?>"><span class="<?php echo ($i == 1 ? 'number active' : 'number') ?>"><?php echo $i ?></span></a><?php } ?></span></nav>
+</div>
