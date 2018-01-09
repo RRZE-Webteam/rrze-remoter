@@ -56,7 +56,7 @@
   max-height: 100%; }
 
 #fancybox-loading, .fancybox-close, .fancybox-prev span, .fancybox-next span {
-  background-image: url("./img/fancybox/fancybox_sprite.png"); }
+  background-image: url("../../img/fancybox/fancybox_sprite.png"); }
 
 #fancybox-loading {
   position: fixed;
@@ -72,7 +72,7 @@
 #fancybox-loading div {
   width: 44px;
   height: 44px;
-  background: url("./img/fancybox/fancybox_loading.gif") center center no-repeat; }
+  background: url("../../img/fancybox/fancybox_loading.gif") center center no-repeat; }
 
 .fancybox-close {
   position: absolute;
@@ -90,7 +90,7 @@
   height: 100%;
   cursor: pointer;
   text-decoration: none;
-  background: transparent url("./img/fancybox/blank.gif");
+  background: transparent url("../../img/fancybox/blank.gif");
   /* helps IE */
   -webkit-tap-highlight-color: transparent;
   z-index: 8040; }
@@ -149,7 +149,7 @@
   overflow: hidden;
   display: none;
   z-index: 8010;
-  background: url("./img/fancybox/fancybox_overlay.png"); }
+  background: url("../../img/fancybox/fancybox_overlay.png"); }
 
 .fancybox-overlay-fixed {
   position: fixed;
@@ -215,12 +215,12 @@
 /*Retina graphics!*/
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
   #fancybox-loading, .fancybox-close, .fancybox-prev span, .fancybox-next span {
-    background-image: url("./img/fancybox/fancybox_sprite@2x.png");
+    background-image: url("../../img/fancybox/fancybox_sprite@2x.png");
     background-size: 44px 152px;
     /*The size of the normal image, half the size of the hi-res image*/ }
 
   #fancybox-loading div {
-    background-image: url("./img/fancybox/fancybox_loading@2x.gif");
+    background-image: url("../../img/fancybox/fancybox_loading@2x.gif");
     background-size: 24px 24px;
     /*The size of the normal image, half the size of the hi-res image*/ } }
 /*
@@ -302,6 +302,15 @@
   color: #fff;
   background-color: $colorPrimary;
 }*/
+.image-gallery-slider .gallery-image-caption .linkorigin {
+  font-size: 13px;
+  line-height: 18px;
+  color: #797676; }
+
+.image-gallery-slider ul.slides li {
+  list-style: none;
+  text-align: center; }
+
 @media screen and (min-width: 768px) {
   .remoter > .pagination {
     box-shadow: none;
