@@ -1,10 +1,17 @@
-.image-gallery-slider .gallery-image-caption .linkorigin {
-    font-size: 13px;
-    line-height: 18px;
-    color: #797676;
-}
+$colorLink: #797676;
 
-.image-gallery-slider ul.slides li {
-    list-style: none;
-    text-align: center;
+.image-gallery-slider {
+    .gallery-image-caption {
+        .linkorigin {
+            font-size: 13px;
+            line-height: 18px;
+            color: $colorLink;
+        }
+    }
+    ul.slides {
+        li {
+            list-style: none;
+            text-align: center;
+        }
+    }
 }
