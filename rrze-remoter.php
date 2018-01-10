@@ -227,8 +227,9 @@ function custom_libraries_scripts() {
         wp_enqueue_script( 'rrze-remoter-scriptsjs' );
         
         $current_theme = wp_get_theme();
-        $themes = array('RRZE 2015');
-        if(in_array('RRZE 2015', $themes)) {
+        $themes = array('FAU-Einrichtungen', 'FAU-Natfak', 'FAU-Philfak', 'FAU-RWFak', 'FAU-Techfak', 'FAU-Medfak');
+        
+        if(!in_array($current_theme, $themes)) {
             wp_enqueue_style( 'rrze-remoter-rrze-theme-stylescss' );
             wp_enqueue_script( 'flexsliderjs' );
             wp_enqueue_script( 'fancyboxjs' );
@@ -237,10 +238,6 @@ function custom_libraries_scripts() {
         } 
        
     }
-    
-    echo '<pre>';
-    echo $current_theme;
-    echo '</pre>';
     
     wp_localize_script( 'rrze-remoter-mainjs', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 }
