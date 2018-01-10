@@ -32,7 +32,7 @@ müssen auf dem Remote-Server im Root-Verzeichnis des Webservers abgelegt werden
 - **index** - Das Verzeichnis in dem oder ab welchem gesucht werden soll. (Default leer)
 - **recursiv** - Ist dieser werden auf 1, so werden alle Unterverzeichnisse mit durchsucht. Bei 0 wird nur das angegebene Verzeichnis ausgelesen. (Default 1)
 - **itemsperpage** - Die Anzahl der Dateien pro Seite. (nur bei view="pagination" relevant!) (Default 5)
-- **filetype** - Nach welchen Dateiendungen gesucht wird. (z. B. pdf). Wird der Parameter "all" verwendet, so wird nach folgenden Dateiendungen gesucht (jpg, jpeg, png, tif, gif, txt, doc, docx, xls, xlsx, ppt, pptx, pdf). (Default pdf)
+- **filetype** - Nach welchen Dateiendungen gesucht wird (z. B. pdf,jpg). Es werden PDF und JPG Dateien angezeigt. (Default pdf)
 - **link** - Bei link="1" wird der Dateiename verlinkt. (Default 0)
 - **alias** - Wird der Parameter "file" verwendet, so kann ein alternativer Anzeigename für den Dateinamen übergeben werden. (Default leer)
 - **view**  - Hier wird das Ausgabeformat angegeben. Zur Auswahl stehen (Default table):
@@ -62,15 +62,15 @@ Die Spalten werden genau in der Reihenfolge ausgegeben, wie sie angegeben werden
 
 - **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader=1). Bei showheader=0 muss der Tabellenkopf selbst über den TinyMCE erzeugt werden. (Default 0)
 - **filter** - Eine zusätzliche Möglichkeit das Suchergebnis einzuschränken. Wird filter gesetzt, so müssen auch ein oder mehrere filetypes (z. B. pdf) gesetzt werden. (Default leer)
-- **showmetainfo** - Die Ausgabe der .meta.txt Datei wird oberhalb z. B. der Tabelle in einem Accrodion angezeigt und kann ein- (1) und ausgeblendet (0) werden. (Default 1)
+- **showmetainfo** - Die Ausgabe der .meta.json Datei wird oberhalb z. B. der Tabelle in einem Accrodion angezeigt und kann ein- (1) und ausgeblendet (0) werden. (Default 1)
 
 ### __Beispiele für mögliche Shortcodes:__
 
  ___für die Galerieansicht:___
 
-[remoter  id=""  index="**images**" filetype="**all**" recursiv="**0**" view="**gallery**"]
+[remoter  id=""  index="**images**" filetype="**jpg,gif**" recursiv="**0**" view="**gallery**"]
 
-Es wird im Verzeichnis images nach den gängisten Dateiformaten (siehe oben) gesucht.
+Es wird im Verzeichnis images nach den Dateiformaten jpg und gif gesucht.
 
 ___Tabelle mit Pagination:___
 
@@ -110,9 +110,9 @@ ___für den Glossar:___
 
 Es wird ab dem Verzeichnis univerisitaet rekursiv nach allen Dateien mit dem Dateiformat (pdf) gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge von show ausgegeben.
 
-### __Ausgabe der Datei .meta.txt:__
+### __Ausgabe der Datei .meta.json:__
 
-In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.txt** hinzugefügt werden. Diese Datei folgt dem **JSON Syntax** und hat eine **vordefinierte Struktur**. Mit der **.meta.txt** lassen sich **kryptische Dateinamen** in der Anzeige vermeiden. So kann jedem Dateinamen ein **alternativer Anzeigename** zugeordnet werden, welcher dann auch angezeigt wird. Darüber hinaus wird oberhalb des jeweiligen Ausgabeformates (z. B. table) ein Accordion mit den JSON-Daten angezeigt. Hier der grundlegende Aufbau der .meta.txt im JSON Syntax:
+In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.json** hinzugefügt werden. Diese Datei folgt dem **JSON Syntax** und hat eine **vordefinierte Struktur**. Mit der **.meta.json** lassen sich **kryptische Dateinamen** in der Anzeige vermeiden. So kann jedem Dateinamen ein **alternativer Anzeigename** zugeordnet werden, welcher dann auch angezeigt wird. Darüber hinaus wird oberhalb des jeweiligen Ausgabeformates (z. B. table) ein Accordion mit den JSON-Daten angezeigt. Hier der grundlegende Aufbau der .meta.json im JSON Syntax:
 
 <pre>
 [{
@@ -129,15 +129,15 @@ In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.txt** hinzugefügt we
 }]
 </pre>
 
-Wird diesem Format **nicht strikt gefolgt**, so kann die **.meta.txt nicht ausgelesen** werden und dementsprechend keine schönen Anzeigenamen ausgegeben werden. Zur besseren Handhabung mit dem **JSON Sytax** empfielt sich die Installation z. B. des Editors [Visual Studio Code](https://code.visualstudio.com/). Mit diesem kann auf einfach Art und Weise mit dem JSON Sytax gearbeitet werden und ein **Code Highlighting** (in der blauen Fußzeile unten rechts) zur besseren Darstellung eingestellt werden. Alternativ können auch sogenannte Online JSON Formatter und Validator wie [JSON Formatter](https://jsonformatter.curiousconcept.com/) oder [JSON Viewer](https://codebeautify.org/jsonviewer) um nur ein paar, der zahlreich vorhanden aufzuzählen, verwendet werden.
+Wird diesem Format **nicht strikt gefolgt**, so kann die **.meta.json nicht ausgelesen** werden und dementsprechend keine schönen Anzeigenamen ausgegeben werden. Zur besseren Handhabung mit dem **JSON Sytax** empfielt sich die Installation z. B. des Editors [Visual Studio Code](https://code.visualstudio.com/). Mit diesem kann auf einfach Art und Weise mit dem JSON Sytax gearbeitet werden und ein **Code Highlighting** (in der blauen Fußzeile unten rechts) zur besseren Darstellung eingestellt werden. Alternativ können auch sogenannte Online JSON Formatter und Validator wie [JSON Formatter](https://jsonformatter.curiousconcept.com/) oder [JSON Viewer](https://codebeautify.org/jsonviewer) um nur ein paar, der zahlreich vorhanden aufzuzählen, verwendet werden.
 
 ### __Sonstiges__:
 
-Wird eine rekursive Suche durchgeführt, so werden alle .meta.txt Dateien ausgelesen und geordnet nach den Verzeichnissen in einem Accordion oberhalb z. B. der Tabelle angezeigt. Falls ein Verzeichnis keine .meta.txt beinhaltet so ist der Anzeigename gleich dem Dateinamen. Um nicht unötig viele .meta.txt Dateien pflegen zu müssen, bietet sich an im Ausgangsverzeichnis eine einzige .meta.txt anzulegen und auch für die unterhalb dieses Verzeichnis liegende Dokumente einen Dateiennamen mit dem entsprechenden Anzeigenamen zu pflegen.
+Wird eine rekursive Suche durchgeführt, so werden alle .meta.json Dateien ausgelesen und geordnet nach den Verzeichnissen in einem Accordion oberhalb z. B. der Tabelle angezeigt. Falls ein Verzeichnis keine .meta.json beinhaltet so ist der Anzeigename gleich dem Dateinamen. Um nicht unötig viele .meta.json Dateien pflegen zu müssen, bietet sich an im gewünschten Ausgangsverzeichnis eine einzige .meta.json anzulegen und auch für die unterhalb dieses Verzeichnis liegende Dokumente einen Dateiennamen mit dem entsprechenden Anzeigenamen zu pflegen.
 
 ### __Falls das Plugin gar nicht will - Ruhe bewahren__:
 
 - Überprüfen Sie zunächst einmal den Shortcode und die darin übergebenen Werte.
-- Beim JSON-Syntax der .meta.txt hat man sich schnell vertippt. Nutzen Sie stets einen JSON Formatter zur Kontrolle. (siehe oben)
-- Viele .meta.txt Dateien bedeuten sehr viel Pflegeaufwand. Legen Sie eine .meta.txt Datei in das Ausgangsverzeichnis. In dieser führen Sie alle Datei- und Anzeigenamen der darunterliegenden Dateien auf.
+- Beim JSON-Syntax der .meta.json hat man sich schnell vertippt. Nutzen Sie stets einen JSON Formatter zur Kontrolle. (siehe oben)
+- Viele .meta.json Dateien bedeuten sehr viel Pflegeaufwand. Legen Sie eine .meta.json Datei in das gewünschte Ausgangsverzeichnis. In dieser führen Sie alle Datei- und Anzeigenamen der darunterliegenden Dateien auf.
 - __Last but not least__, spielen Sie ein wenig mit dem Plugin. Viel Spass!
