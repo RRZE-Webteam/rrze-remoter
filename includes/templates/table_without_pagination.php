@@ -141,3 +141,5 @@ if($header) { ?>
     </tr>
 
 <?php } ?>
+
+<?php if($header) echo '</table>'; ?>

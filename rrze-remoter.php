@@ -227,7 +227,8 @@ function custom_libraries_scripts() {
         wp_enqueue_script( 'rrze-remoter-scriptsjs' );
         
         $current_theme = wp_get_theme();
-        if($current_theme == 'RRZE 2015') {
+        $themes = array('RRZE 2015');
+        if(in_array('RRZE 2015', $themes)) {
             wp_enqueue_style( 'rrze-remoter-rrze-theme-stylescss' );
             wp_enqueue_script( 'flexsliderjs' );
             wp_enqueue_script( 'fancyboxjs' );
