@@ -84,12 +84,14 @@ class Class_Grab_Remote_Files {
     
     public static function search_for_api_key($domain, $api_key) {
         $handle = fopen('http://'. $domain .'/.hash', 'r');
-        $valid = false; 
-        while (($buffer = fgets($handle)) !== false) {
-            if (strpos($buffer, trim($api_key)) !== false) {
-                $valid = TRUE;
-                break;
-            }      
+        $valid = false;
+        if($api_key) {
+            while (($buffer = fgets($handle)) !== false) {
+                if (strpos($buffer, trim($api_key)) !== false) {
+                    $valid = TRUE;
+                    break;
+                }
+            }
         }
         fclose($handle);
         
