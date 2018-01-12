@@ -1,7 +1,14 @@
 <?php
 
+$current_theme = wp_get_theme();
+$themes = array('FAU-Einrichtungen', 'FAU-Natfak', 'FAU-Philfak', 'FAU-RWFak', 'FAU-Techfak', 'FAU-Medfak');
+if(!in_array($current_theme, $themes)) {
+echo '';
+} else {
 global $usejslibs;
 $usejslibs['flexslider'] = true;
+}
+
 
 $id = uniqid();
 $data = $this->remote_data;
@@ -21,7 +28,7 @@ function createSlider($data, $domain, $id) {
         $g .= '<div class="gallery-image-caption">Bild in Originalgröße (1153px). Ausrichtung keine.<br />';
         $g .= '<span class="linkorigin">';
         $g .= '(<a href="http://'. $domain . $value['dir'] . $value['name'] . '" title="'. $iptcdata["2#105"][0] . ' ' . $iptcdata["2#120"][0] . ' ' . $iptcdata["2#085"][0] .'" class="lightbox" rel="lightbox-' . $id . '">Vergrößern</a>)';
-        $g .= '<div>' . $iptcdata["2#105"][0] . '<br/>' . $iptcdata["2#120"][0] . '<br/>' . $iptcdata["2#085"][0] . '</div>';
+        $g .= '<div>' . $iptcdata["2#105"][0] . '<br>' . $iptcdata["2#120"][0] . '<br>' . $iptcdata["2#085"][0] . '</div></span>';
         $g .= '</li>';
     
     }
