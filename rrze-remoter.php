@@ -4,7 +4,7 @@
  * Plugin Name:     Remoter
  * Plugin URI:      https://gitlab.rrze.fau.de/rrze-webteam/rrze-remoter.git
  * Description:     Liest den DirectoryIndex eines Servers remote aus und gibt die Daten strukturiert auf einer Seite aus.
- * Version:         1.2.0
+ * Version:         1.3.0
  * Author:          RRZE-Webteam
  * Author URI:      https://blogs.fau.de/webworking/
  * License:         GNU General Public License v2
@@ -81,8 +81,8 @@ function activation() {
     //register_remoter_post_type();
     //flush_rewrite_rules();
     
-    //$caps_remoter = get_caps('remoter');
-    //add_caps('administrator', $caps_remoter);
+    $caps_remoter = get_caps('remoter');
+    add_caps('administrator', $caps_remoter);
 
     // Ab hier können die Funktionen hinzugefügt werden, 
     // die bei der Aktivierung des Plugins aufgerufen werden müssen.
@@ -98,9 +98,9 @@ function deactivation() {
     // bei der Deaktivierung des Plugins aufgerufen werden müssen.
     // Bspw. wp_clear_scheduled_hook, flush_rewrite_rules, etc.
     
-    //$caps_remoter = get_caps('remoter');
-    //remove_caps('administrator',  $caps_remoter);
-    //flush_rewrite_rules();
+    $caps_remoter = get_caps('remoter');
+    remove_caps('administrator',  $caps_remoter);
+    flush_rewrite_rules();
 }
 
 /*
@@ -138,7 +138,7 @@ function system_requirements() {
     }
     
 }
-
+*/
 function get_caps($cap_type) {
     $caps = array(
         "edit_" . $cap_type,
@@ -172,7 +172,7 @@ function remove_caps($role, $caps) {
         $role->remove_cap($cap);
     }        
 }    
-*/
+
 
 /*
  * Wird durchgeführt, nachdem das WP-Grundsystem hochgefahren
@@ -218,11 +218,25 @@ function custom_libraries_scripts() {
     wp_register_script( 'rrze-remoter-mainjs', plugins_url( 'rrze-remoter/assets/js/rrze-remoter-main.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_script( 'rrze-remoter-scriptsjs', plugins_url( 'rrze-remoter/assets/js/rrze-remoter-scripts.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_style( 'rrze-remoter-stylescss', plugins_url( 'rrze-remoter/assets/css/styles.css', dirname(__FILE__) ) );
+    wp_register_style( 'rrze-remoter-rrze-theme-stylescss', plugins_url( 'rrze-remoter/assets/css/rrze-styles.css', dirname(__FILE__) ) );
+    wp_register_script( 'flexsliderjs', plugins_url( 'rrze-remoter/assets/js/jquery.flexslider.js', dirname(__FILE__)), array('jquery'),'', true);
+    wp_register_script( 'fancyboxjs', plugins_url( 'rrze-remoter/assets/js/jquery.fancybox.js', dirname(__FILE__)), array('jquery'),'', true);
     
     if( is_page() && has_shortcode( $post->post_content, 'remoter') ) {
         wp_enqueue_script( 'rrze-remoter-mainjs' );
         wp_enqueue_script( 'rrze-remoter-scriptsjs' );
-        wp_enqueue_style( 'rrze-remoter-stylescss' );
+        
+        $current_theme = wp_get_theme();
+        $themes = array('FAU-Einrichtungen', 'FAU-Natfak', 'FAU-Philfak', 'FAU-RWFak', 'FAU-Techfak', 'FAU-Medfak');
+        
+        if(!in_array($current_theme, $themes)) {
+            wp_enqueue_style( 'rrze-remoter-rrze-theme-stylescss' );
+            wp_enqueue_script( 'flexsliderjs' );
+            wp_enqueue_script( 'fancyboxjs' );
+        } else {
+            wp_enqueue_style( 'rrze-remoter-stylescss' );
+        } 
+       
     }
     
     wp_localize_script( 'rrze-remoter-mainjs', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));

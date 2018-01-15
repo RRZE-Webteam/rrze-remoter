@@ -4,4 +4,5 @@ jQuery(document).ready(function($){
       $listItems.removeClass('active');
       $(this).addClass('active');  
     });
+    $('a.lightbox').fancybox({ helpers: { title: { type: 'outside'}}});
 });

@@ -1,0 +1,17 @@
+/*
+* SCSS Files for RRZE-Theme
+*/
+.image-gallery-carousel ul.slides li:hover, .image-gallery-carousel ul.slides li:focus, .image-gallery-carousel ul.slides li.flex-active-slide {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@import "_fancybox";
+@import "_glossar";
+@import "_gallery";
+@import "_pagination";
+@import "_imagetable";
+@import "_flexslider";

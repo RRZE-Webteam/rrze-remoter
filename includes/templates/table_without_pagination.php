@@ -1,19 +1,19 @@
 <?php if($shortcodeValues['showInfo']) { ?>
-    <?php for($i = 0; $i < sizeof($meta); $i++) { ?> 
-        <?php if(!empty($meta[$i]['meta']) && $header == 1) { ?>
+    <?php for($i = 0; $i < sizeof($metadata); $i++) { ?> 
+        <?php if(!empty($metadata[$i][0]) && $header == 1) { ?>
           <?php $accordionId = uniqid(); ?>
             <div class="accordion" id="accordion-1">
             <div class="accordion-group">
-                 <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $accordionId ?>" href="#collapse_<?php echo $accordionId ?>"><?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['titel'] : '');  ?></a></div>
+                 <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-<?php echo $accordionId ?>" href="#collapse_<?php echo $accordionId ?>"><?php echo (!empty($metadata[$i][0]['directory']['titel']) ? $metadata[$i][0]['directory']['titel'] : '');  ?></a></div>
                     <div id="collapse_<?php echo $accordionId ?>" class="accordion-body" style="display: none;">
                         <div class="accordion-inner clearfix">
                             <table>
                                 <tr>
                                     <td colspan="2"><strong>Beschreibung: </strong>
-                                        <?php echo (!empty($meta[$i]['meta']['directory']['titel']) ? $meta[$i]['meta']['directory']['beschreibung'] : '');  ?>
+                                        <?php echo (!empty($metadata[$i][0]['directory']['titel']) ? $metadata[$i][0]['directory']['beschreibung'] : '');  ?>
                                     </td>
                                 </tr>
-                                <?php foreach($meta[$i]['meta']['directory']['file-aliases'][0] as $key => $value) { ?>
+                                <?php foreach($metadata[$i][0]['directory']['file-aliases'][0] as $key => $value) { ?>
                                 <?php $meta_store[] = array(
                                     'key'   => $value,
                                     'value' => $key
@@ -32,7 +32,7 @@
             </div>  
         <?php } ?>
     <?php } ?>
- <?php } ?>
+<?php } ?>
 <?php
 if($header) { ?>
 <table>
@@ -63,10 +63,6 @@ if($header) { ?>
     <?php } ?>
     </tr>
 <?php } ?>
-<?php $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'change_time' : 'name'); ?>
-<?php $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC); ?>
-<?php $data = RRZE\Remoter\Class_Help_Methods::deleteMetaTxtEntries($data); ?>
-<?php array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);?>
 <?php for($i = 0; $i <sizeof($data); $i++) { ?> 
     <tr>    
 
@@ -98,49 +94,39 @@ if($header) { ?>
                 <?php break;
                 case 'download': ?>
                         
-                    <td align="center"><a href="http://<?php echo $domain . $data[$i]['image'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                    <td align="center"><a href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
             
                 <?php break;
                 case 'directory': ?>
                     
-                    <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data[$i]['dir']) ?></td>
+                    <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data[$i]['path']) ?></td>
                     
                 <?php break;
                 case 'name': ?>
                     <?php $extension = $data[$i]['extension']; ?>
                     <?php if ($shortcodeValues['link']) { ?> 
-                        <?php $path = basename($data[$i]['path']); ?>
+                        <?php $path = $data[$i]['name']; ?>
                         <?php $store = $meta_store; ?> 
                         <?php $file = $shortcodeValues['file'] ?>
                         <?php $imgFormats = RRZE\Remoter\Class_Help_Methods::getImageFormats(); ?>     
                             
                         <?php if (!in_array($extension, $imgFormats)) { ?>
                         <td>
-                            <a href="http://<?php echo $domain . $data[$i]['image'] ?>">
-                                <?php
-                                    echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
-                                ?>
-                            </a>
+                            <a href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file); ?></a>
                         </td> 
                         <?php } else { ?>
                         <td>
-                            <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data[$i]['image'] ?>">
-                                <?php
-                                    echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
-                                ?>
-                            </a>
+                            <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);?></a>
                         </td>  
                         <?php } ?>
 
-                        <?php } else { ?>
-
-                        <td><?php echo str_replace('_',' ', basename($data[$i]['path'])) ?></td>  
-
-                        <?php  }
+                    <?php } else { ?>
+                        <td><?php echo str_replace('_',' ', $data[$i]['name']) ?></td>  
+                    <?php  }
                     break;
                 case 'date': ?>
                 
-                    <td><?php echo date('j F Y', $data[$i]['change_time']) ?></td>
+                        <td><?php echo date("d.m.Y", $data[$i]['date']) ?></td>
                     
                 <?php break;
         
@@ -155,3 +141,5 @@ if($header) { ?>
     </tr>
 
 <?php } ?>
+
+<?php if($header) echo '</table>'; ?>
