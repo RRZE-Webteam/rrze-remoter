@@ -26,3 +26,10 @@ i.fa.fa-arrow-circle-down {
 
 .pagination.pagebreaks > p {
   display: inline; }
+
+.image-gallery-carousel ul.slides li:hover, .image-gallery-carousel ul.slides li:focus, .image-gallery-carousel ul.slides li.flex-active-slide {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
