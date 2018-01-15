@@ -511,16 +511,16 @@ class Class_Build_Shortcode {
         
             foreach($columns as $key => $column) {
                 
-                $dir = pathinfo($data[$i]['image']);
+                /*$dir = pathinfo($data[$i]['image']);
                 $titel = explode("/", $dir['dirname']);
-                $folder = $titel[count($titel)-1];
+                $folder = $titel[count($titel)-1];*/
+                $extension = $data[$i]['extension'];
                 
                 switch($column) {
                     case 'size':
                         $t .= '<td>' . Class_Help_Methods::formatSize($data[$i]['size']) . '</td>';
                         break;
                     case 'type':
-                        $extension = $data[$i]['extension'];
                         if ($extension == 'pdf') {
                             $t .= '<td align="center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></td>';
                         } elseif ($extension == 'pptx' || $extension =='ppt') {
