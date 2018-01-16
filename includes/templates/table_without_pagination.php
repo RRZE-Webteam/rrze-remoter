@@ -94,7 +94,7 @@ if($header) { ?>
                 <?php break;
                 case 'download': ?>
                         
-                    <td align="center"><a href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                    <td align="center"><a class="no_mtli" rel="no_mtli" href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
             
                 <?php break;
                 case 'directory': ?>
@@ -104,15 +104,16 @@ if($header) { ?>
                 <?php break;
                 case 'name': ?>
                     <?php $extension = $data[$i]['extension']; ?>
+                    <?php $replaced_name = RRZE\Remoter\Class_Help_Methods::convertUmlauts($data[$i]['name']) ?>
                     <?php if ($shortcodeValues['link']) { ?> 
-                        <?php $path = $data[$i]['name']; ?>
+                        <?php $path = $replaced_name ?>
                         <?php $store = $meta_store; ?> 
                         <?php $file = $shortcodeValues['file'] ?>
                         <?php $imgFormats = RRZE\Remoter\Class_Help_Methods::getImageFormats(); ?>     
                             
                         <?php if (!in_array($extension, $imgFormats)) { ?>
                         <td>
-                            <a href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file); ?></a>
+                            <a class="no_mtli" rel="no_mtli" href="http://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file); ?></a>
                         </td> 
                         <?php } else { ?>
                         <td>

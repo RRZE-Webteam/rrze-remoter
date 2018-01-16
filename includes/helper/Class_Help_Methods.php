@@ -51,6 +51,17 @@ class Class_Help_Methods {
         
     }
     
+    public static function convertUmlauts($name) {
+        $replaced_name = str_replace( 
+            array('ae','oe','ue','Ae','Oe','Ue','Ã'), 
+            array( 'ä','ö','ü','Ä','Ö','Ü','Ä'), 
+            $name
+        );
+        
+        return $replaced_name;
+        
+    }
+    
     public static function deleteMetaTxtEntries($meta) {
         foreach($meta as $key => $value) {
             if($value['name'] === '.meta.json') {
