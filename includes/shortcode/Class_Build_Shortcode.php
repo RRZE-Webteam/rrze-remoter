@@ -37,7 +37,8 @@ class Class_Build_Shortcode {
             'show'              => 'name,download',
             'showheader'        => '0',
             'filter'            => '',
-            'showmetainfo'      => '1'
+            'showmetainfo'      => '1',
+            'errormsg'          => '1'
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -71,7 +72,8 @@ class Class_Build_Shortcode {
             'showHeader'    => $this->remote_server_shortcode['showheader'],
             'file'          => $this->remote_server_shortcode['file'],
             'showInfo'      => $this->remote_server_shortcode['showmetainfo'],
-            'alias'         => $this->remote_server_shortcode['alias']
+            'alias'         => $this->remote_server_shortcode['alias'],
+            'errormsg'      => $this->remote_server_shortcode['errormsg']
         );
         
         $the_query = new \WP_Query( $query_arguments);
@@ -179,7 +181,12 @@ class Class_Build_Shortcode {
                     }
                     
                 } else {
-                    echo 'Es konnten keine Daten auf dem Server gefunden werden!';
+                    $error = $shortcodeValues['errormsg'];
+                    if($error) {
+                        echo 'Es konnten keine Daten auf dem Server gefunden werden!';
+                    } else {
+                        echo '';
+                    }
                 }
                    
             }
