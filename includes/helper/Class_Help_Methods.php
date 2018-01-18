@@ -53,8 +53,8 @@ class Class_Help_Methods {
     
     public static function convertUmlauts($name) {
         $replaced_name = str_replace( 
-            array('ae','oe','ue','Oe','Ue','Ã','AeSa', 'AeS', 'Ae'), 
-            array( 'ä','ö','ü','Ö','Ü','Ä', 'Änderungssatzung', 'Änderungssatzung', 'Ä'), 
+            array('ae','oe','ue','Oe','Ue','Ã','Ae','idF'), 
+            array( 'ä','ö','ü','Ö','Ü','Ä','Ä','i.d.F.'), 
             $name
         );
         
