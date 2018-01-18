@@ -23,21 +23,23 @@ class Class_Build_Shortcode {
     public function shortcode($atts) {
         
         $this->remote_server_shortcode = shortcode_atts( array(
-            'id'                => '',
-            'file'              => '',
-            'index'             => '',
-            'recursiv'          => '1',
-            'itemsperpage'      => '5',
-            'filetype'          => 'pdf',
-            'link'              => '1',
-            'alias'             => '',
-            'view'              => 'table',
-            'orderby'           => 'name',
-            'order'             => 'asc',
-            'show'              => 'name,download',
-            'showheader'        => '0',
-            'filter'            => '',
-            'showmetainfo'      => '1'
+            'id'                    => '',
+            'file'                  => '',
+            'index'                 => '',
+            'recursiv'              => '1',
+            'itemsperpage'          => '5',
+            'filetype'              => 'pdf',
+            'link'                  => '1',
+            'alias'                 => '',
+            'view'                  => 'table',
+            'orderby'               => 'name',
+            'order'                 => 'asc',
+            'show'                  => 'name,download',
+            'showheader'            => '0',
+            'filter'                => '',
+            'showmetainfo'          => '1',
+            'errormsg'              => '1',
+            'fileheader'            => '0'
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -62,16 +64,18 @@ class Class_Build_Shortcode {
         global $post;
         
         $shortcodeValues = array(
-            'fileIndex'     => $this->remote_server_shortcode['index'],
-            'view'          => $this->remote_server_shortcode['view'],
-            'recursive'     => $this->remote_server_shortcode['recursiv'],
-            'filetype'      => $this->remote_server_shortcode['filetype'],
-            'showColumns'   => $this->remote_server_shortcode['show'],
-            'link'          => $this->remote_server_shortcode['link'],
-            'showHeader'    => $this->remote_server_shortcode['showheader'],
-            'file'          => $this->remote_server_shortcode['file'],
-            'showInfo'      => $this->remote_server_shortcode['showmetainfo'],
-            'alias'         => $this->remote_server_shortcode['alias']
+            'fileIndex'         => $this->remote_server_shortcode['index'],
+            'view'              => $this->remote_server_shortcode['view'],
+            'recursive'         => $this->remote_server_shortcode['recursiv'],
+            'filetype'          => $this->remote_server_shortcode['filetype'],
+            'showColumns'       => $this->remote_server_shortcode['show'],
+            'link'              => $this->remote_server_shortcode['link'],
+            'showHeader'        => $this->remote_server_shortcode['showheader'],
+            'file'              => $this->remote_server_shortcode['file'],
+            'showInfo'          => $this->remote_server_shortcode['showmetainfo'],
+            'alias'             => $this->remote_server_shortcode['alias'],
+            'errormsg'          => $this->remote_server_shortcode['errormsg'],
+            'fileheader'        => $this->remote_server_shortcode['fileheader']
         );
         
         $the_query = new \WP_Query( $query_arguments);
@@ -153,6 +157,7 @@ class Class_Build_Shortcode {
                             break;
                         case 'table':
                             ob_start();
+                            $fileheader = $shortcodeValues['fileheader'];
                             $header = $shortcodeValues['showHeader'];
                             $order = $this->remote_server_shortcode['order'];
                             $orderby = $this->remote_server_shortcode['orderby'];
@@ -179,7 +184,12 @@ class Class_Build_Shortcode {
                     }
                     
                 } else {
-                    echo 'Es konnten keine Daten auf dem Server gefunden werden!';
+                    $error = $shortcodeValues['errormsg'];
+                    if($error) {
+                        echo 'Es konnten keine Daten auf dem Server gefunden werden!';
+                    } else {
+                        echo '';
+                    }
                 }
                    
             }

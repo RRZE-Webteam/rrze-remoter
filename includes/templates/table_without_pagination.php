@@ -44,7 +44,12 @@ if($header) { ?>
                 <th><?php _e('Verzeichnisname', 'rrze-remoter');?></th>
             <?php break;
             case 'name': ?>
-                <th><?php _e('Dateiname', 'rrze-remoter');?></th>
+                <th><?php if($fileheader) { 
+                    echo RRZE\Remoter\Class_Help_Methods::getFolder($data[0]['path']); 
+                } else {
+                    _e('Dateiname', 'rrze-remoter');
+                }
+                ?></th>
             <?php break;
             case 'date': ?>
                 <th><?php _e('Erstellungsdatum', 'rrze-remoter');?></th>
