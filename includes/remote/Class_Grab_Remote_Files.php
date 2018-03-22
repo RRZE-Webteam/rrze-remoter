@@ -83,18 +83,24 @@ class Class_Grab_Remote_Files {
     }
     
     public static function search_for_api_key($domain, $api_key) {
-        $handle = fopen('http://'. $domain .'/.hash', 'r');
-        $valid = false;
-        if($api_key) {
-            while (($buffer = fgets($handle)) !== false) {
-                if (strpos($buffer, trim($api_key)) !== false) {
-                    $valid = TRUE;
-                    break;
-                }
-            }
-        }
-        fclose($handle);
         
-        return $valid;
+        $responseRequest = wp_remote_get( 'http://' . $domain . '/request.php?' .
+            '&apikey=' . $api_key, 
+            array( 'timeout' => 120, 'httpversion' => '1.1' )
+        );
+        
+        $status_code = wp_remote_retrieve_response_code( $responseRequest );
+        
+        echo '<pre>';
+        print_r($responseRequest['body']);
+        echo '</pre>';
+        
+        if(200 == $status_code && $responseRequest['body'] == 1) {
+            return true;
+        } else {
+            return false;
+        }
+        
     }
+    
 }
