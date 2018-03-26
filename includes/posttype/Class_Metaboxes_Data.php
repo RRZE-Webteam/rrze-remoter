@@ -45,6 +45,9 @@ class Class_Metaboxes_Data {
                     '4'         => array(
                              'value' => 'zuv.fau.de'
                     ),
+                    '5'         => array(
+                             'value' => 'doc.zuv.fau.de'
+                    ),
                 )
             )                        
         );
