@@ -39,7 +39,9 @@ class Class_Build_Shortcode {
             'filter'                => '',
             'showmetainfo'          => '1',
             'errormsg'              => '1',
-            'fileheader'            => '0'
+            'fileheader'            => '0',
+            'gallerytitle'          => '1',
+            'gallerydescription'    => '1'
         ), $atts );
         
         return $this->query_args($this->remote_server_shortcode);
@@ -75,7 +77,9 @@ class Class_Build_Shortcode {
             'showInfo'          => $this->remote_server_shortcode['showmetainfo'],
             'alias'             => $this->remote_server_shortcode['alias'],
             'errormsg'          => $this->remote_server_shortcode['errormsg'],
-            'fileheader'        => $this->remote_server_shortcode['fileheader']
+            'fileheader'        => $this->remote_server_shortcode['fileheader'],
+            'gallerytitle'      => $this->remote_server_shortcode['gallerytitle'],
+            'gallerydescription'=> $this->remote_server_shortcode['gallerydescription']
         );
         
         $the_query = new \WP_Query( $query_arguments);
@@ -109,6 +113,8 @@ class Class_Build_Shortcode {
                     switch ($view) {
                         case 'gallery':
                             ob_start();
+                            $gallery_title = $shortcodeValues['gallerytitle'];
+                            $gallery_description = $shortcodeValues['gallerydescription'];
                             include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
                             $content = ob_get_clean();
                             return $content;

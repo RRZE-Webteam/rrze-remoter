@@ -13,7 +13,7 @@ $usejslibs['flexslider'] = true;
 $id = uniqid();
 $data = $this->remote_data;
 
-function createSlider($data, $domain, $id) {
+function createSlider($data, $domain, $id, $gallerytitle, $gallerydescription) {
 
     $g  = '<div id="slider-' . $id . '" class="image-gallery-slider">';
     $g .= '<ul class="slides">';
@@ -25,10 +25,18 @@ function createSlider($data, $domain, $id) {
         $iptcdata    = iptcparse($info["APP13"]);
         
         $g .= '<li><img src="http://'. $domain . $value['dir'] . $value['name'] . '"/>';
-        $g .= '<div class="gallery-image-caption">Bild in Originalgröße (1153px). Ausrichtung keine.<br />';
+        $g .= '<div class="gallery-image-caption">';
         $g .= '<span class="linkorigin">';
-        $g .= '(<a href="http://'. $domain . $value['dir'] . $value['name'] . '" title="'. $iptcdata["2#105"][0] . ' ' . $iptcdata["2#120"][0] . ' ' . $iptcdata["2#085"][0] .'" class="lightbox" rel="lightbox-' . $id . '">Vergrößern</a>)';
-        $g .= '<div>' . $iptcdata["2#105"][0] . '<br>' . $iptcdata["2#120"][0] . '<br>' . $iptcdata["2#085"][0] . '</div></span>';
+        $g .= '(<a href="http://'. $domain . $value['dir'] . $value['name'] . '" class="lightbox" rel="lightbox-' . $id . '">Vergrößern</a>)';
+        if($gallerytitle && $gallerydescription) {
+            $g .= '<div>' . $iptcdata["2#105"][0]  . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
+        } elseif($gallerytitle && !$gallerdescription) {
+            $g .= '<div>' . $iptcdata["2#105"][0] .'</div></span>';
+        } elseif(!$gallerytitle && $gallerydescription) {
+            $g .= '<div>' . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
+        } elseif(!$gallerytitle && !$gallerdescription) {
+            $g .= '<div></div>';
+        }    
         $g .= '</li>';
     
     }
@@ -83,7 +91,7 @@ function createCarousel($data, $domain, $id) {
 
 }*/
 
-createSlider($data, $domain, $id);
+createSlider($data, $domain, $id, $gallery_title, $gallery_description);
 createCarousel($data, $domain, $id);
 
 ?>

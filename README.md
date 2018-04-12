@@ -63,6 +63,8 @@ Die Spalten werden genau in der Reihenfolge ausgegeben, wie sie angegeben werden
 - **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader=1). Bei showheader=0 muss der Tabellenkopf selbst über den TinyMCE erzeugt werden. (Default 0)
 - **filter** - Eine zusätzliche Möglichkeit das Suchergebnis einzuschränken. Wird filter gesetzt, so müssen auch ein oder mehrere filetypes (z. B. pdf) gesetzt werden. (Default leer)
 - **showmetainfo** - Die Ausgabe der .meta.json Datei wird oberhalb z. B. der Tabelle in einem Accrodion angezeigt und kann ein- (1) und ausgeblendet (0) werden. (Default 1)
+- **gallerytitle** - Unterhalb des Gallerie Bildes wird der IPTC-Titel angezeigt (Default 1)
+- **gallerydescription** - Unterhalb der Gallerie Beschreibung wird die IPTC-Beschreibung angezeigt (Default 1)
 
 ### __Beispiele für mögliche Shortcodes:__
 
