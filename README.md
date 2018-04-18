@@ -42,7 +42,8 @@ müssen auf dem Remote-Server im Root-Verzeichnis des Webservers abgelegt werden
 - die Tabelle mit Pagination (pagination), 
 - eine Tabelle ohne Pagination (view="table" mit showheader=1), 
 - eine Tablle mit Html-Header im TinyMCE (view="table" mit showheader=0)
-- ein Glossar
+- ein Glossar (view="glossary")
+- eine Liste (view="list") Default
 ```
 
 - **orderby** - Hier kann die Spalte ausgewählt werden nach welcher sortiert wird. (Sortierung möglich für die Spalten: name, size, date) (Default name)
