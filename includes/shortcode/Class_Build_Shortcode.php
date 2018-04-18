@@ -186,7 +186,10 @@ class Class_Build_Shortcode {
                             return $content;
                             break;
                         default:
+                            ob_start();
                             include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
+                            $content = ob_get_clean();
+                            return $content;
                     }
                     
                 } else {
