@@ -4,7 +4,7 @@
  * Plugin Name:     Remoter
  * Plugin URI:      https://gitlab.rrze.fau.de/rrze-webteam/rrze-remoter.git
  * Description:     Liest den DirectoryIndex eines Servers remote aus und gibt die Daten strukturiert auf einer Seite aus.
- * Version:         1.3.6
+ * Version:         1.3.7
  * Author:          RRZE-Webteam
  * Author URI:      https://blogs.fau.de/webworking/
  * License:         GNU General Public License v2
@@ -190,15 +190,12 @@ function loaded() {
     // Ab hier können weitere Funktionen bzw. Klassen angelegt werden.
     autoload();
     
-    $remoter_custom_post_type   =   new Class_Custom_Post_Type_Server();
-    $remoter_create_metaboxes   =   new Class_Create_Metaboxes();
-    $remoter_customize_list     =   new Class_Customize_List_View();
-    $remoter_add_submenu        =   new Class_Create_Post_Type_Submenu_Page();
-   
-    
-    $remoter_get_data   =   new Class_Grab_Remote_Files();
-    $remoter_shortcode  =   new Class_Build_Shortcode();
-    
+    $remoter_custom_post_type           =   new Class_Custom_Post_Type_Server();
+    $remoter_customize_list             =   new Class_Customize_List_View();
+    $remoter_add_submenu                =   new Class_Create_Post_Type_Submenu_Page();
+    $remoter_get_data                   =   new Class_Grab_Remote_Files();
+    $remoter_shortcode                  =   new Class_Build_Shortcode();
+    $remoter_create_metaboxes           =   new Class_Create_Metaboxes();
 }
 
 /*
