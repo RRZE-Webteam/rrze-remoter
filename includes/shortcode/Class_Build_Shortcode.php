@@ -107,7 +107,7 @@ class Class_Build_Shortcode {
                     
                     $meta_store = array();
                     //array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
-                    date_default_timezone_set('Europe/Berlin');
+                    #date_default_timezone_set('Europe/Berlin');
                     $order = $this->remote_server_shortcode['order'];
                     $orderby = $this->remote_server_shortcode['orderby'];
                     switch ($view) {

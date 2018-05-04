@@ -191,19 +191,11 @@ function loaded() {
     autoload();
     
     $remoter_custom_post_type           =   new Class_Custom_Post_Type_Server();
-    global $pagenow;
-    #global $post;
-  
     $remoter_customize_list             =   new Class_Customize_List_View();
     $remoter_add_submenu                =   new Class_Create_Post_Type_Submenu_Page();
-   
-    
     $remoter_get_data                   =   new Class_Grab_Remote_Files();
     $remoter_shortcode                  =   new Class_Build_Shortcode();
-    #if ($pagenow == 'post-new.php' || ($pagenow == 'post.php' && $_GET['action'] == 'edit')){ //&& $post_type == 'remoter' && $_GET['action'] == 'edit' ) {
-        $remoter_create_metaboxes       =   new Class_Create_Metaboxes();
-    #}
-    
+    $remoter_create_metaboxes           =   new Class_Create_Metaboxes();
 }
 
 /*
@@ -245,10 +237,4 @@ function custom_libraries_scripts() {
     }
     
     wp_localize_script( 'rrze-remoter-mainjs', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
-}
-
-function is_post_type($type){
-    global $wp_query;
-    if($type == get_post_type($wp_query->post->ID)) return true;
-    return false;
 }
