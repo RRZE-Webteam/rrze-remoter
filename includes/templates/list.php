@@ -4,7 +4,11 @@ $list = '<ul>';
 
 $id = uniqid();
 
-foreach ($this->remote_data as $key => $value) {
+$sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
+$sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
+array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);
+
+foreach ($data as $key => $value) {
 
     $list .= '<li>' . getIcon($value['name']) . ' <a href="http://'. $domain . $value['dir'] . $value['name'] . '">' . replaceCharacter(changeUmlauts($value['name'])) . '</a> (' . getSize($value['size']) . ')</li>';
 

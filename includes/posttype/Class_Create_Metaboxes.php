@@ -12,21 +12,24 @@ class Class_Create_Metaboxes {
         add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 1 );
     }
     
-
     public function adding_meta_box() {
+        global $post;
+        
+        if($post->post_type == 'remoter') {
 
-        foreach ( $this->data as $box )  {
+            foreach ( $this->data as $box )  {
 
-            add_meta_box( 
-                $box['id'], 
-                $box['title'],
-                array( $this, 'metabox_callback'),
-                $box['post_type'],
-                $box['context'],
-                $box['priority'],
-                $box['args']
-            );
+                add_meta_box( 
+                    $box['id'], 
+                    $box['title'],
+                    array( $this, 'metabox_callback'),
+                    $box['post_type'],
+                    $box['context'],
+                    $box['priority'],
+                    $box['args']
+                );
 
+            }
         }
 
     }
@@ -91,12 +94,17 @@ class Class_Create_Metaboxes {
     
 
     public function save_meta_boxes( $post_id ) { 
-        if( $_POST ) {
-            foreach( $this->data as $box ) {
-                if( isset($_POST[$box['id']]) ) { 
-                    update_post_meta( $post_id, $box['id'], $_POST[$box['id']] );
-                }
-            } 
+        
+        $post  = get_post( $post_id );
+        
+        if ($post->post_type == 'remoter') {
+            if( $_POST ) {
+                foreach( $this->data as $box ) {
+                    if( isset($_POST[$box['id']]) ) { 
+                        update_post_meta( $post_id, $box['id'], $_POST[$box['id']] );
+                    }
+                } 
+            }
         }
     }
-  }
+}

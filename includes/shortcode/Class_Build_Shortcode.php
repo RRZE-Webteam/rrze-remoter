@@ -188,6 +188,7 @@ class Class_Build_Shortcode {
                         default:
                             ob_start();
                             include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
+                            $orderby = $this->remote_server_shortcode['orderby'];
                             $content = ob_get_clean();
                             return $content;
                     }
