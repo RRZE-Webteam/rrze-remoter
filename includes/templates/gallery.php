@@ -9,57 +9,48 @@ global $usejslibs;
 $usejslibs['flexslider'] = true;
 }
 
-
 $id = uniqid();
 $data = $this->remote_data;
 
-function createSlider($data, $domain, $id, $gallerytitle, $gallerydescription) {
+$g  = '<div id="slider-' . $id . '" class="image-gallery-slider">';
+$g .= '<ul class="slides">';
 
-    $g  = '<div id="slider-' . $id . '" class="image-gallery-slider">';
-    $g .= '<ul class="slides">';
-    
-    foreach ($data as $key => $value) {
-        
-        $path       = 'http://'. $domain . $value['dir'] . $value['name'] . '';
-        $imginfo    = getimagesize($path, $info);
-        $iptcdata    = iptcparse($info["APP13"]);
-        
-        $g .= '<li><img src="http://'. $domain . $value['dir'] . $value['name'] . '"/>';
-        $g .= '<div class="gallery-image-caption">';
-        $g .= '<span class="linkorigin">';
-        $g .= '(<a href="http://'. $domain . $value['dir'] . $value['name'] . '" title="' . $iptcdata["2#120"][0] . '" class="lightbox" rel="lightbox-' . $id . '">Vergrößern</a>)';
-        if($gallerytitle && $gallerydescription) {
-            $g .= '<div>' . $iptcdata["2#105"][0]  . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
-        } elseif($gallerytitle && !$gallerdescription) {
-            $g .= '<div>' . $iptcdata["2#105"][0] .'</div></span>';
-        } elseif(!$gallerytitle && $gallerydescription) {
-            $g .= '<div>' . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
-        } elseif(!$gallerytitle && !$gallerdescription) {
-            $g .= '<div></div>';
-        }    
-        $g .= '</li>';
-    
-    }
+foreach ($data as $key => $value) {
 
-    $g .= '</ul></div>';
-    echo $g;
-    
+    $path       = 'http://'. $domain . $value['dir'] . $value['name'] . '';
+    $imginfo    = getimagesize($path, $info);
+    $iptcdata    = iptcparse($info["APP13"]);
+
+    $g .= '<li><img src="http://'. $domain . $value['dir'] . $value['name'] . '"/>';
+    $g .= '<div class="gallery-image-caption">';
+    $g .= '<span class="linkorigin">';
+    $g .= '(<a href="http://'. $domain . $value['dir'] . $value['name'] . '" title="' . $iptcdata["2#120"][0] . '" class="lightbox" rel="lightbox-' . $id . '">Vergrößern</a>)';
+    if($gallerytitle && $gallerydescription) {
+        $g .= '<div>' . $iptcdata["2#105"][0]  . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
+    } elseif($gallerytitle && !$gallerdescription) {
+        $g .= '<div>' . $iptcdata["2#105"][0] .'</div></span>';
+    } elseif(!$gallerytitle && $gallerydescription) {
+        $g .= '<div>' . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
+    } elseif(!$gallerytitle && !$gallerdescription) {
+        $g .= '<div></div>';
+    }    
+    $g .= '</li>';
+
 }
 
-
-
-function createCarousel($data, $domain, $id) {
-        
-    $c = '<div id="carousel-' . $id . '" class="image-gallery-carousel">';
-    $c .= '<ul class="slides">';
+$g .= '</ul></div>';
+echo $g;
     
-    foreach ($data as $key => $value) {
-        $c .= '<li><img src="http://'. $domain . $value['dir'] . $value['name'] . '" width="120" height="80" alt=""/></li>';
-    }
-        
-    $c .='</ul></div>';
-    echo $c;
+$c = '<div id="carousel-' . $id . '" class="image-gallery-carousel">';
+$c .= '<ul class="slides">';
+
+foreach ($data as $key => $value) {
+    $c .= '<li><img src="http://'. $domain . $value['dir'] . $value['name'] . '" width="120" height="80" alt=""/></li>';
 }
+
+$c .='</ul></div>';
+echo $c;
+
 
 /*function getIptcData($data, $domain) {
     
@@ -91,11 +82,7 @@ function createCarousel($data, $domain, $id) {
 
 }*/
 
-createSlider($data, $domain, $id, $gallery_title, $gallery_description);
-createCarousel($data, $domain, $id);
-
 ?>
-<?php function setFlexslider($id) { ?>
 <script>
 jQuery(document).ready(function($) {
   $("#carousel-<?php echo $id ?>").flexslider({
@@ -125,4 +112,3 @@ jQuery(document).ready(function($) {
   });
 });
 </script>
-<?php } setFlexslider($id); ?>
