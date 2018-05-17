@@ -4,7 +4,7 @@
  * Plugin Name:     Remoter
  * Plugin URI:      https://gitlab.rrze.fau.de/rrze-webteam/rrze-remoter.git
  * Description:     Liest den DirectoryIndex eines Servers remote aus und gibt die Daten strukturiert auf einer Seite aus.
- * Version:         1.3.7
+ * Version:         1.3.8
  * Author:          RRZE-Webteam
  * Author URI:      https://blogs.fau.de/webworking/
  * License:         GNU General Public License v2

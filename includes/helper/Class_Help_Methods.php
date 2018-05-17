@@ -53,8 +53,8 @@ class Class_Help_Methods {
     
     public static function convertUmlauts($name) {
         $replaced_name = str_replace( 
-            array('ae','oe','ue','Oe','Ue','Ã','Ae','idF'), 
-            array( 'ä','ö','ü','Ö','Ü','Ä','Ä','i.d.F.'), 
+            array('ae','oe','ue','eü','Oe','Ue','Ã','Ae','idF'), 
+            array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.'), 
             $name
         );
         
@@ -187,6 +187,22 @@ class Class_Help_Methods {
         
         return $metadata;
         
+    }
+    
+    public static function replaceCharacterList($name) {
+        $newName = str_replace('_',' ', $name);
+        return $newName;
+    }
+
+    public static function changeUmlautsList($filename) {
+
+        $str = str_replace(
+            array('ae','oe','ue','Ae','Oe','Ue','Ã', 'ss'), 
+            array( 'ä','ö','ü','Ä','Ö','Ü','Ä', 'ß'),
+            $filename
+        );  
+
+        return $str;
     }
     
 }

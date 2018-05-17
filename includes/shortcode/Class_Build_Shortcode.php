@@ -113,8 +113,8 @@ class Class_Build_Shortcode {
                     switch ($view) {
                         case 'gallery':
                             ob_start();
-                            $gallery_title = $shortcodeValues['gallerytitle'];
-                            $gallery_description = $shortcodeValues['gallerydescription'];
+                            $gallerytitle = $shortcodeValues['gallerytitle'];
+                            $gallerydescription = $shortcodeValues['gallerydescription'];
                             include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
                             $content = ob_get_clean();
                             return $content;
