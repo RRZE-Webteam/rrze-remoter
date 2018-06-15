@@ -37,16 +37,17 @@ class Class_Metaboxes_Data {
                             'value' =>  'rw.fau.de'
                     ),
                     '2'         => array(
-                             'value' => 'nat.fau.de'
+                            'value' => 'nat.fau.de'
                     ),
                     '3'         => array(
-                             'value' => 'remote.localhost'
+                            'value' => 'doc.rrze.fau.de'
+                             //'value' => 'remote.localhost'
                     ),
                     '4'         => array(
-                             'value' => 'zuv.fau.de'
+                            'value' => 'zuv.fau.de'
                     ),
                     '5'         => array(
-                             'value' => 'doc.zuv.fau.de'
+                            'value' => 'doc.zuv.fau.de'
                     ),
                 )
             )                        
