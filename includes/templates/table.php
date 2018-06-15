@@ -89,7 +89,7 @@
                             <?php }
                             break; 
                         case 'download': ?>
-                            <td align="center"><a href="http://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                            <td align="center"><a href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                            <?php break;
                         case 'directory': ?>
                             <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data[$i][$j]['path']) ?></td>
@@ -104,7 +104,7 @@
                             
                                 <?php if (!in_array($extension, $imgFormats)) { ?>
                                     <td>
-                                        <a href="http://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
+                                        <a href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
                                             <?php
                                                 echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                             ?>
@@ -112,7 +112,7 @@
                                     </td> 
                                 <?php } else { ?>
                                     <td>
-                                        <a class="lightbox" rel="lightbox-' . $id . '" href="http://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
+                                        <a class="lightbox" rel="lightbox-' . $id . '" href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
                                             <?php
                                                 echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
                                             ?>

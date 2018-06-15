@@ -35,7 +35,7 @@ class Class_Grab_Remote_Files {
         
         if(self::search_for_api_key($domain, $api_key) === TRUE) {
         
-            //$result = self::csv_to_array('http://'. $domain .'/data.csv');
+            //$result = self::csv_to_array('https://'. $domain .'/data.csv');
             
             $result = self::getData($domain, $api_key);
             
@@ -93,9 +93,11 @@ class Class_Grab_Remote_Files {
     
     public static function search_for_api_key($domain, $api_key) {
         
-        $responseRequest = wp_remote_get( 'http://' . $domain . '/request.php?' .
+        $sslverify = defined('WP_DEBUG') && WP_DEBUG ? false : true;
+        
+        $responseRequest = wp_remote_get( 'https://' . $domain . '/request.php?' .
             '&apikey=' . $api_key, 
-            array( 'timeout' => 120, 'httpversion' => '1.1' )
+            array( 'timeout' => 120, 'httpversion' => '1.1', 'sslverify' => $sslverify )
         );
         
         $status_code = wp_remote_retrieve_response_code( $responseRequest );
@@ -110,9 +112,11 @@ class Class_Grab_Remote_Files {
     
     public static function getData($domain, $api_key) {
         
-        $responseRequest = wp_remote_get( 'http://' . $domain . '/request.php?' .
+        $sslverify = defined('WP_DEBUG') && WP_DEBUG ? false : true;
+        
+        $responseRequest = wp_remote_get( 'https://' . $domain . '/request.php?' .
             '&apikey=' . $api_key,   
-            array( 'timeout' => 120, 'httpversion' => '1.1' )
+            array( 'timeout' => 120, 'httpversion' => '1.1', 'sslverify' => $sslverify )
         );
         
         $status_code = wp_remote_retrieve_response_code( $responseRequest );

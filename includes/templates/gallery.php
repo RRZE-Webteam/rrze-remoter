@@ -17,14 +17,14 @@ $g .= '<ul class="slides">';
 
 foreach ($data as $key => $value) {
 
-    $path       = 'http://'. $domain . $value['dir'] . $value['name'] . '';
+    $path       = 'https://'. $domain . $value['dir'] . $value['name'] . '';
     $imginfo    = getimagesize($path, $info);
     $iptcdata    = iptcparse($info["APP13"]);
 
-    $g .= '<li><img src="http://'. $domain . $value['dir'] . $value['name'] . '"/>';
+    $g .= '<li><img src="https://'. $domain . $value['dir'] . $value['name'] . '"/>';
     $g .= '<div class="gallery-image-caption">';
     $g .= '<span class="linkorigin">';
-    $g .= '(<a href="http://'. $domain . $value['dir'] . $value['name'] . '" title="' . $iptcdata["2#120"][0] . '" class="lightbox" rel="lightbox-' . $id . '">Vergrößern</a>)';
+    $g .= '(<a href="https://'. $domain . $value['dir'] . $value['name'] . '" title="' . $iptcdata["2#120"][0] . '" class="lightbox" rel="lightbox-' . $id . '">Vergrößern</a>)';
     if($gallerytitle && $gallerydescription) {
         $g .= '<div>' . $iptcdata["2#105"][0]  . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
     } elseif($gallerytitle && !$gallerdescription) {
@@ -45,7 +45,7 @@ $c = '<div id="carousel-' . $id . '" class="image-gallery-carousel">';
 $c .= '<ul class="slides">';
 
 foreach ($data as $key => $value) {
-    $c .= '<li><img src="http://'. $domain . $value['dir'] . $value['name'] . '" width="120" height="80" alt=""/></li>';
+    $c .= '<li><img src="https://'. $domain . $value['dir'] . $value['name'] . '" width="120" height="80" alt=""/></li>';
 }
 
 $c .='</ul></div>';
@@ -54,7 +54,7 @@ echo $c;
 
 /*function getIptcData($data, $domain) {
     
-    $path       = 'http://'. $domain . $value['image'] . '';
+    $path       = 'https://'. $domain . $value['image'] . '';
     $imginfo    = getimagesize($path, $info);
     $iptcdata    = iptcparse($info["APP13"]);
     

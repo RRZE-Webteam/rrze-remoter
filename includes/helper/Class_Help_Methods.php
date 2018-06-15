@@ -176,7 +176,7 @@ class Class_Help_Methods {
         $metadata = array();
 
         foreach ($metajson as $key => $array) {
-            $meta[] = file_get_contents('http://' . $domain . $metajson[$key]['dir'] . '.meta.json');
+            $meta[] = file_get_contents('https://' . $domain . $metajson[$key]['dir'] . '.meta.json');
         }
 
         foreach ($meta as $key => $array) {

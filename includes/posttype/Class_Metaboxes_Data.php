@@ -40,7 +40,7 @@ class Class_Metaboxes_Data {
                              'value' => 'nat.fau.de'
                     ),
                     '3'         => array(
-                             'value' => 'remoter.dev'
+                             'value' => 'remote.localhost'
                     ),
                     '4'         => array(
                              'value' => 'zuv.fau.de'

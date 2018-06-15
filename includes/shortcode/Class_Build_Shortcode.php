@@ -370,7 +370,7 @@ class Class_Build_Shortcode {
                             }
                             break;
                         case 'download':
-                            $t .= '<td align="center"><a href="http://' . $host . $value['dir'] . $value['name'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                            $t .= '<td align="center"><a href="https://' . $host . $value['dir'] . $value['name'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                             break;
                         case 'directory':
                             $t .= '<td>' . Class_Help_Methods::getFolder($value['path'])  . '</td>';
@@ -383,14 +383,14 @@ class Class_Build_Shortcode {
                             
                                 if (!in_array($extension, $imgFormats)) {
                                     $t .= '<td>';
-                                    $t .= '<a href="http://' . $host . $value['dir'] . $value['name'] . '">';
+                                    $t .= '<a href="https://' . $host . $value['dir'] . $value['name'] . '">';
                                     $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
                                     $t .= '</a>';
                                     $t .= '</td>'; 
 
                                 } else {
                                     $t .= '<td>';
-                                    $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $value['dir'] . $value['name'] .'">';
+                                    $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="https://' . $host . $value['dir'] . $value['name'] .'">';
                                     $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
                                     $t .= '</a>';
                                     $t .= '</td>';  
@@ -556,7 +556,7 @@ class Class_Build_Shortcode {
                         }
                         break;
                     case 'download':
-                        $t .= '<td align="center"><a href="http://' . $host . $data[$i]['dir'] .  $data[$i]['name'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
+                        $t .= '<td align="center"><a href="https://' . $host . $data[$i]['dir'] .  $data[$i]['name'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                         break;
                     case 'directory':
                         $t .= '<td>' . Class_Help_Methods::getFolder($data[$i]['path']) . '</td>';
@@ -568,14 +568,14 @@ class Class_Build_Shortcode {
                             
                             if (!in_array($extension, $imgFormats)) {
                                 $t .= '<td>';
-                                $t .= '<a href="http://' . $host . $data[$i]['dir'] . $data[$i]['name'] . '">';
+                                $t .= '<a href="https://' . $host . $data[$i]['dir'] . $data[$i]['name'] . '">';
                                 $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
                                 $t .= '</a>';
                                 $t .= '</td>'; 
 
                             } else {
                                 $t .= '<td>';
-                                $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="http://' . $host . $data[$i]['dir'] . $data[$i]['name'] . '">';
+                                $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="https://' . $host . $data[$i]['dir'] . $data[$i]['name'] . '">';
                                 $t .= Class_Help_Methods::getMetafileNames($path, $meta, $file='');
                                 $t .= '</a>';
                                 $t .= '</td>';  

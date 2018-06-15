@@ -86,12 +86,14 @@ class Class_Create_Post_Type_Submenu_Page {
         $meta = 0;
         $html = '';
         
+        $sslverify = defined('WP_DEBUG') && WP_DEBUG ? false : true;
+        
         query_posts('post_type=remoter&p=' . $serverid);
         while (have_posts()): the_post(); 
             $meta = get_post_meta( get_the_ID(), 'domain' );
         endwhile;
         
-        $responseRequest = wp_remote_get('http://' . $meta[0] . '/request.php');
+        $responseRequest = wp_remote_get('https://' . $meta[0] . '/request.php', ['sslverify' => $sslverify]);
         $status_code = wp_remote_retrieve_response_code( $responseRequest );
         
         if(!$meta) {
@@ -108,13 +110,13 @@ class Class_Create_Post_Type_Submenu_Page {
         
         } elseif(200 == $status_code) {
             
-            $response = wp_remote_get( 'http://' . $meta[0] . '/request.php?' .
+            $response = wp_remote_get( 'https://' . $meta[0] . '/request.php?' .
                 //'ip=' . $ip .
                 '&serverid=' . $serverid .    
                 '&email=' . $adminemail . 
                 '&domain=' . $domain . 
                 '&requested_domain=' . (isset($meta[0]) ? $meta[0] : ''), 
-                array( 'timeout' => 120, 'httpversion' => '1.1' )
+                array( 'timeout' => 120, 'httpversion' => '1.1', 'sslverify' => $sslverify )
             );
 
             echo $response['body'];

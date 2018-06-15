@@ -103,7 +103,7 @@ class Settings {
             'content' => implode(PHP_EOL, $content),
         );
 
-        $help_sidebar = sprintf('<p><strong>%1$s:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">%2$s</a></p>', __('For more information', 'rrze-remoter'), __('RRZE Webteam on Github', 'rrze-remoter'));
+        $help_sidebar = sprintf('<p><strong>%1$s:</strong></p><p><a href="https://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">%2$s</a></p>', __('For more information', 'rrze-remoter'), __('RRZE Webteam on Github', 'rrze-remoter'));
 
         $screen = get_current_screen();
 

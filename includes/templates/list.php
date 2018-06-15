@@ -24,7 +24,7 @@ foreach ($data as $key => $value) {
         $icon ='<i class="fa fa-file-image-o" aria-hidden="true"></i>';
     }
     
-    $list.= '<li>' . $icon . ' <a href="http://'. $domain . $value['dir'] . $value['name'] . '">' . RRZE\Remoter\Class_Help_Methods::replaceCharacterList(RRZE\Remoter\Class_Help_Methods::changeUmlautsList($value['name'])) . '</a> (' . RRZE\Remoter\Class_Help_Methods::formatSize($value['size']) . ')</li>';
+    $list.= '<li>' . $icon . ' <a href="https://'. $domain . $value['dir'] . $value['name'] . '">' . RRZE\Remoter\Class_Help_Methods::replaceCharacterList(RRZE\Remoter\Class_Help_Methods::changeUmlautsList($value['name'])) . '</a> (' . RRZE\Remoter\Class_Help_Methods::formatSize($value['size']) . ')</li>';
 
 }
 
