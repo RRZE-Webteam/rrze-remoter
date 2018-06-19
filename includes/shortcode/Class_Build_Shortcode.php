@@ -44,26 +44,11 @@ class Class_Build_Shortcode {
             'gallerydescription'    => '1'
         ), $atts );
         
-        return $this->query_args($this->remote_server_shortcode);
+        return $this->show_results();
        
     }
-    
-    public function query_args($args) {
-        
-        $this->remote_server_args = array(
-            'post_type'         =>  'remoter',
-            'p'                 =>  $args['id'],
-            'posts_per_page'    =>  1,
-            'orderby'           =>  'date',
-            'order'             =>  'DESC'
-        );
-        
-        return $this->show_results_as_list($this->remote_server_args);
-    }
   
-    public function show_results_as_list($query_arguments) {
-        
-        global $post;
+    public function show_results() { 
         
         $shortcodeValues = array(
             'fileIndex'         => $this->remote_server_shortcode['index'],
@@ -82,133 +67,120 @@ class Class_Build_Shortcode {
             'gallerydescription'=> $this->remote_server_shortcode['gallerydescription']
         );
         
-        $the_query = new \WP_Query( $query_arguments);
-        
-        //echo '<pre>';
-        //print_r($the_query);
-        //echo '</pre>';
-        
-        if ( $the_query->have_posts() ) {
-            
-            while ( $the_query->have_posts() ) {
-                $the_query->the_post();
+        $remoter_post = get_post(absint($this->remote_server_shortcode['id']));
+        if (!$remoter_post || $remoter_post->post_type != 'remoter') {
+            return '';
+        }
                 
-                $domain = get_post_meta($post->ID, 'domain', true); 
-                $api_key = get_post_meta($post->ID, 'apikey', true); 
-                
-                $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
-                
-                $data = $this->remote_data;
-                
-                if($data){
-                    $view = $shortcodeValues['view'];
-                    $tableHeader = Class_Help_Methods::getHeaderData($shortcodeValues['showColumns']);
-                    $meta = $data;
-                    
-                    $meta_store = array();
-                    //array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
-                    #date_default_timezone_set('Europe/Berlin');
+        $domain = get_post_meta($remoter_post->ID, 'domain', true); 
+        $api_key = get_post_meta($remoter_post->ID, 'apikey', true); 
+
+        $this->remote_data = Class_Grab_Remote_Files::get_files_from_remote_server($this->remote_server_shortcode, $domain, $api_key);
+
+        $data = $this->remote_data;
+
+        if($data) {
+            $view = $shortcodeValues['view'];
+            $tableHeader = Class_Help_Methods::getHeaderData($shortcodeValues['showColumns']);
+            $meta = $data;
+
+            $meta_store = array();
+            //array_multisort(array_column($meta, 'name'), SORT_ASC, $meta);
+            #date_default_timezone_set('Europe/Berlin');
+            $order = $this->remote_server_shortcode['order'];
+            $orderby = $this->remote_server_shortcode['orderby'];
+            switch ($view) {
+                case 'gallery':
+                    ob_start();
+                    $gallerytitle = $shortcodeValues['gallerytitle'];
+                    $gallerydescription = $shortcodeValues['gallerydescription'];
+                    include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
+                    $content = ob_get_clean();
+                    return $content;
+                    break;
+                case 'glossary':
+                    ob_start();
+                    $id = uniqid();
+                    $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
+                    $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
+                    $letters = Class_Help_Methods::createLetters();
+                    $unique = Class_Help_Methods::getUsedLetters($data);
+                    $array_without_numbers = Class_Help_Methods::checkforfigures($unique);
+                    if(empty($array_without_numbers)) {
+                        echo 'Zu diesem Dateityp gibt es keine Einträge!';
+                    } else {
+                        $dataSorted = Class_Help_Methods::sortArray($data, $unique);
+                        $data_new = Class_Help_Methods::deleteMetaTxtEntries($dataSorted);
+                        include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
+                    }
+                    $content = ob_get_clean();
+                    return $content;
+                    break;
+                case 'pagination':
+                    //date_default_timezone_set('Europe/Berlin');
+                    ob_start();
+                    $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
+                    $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
+
+                    $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
+                    $dataFirstPage = $this->remote_data;
+                    $dataChunk = Class_Help_Methods::deleteMetaTxtEntries($dataFirstPage);
+                    $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
+                    $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
+                    array_multisort(array_column($dataChunk, $sortOrderby), $sortOrder , $dataChunk);
+                    $data = array_chunk($dataChunk, $number_of_chunks);
+                    $pagecount = count($data);
+                    if(empty($pagecount)) {
+                        echo 'Zu diesem Dateityp gibt es keine Einträge!';
+                    } else {
+                    $id = uniqid();
+                    $itemscount = (isset($data[0]) ? count($data[0]) : '');
+                    include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
+                    }
+                    $content = ob_get_clean();
+                    return $content;
+                    break;
+                case 'table':
+                    ob_start();
+                    $fileheader = $shortcodeValues['fileheader'];
+                    $header = $shortcodeValues['showHeader'];
                     $order = $this->remote_server_shortcode['order'];
                     $orderby = $this->remote_server_shortcode['orderby'];
-                    switch ($view) {
-                        case 'gallery':
-                            ob_start();
-                            $gallerytitle = $shortcodeValues['gallerytitle'];
-                            $gallerydescription = $shortcodeValues['gallerydescription'];
-                            include( plugin_dir_path( __DIR__ ) . '/templates/gallery.php');
-                            $content = ob_get_clean();
-                            return $content;
-                            break;
-                        case 'glossary':
-                            ob_start();
-                            $id = uniqid();
-                            $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
-                            $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
-                            $letters = Class_Help_Methods::createLetters();
-                            $unique = Class_Help_Methods::getUsedLetters($data);
-                            $array_without_numbers = Class_Help_Methods::checkforfigures($unique);
-                            if(empty($array_without_numbers)) {
-                                echo 'Zu diesem Dateityp gibt es keine Einträge!';
-                            } else {
-                                $dataSorted = Class_Help_Methods::sortArray($data, $unique);
-                                $data_new = Class_Help_Methods::deleteMetaTxtEntries($dataSorted);
-                                include( plugin_dir_path( __DIR__ ) . '/templates/glossary.php');
-                            }
-                            $content = ob_get_clean();
-                            return $content;
-                            break;
-                        case 'pagination':
-                            //date_default_timezone_set('Europe/Berlin');
-                            ob_start();
-                            $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
-                            $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
-                            $url = parse_url(get_post_meta($post->ID, 'url', true)); 
-                            $number_of_chunks = (int)$this->remote_server_shortcode['itemsperpage'];
-                            $dataFirstPage = $this->remote_data;
-                            $dataChunk = Class_Help_Methods::deleteMetaTxtEntries($dataFirstPage);
-                            $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
-                            $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
-                            array_multisort(array_column($dataChunk, $sortOrderby), $sortOrder , $dataChunk);
-                            $data = array_chunk($dataChunk, $number_of_chunks);
-                            $pagecount = count($data);
-                            if(empty($pagecount)) {
-                                echo 'Zu diesem Dateityp gibt es keine Einträge!';
-                            } else {
-                            $id = uniqid();
-                            $itemscount = (isset($data[0]) ? count($data[0]) : '');
-                            include( plugin_dir_path( __DIR__ ) . '/templates/table.php');
-                            }
-                            $content = ob_get_clean();
-                            return $content;
-                            break;
-                        case 'table':
-                            ob_start();
-                            $fileheader = $shortcodeValues['fileheader'];
-                            $header = $shortcodeValues['showHeader'];
-                            $order = $this->remote_server_shortcode['order'];
-                            $orderby = $this->remote_server_shortcode['orderby'];
-                            $alias = $shortcodeValues['alias'];
-                            $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
-                            $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
-                            $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
-                            $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
-                            $deletejson = $data;
-                            $data = Class_Help_Methods::deleteMetaTxtEntries($deletejson);
-                            array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);
-                            include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
-                            $content = ob_get_clean();
-                            return $content;
-                            break;
-                        case 'imagetable':
-                            ob_start();
-                            include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
-                            $content = ob_get_clean();
-                            return $content;
-                            break;
-                        default:
-                            ob_start();
-                            include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
-                            $orderby = $this->remote_server_shortcode['orderby'];
-                            $content = ob_get_clean();
-                            return $content;
-                    }
-                    
-                } else {
-                    $error = $shortcodeValues['errormsg'];
-                    if($error) {
-                        echo 'Es konnten keine Daten auf dem Server gefunden werden!';
-                    } else {
-                        echo '';
-                    }
-                }
-                   
+                    $alias = $shortcodeValues['alias'];
+                    $metajson = Class_Help_Methods::getJsonFile($shortcodeValues, $data);
+                    $metadata = Class_Help_Methods::getJsonData($metajson, $domain);
+                    $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
+                    $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
+                    $deletejson = $data;
+                    $data = Class_Help_Methods::deleteMetaTxtEntries($deletejson);
+                    array_multisort(array_column($data, $sortOrderby), $sortOrder , $data);
+                    include( plugin_dir_path( __DIR__ ) . '/templates/table_without_pagination.php');
+                    $content = ob_get_clean();
+                    return $content;
+                    break;
+                case 'imagetable':
+                    ob_start();
+                    include( plugin_dir_path( __DIR__ ) . '/templates/imagetable.php');
+                    $content = ob_get_clean();
+                    return $content;
+                    break;
+                default:
+                    ob_start();
+                    include( plugin_dir_path( __DIR__ ) . '/templates/list.php');
+                    $orderby = $this->remote_server_shortcode['orderby'];
+                    $content = ob_get_clean();
+                    return $content;
             }
-            
-            wp_reset_postdata();
-            
+
         } else {
-                echo 'no posts found';
+            $error = $shortcodeValues['errormsg'];
+            if($error) {
+                echo 'Es konnten keine Daten auf dem Server gefunden werden!';
+            } else {
+                echo '';
+            }
         }
+
     }
     
     public function rrze_remote_table_script_footer(){ 
