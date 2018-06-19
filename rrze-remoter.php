@@ -4,31 +4,13 @@
  * Plugin Name:     Remoter
  * Plugin URI:      https://gitlab.rrze.fau.de/rrze-webteam/rrze-remoter.git
  * Description:     Liest den DirectoryIndex eines Servers remote aus und gibt die Daten strukturiert auf einer Seite aus.
- * Version:         1.3.10
+ * Version:         1.3.11
  * Author:          RRZE-Webteam
  * Author URI:      https://blogs.fau.de/webworking/
  * License:         GNU General Public License v2
  * License URI:     http://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path:     /languages
  * Text Domain:     rrze-remoter
- */
-
-/*
-  Verzeichnisschema:
-  rrze-remoter
-  |-- languages                     Verzeichnis der Sprachdateien
-  |   +-- rrze-remoter.pot             Vorlagedatei falls Übersetzungen in andere Sprachen nötig werden
-  |   +-- rrze-remoter-de_DE.po        Deutsche Übersetzungsdatei (kann mit poedit angepasst werden)
-  |   +-- rrze-remoter-de_DE.mo        Deutsche Übersetzungsdatei (wird beim Speichern in poedit aktualisiert)
-  |   +-- rrze-remoter_DE_formal.po Deutsche (Sie) Übersetzungsdatei (kann mit poedit angepasst werden)
-  |   +-- crrze-remoter-de_DE_formal.mo Deutsche (Sie) Übersetzungsdatei (wird beim Speichern in poedit aktualisiert)
-  |-- includes                      (Optional)
-      +-- autoload.php              Automatische Laden von Klassen
-      +-- main.php                  Main-Klasse
-      +-- options.php               Optionen-Klasse
-      +-- settings.php              Settings-Klasse
-  +-- README.md                     Anweisungen
-  +-- rrze-remoter.php                 Hauptdatei des Plugins
  */
 
 namespace RRZE\Remoter;
