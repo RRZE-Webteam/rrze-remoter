@@ -187,8 +187,6 @@ function loaded() {
     
     load_textdomain();
     
-    // Ab hier können weitere Funktionen bzw. Klassen angelegt werden.
-    autoload();
     
     $remoter_custom_post_type           =   new Class_Custom_Post_Type_Server();
     $remoter_customize_list             =   new Class_Customize_List_View();
@@ -196,6 +194,10 @@ function loaded() {
     $remoter_get_data                   =   new Class_Grab_Remote_Files();
     $remoter_shortcode                  =   new Class_Build_Shortcode();
     $remoter_create_metaboxes           =   new Class_Create_Metaboxes();
+    
+    // Ab hier können weitere Funktionen bzw. Klassen angelegt werden.
+    autoload();
+    
 }
 
 /*
