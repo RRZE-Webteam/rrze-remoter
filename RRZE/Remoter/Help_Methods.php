@@ -4,7 +4,7 @@ namespace RRZE\Remoter;
 
 defined('ABSPATH') || exit;
 
-class Class_Help_Methods {
+class Help_Methods {
     
     public static function getHeaderData($columns) {
         $shortcodeColumns = explode(",", $columns);
@@ -120,7 +120,7 @@ class Class_Help_Methods {
 
         array_multisort($filenames, SORT_ASC, $data);
 
-        $array_without_numbers = Class_Help_Methods::checkforfigures($unique);
+        $array_without_numbers = Help_Methods::checkforfigures($unique);
 
         foreach ( $data as $key => $value ) {
             if ( substr($value['name'], 0, 1) !=  $array_without_numbers[0] ) {
@@ -153,7 +153,6 @@ class Class_Help_Methods {
     }
     
     public static function getJsonFile($shortcodeValues, $data) {
-        
         $recursiv = $shortcodeValues['recursive'];
         $path = $shortcodeValues['fileIndex'];
         $maskpath = str_replace('/', '\/', $path);
