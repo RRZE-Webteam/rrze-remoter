@@ -38,13 +38,13 @@ class Main {
         global $post;
 
         wp_register_script('rrze-remoter-mainjs', plugins_url('assets/js/rrze-remoter-main.js', $this->plugin_basename), ['jquery'], '', true);
+        wp_localize_script('rrze-remoter-mainjs', 'frontendajax', ['ajaxurl' => admin_url('admin-ajax.php')]);
+        
         wp_register_script('rrze-remoter-scriptsjs', plugins_url('assets/js/rrze-remoter-scripts.js', $this->plugin_basename), ['jquery'], '', true);
         wp_register_style('rrze-remoter-stylescss', plugins_url('assets/css/styles.css', $this->plugin_basename));
         wp_register_style('rrze-remoter-rrze-theme-stylescss', plugins_url('assets/css/rrze-styles.css', $this->plugin_basename));
         wp_register_script('flexsliderjs', plugins_url('assets/js/jquery.flexslider.js', $this->plugin_basename), ['jquery'], '', true);
         wp_register_script('fancyboxjs', plugins_url('assets/js/jquery.fancybox.js', $this->plugin_basename), ['jquery'], '', true);
-
-        wp_localize_script('rrze-remoter-mainjs', 'frontendajax', ['ajaxurl' => admin_url('admin-ajax.php')]);
 
         if (is_singular() && in_array($post->post_type, ['post', 'page']) && has_shortcode($post->post_content, 'remoter')) {
 
