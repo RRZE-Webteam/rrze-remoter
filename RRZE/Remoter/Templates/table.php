@@ -103,8 +103,9 @@ defined('ABSPATH') || exit;
                          <?php break;
                         case 'name': ?>
                             <?php $extension = $data[$i][$j]['extension']; ?>
+                            <?php $replaced_name = Help_Methods::convertUmlauts($data[$i][$j]['name']) ?>
                             <?php if ($shortcodeValues['link']) { ?> 
-                                <?php $path = $data[$i][$j]['name']; ?>
+                                <?php $path = $replaced_name; ?>
                                 <?php $store = $meta_store; ?> 
                                 <?php $file = $shortcodeValues['file'] ?>
                                 <?php $imgFormats = Help_Methods::getImageFormats(); ?>     
