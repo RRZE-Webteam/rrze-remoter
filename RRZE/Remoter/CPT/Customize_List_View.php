@@ -8,25 +8,24 @@ class Customize_List_View {
 
     public function __construct() {
 
-        add_filter('manage_edit-remoter_columns', array($this, 'video_columns'));
-        add_action('manage_remoter_posts_custom_column', array($this, 'show_video_columns'));
+        add_filter('manage_edit-remoter_columns', array($this, 'columns'));
+        add_action('manage_remoter_posts_custom_column', array($this, 'custom_column'));
     }
 
-    public function video_columns($columns) {
+    public function columns($columns) {
 
         $columns = array(
             'cb' => '<input type="checkbox" />',
             'title' => __('Title', 'rrze-remoter'),
             'id' => __('ID', 'rrze-remoter'),
-            'domain' => __('Domain', 'rrze-remoter'),
-            'apikey' => __('API Key', 'rrze-remoter'),
+            'apiurl' => __('API URL', 'rrze-remoter'),
             'date' => __('Date', 'rrze-remoter'),
         );
 
         return $columns;
     }
 
-    public function show_video_columns($column_name) {
+    public function custom_column($column_name) {
 
         global $post;
 
@@ -39,13 +38,9 @@ class Customize_List_View {
                 $id = get_the_ID();
                 echo $id;
                 break;
-            case 'domain':
-                $domain = get_post_meta($post->ID, 'domain', true);
+            case 'apiurl':
+                $domain = get_post_meta($post->ID, '_rrze_remoter_apiurl', true);
                 echo $domain;
-                break;
-            case 'apikey':
-                $apikey = get_post_meta($post->ID, 'apikey', true);
-                echo $apikey;
                 break;
         }
     }

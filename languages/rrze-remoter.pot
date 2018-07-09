@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Remoter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-21 12:27+0200\n"
+"POT-Creation-Date: 2018-07-09 10:00+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam <webmaster@rrze.fau.de>\n"
@@ -21,63 +21,6 @@ msgstr ""
 "X-Generator: Poedit 2.0.8\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
-
-#: ../RRZE/Remoter/Build_Shortcode.php:125
-#: ../RRZE/Remoter/Build_Shortcode.php:152
-msgid "There are no entries for this file type!"
-msgstr ""
-
-#: ../RRZE/Remoter/Build_Shortcode.php:195
-msgid "No data could be found on the server!"
-msgstr ""
-
-#: ../RRZE/Remoter/Build_Shortcode.php:303
-#: ../RRZE/Remoter/Build_Shortcode.php:482
-#: ../RRZE/Remoter/Templates/glossary.php:79
-#: ../RRZE/Remoter/Templates/table.php:63
-#: ../RRZE/Remoter/Templates/table_without_pagination.php:67
-msgid "File size"
-msgstr ""
-
-#: ../RRZE/Remoter/Build_Shortcode.php:306
-#: ../RRZE/Remoter/Build_Shortcode.php:485
-#: ../RRZE/Remoter/Templates/glossary.php:76
-#: ../RRZE/Remoter/Templates/table.php:60
-#: ../RRZE/Remoter/Templates/table_without_pagination.php:64
-msgid "Type of file"
-msgstr ""
-
-#: ../RRZE/Remoter/Build_Shortcode.php:309
-#: ../RRZE/Remoter/Build_Shortcode.php:488
-#: ../RRZE/Remoter/Templates/glossary.php:82
-#: ../RRZE/Remoter/Templates/table.php:66
-#: ../RRZE/Remoter/Templates/table_without_pagination.php:70
-msgid "Download"
-msgstr ""
-
-#: ../RRZE/Remoter/Build_Shortcode.php:312
-#: ../RRZE/Remoter/Build_Shortcode.php:491
-#: ../RRZE/Remoter/Templates/glossary.php:67
-#: ../RRZE/Remoter/Templates/table.php:51
-#: ../RRZE/Remoter/Templates/table_without_pagination.php:50
-msgid "Directory name"
-msgstr ""
-
-#: ../RRZE/Remoter/Build_Shortcode.php:315
-#: ../RRZE/Remoter/Build_Shortcode.php:494
-#: ../RRZE/Remoter/Templates/glossary.php:70
-#: ../RRZE/Remoter/Templates/table.php:54
-#: ../RRZE/Remoter/Templates/table_without_pagination.php:56
-msgid "Filename"
-msgstr ""
-
-#: ../RRZE/Remoter/Build_Shortcode.php:318
-#: ../RRZE/Remoter/Build_Shortcode.php:497
-#: ../RRZE/Remoter/Templates/glossary.php:73
-#: ../RRZE/Remoter/Templates/table.php:57
-#: ../RRZE/Remoter/Templates/table_without_pagination.php:61
-msgid "Creation date"
-msgstr ""
 
 #: ../RRZE/Remoter/CPT/Create_Custom_Post_Type_Server.php:36
 #, php-format
@@ -124,50 +67,6 @@ msgstr ""
 msgid "Parent %s"
 msgstr ""
 
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:17
-msgid "Request for an API key"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:28
-msgid "API Key Request"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:29
-msgid "You can apply for an API key here."
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:35
-msgid "Server ID:"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:36
-msgid "Request API key"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:100
-msgid "The server ID is not assigned!"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:103
-msgid "Please enter a server ID!"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:106
-msgid "Only numeric values are allowed!"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:118
-msgid "The necessary files are not yet or in the wrong place on the server!"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:119
-msgid "Please put the following files on your server first:"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Create_Post_Type_Submenu_Page.php:126
-msgid "Link"
-msgstr ""
-
 #: ../RRZE/Remoter/CPT/Custom_Post_Type_Server.php:14
 msgid "Remote Servers"
 msgstr ""
@@ -185,27 +84,73 @@ msgid "ID"
 msgstr ""
 
 #: ../RRZE/Remoter/CPT/Customize_List_View.php:21
-#: ../RRZE/Remoter/CPT/Metaboxes_Data.php:13
-msgid "Domain"
+#: ../RRZE/Remoter/CPT/Metaboxes.php:27
+msgid "API URL"
 msgstr ""
 
 #: ../RRZE/Remoter/CPT/Customize_List_View.php:22
-msgid "API Key"
-msgstr ""
-
-#: ../RRZE/Remoter/CPT/Customize_List_View.php:23
 msgid "Date"
 msgstr ""
 
-#: ../RRZE/Remoter/CPT/Metaboxes_Data.php:46
-msgid "API-Key"
+#: ../RRZE/Remoter/CPT/Metaboxes.php:135
+msgid "Not a valid API URL"
+msgstr ""
+
+#: ../RRZE/Remoter/Shortcode.php:125 ../RRZE/Remoter/Shortcode.php:152
+msgid "There are no entries for this file type!"
+msgstr ""
+
+#: ../RRZE/Remoter/Shortcode.php:195
+msgid "No data could be found on the server!"
+msgstr ""
+
+#: ../RRZE/Remoter/Shortcode.php:303 ../RRZE/Remoter/Shortcode.php:482
+#: ../RRZE/Remoter/Templates/glossary.php:79
+#: ../RRZE/Remoter/Templates/table.php:63
+#: ../RRZE/Remoter/Templates/table_without_pagination.php:67
+msgid "File size"
+msgstr ""
+
+#: ../RRZE/Remoter/Shortcode.php:306 ../RRZE/Remoter/Shortcode.php:485
+#: ../RRZE/Remoter/Templates/glossary.php:76
+#: ../RRZE/Remoter/Templates/table.php:60
+#: ../RRZE/Remoter/Templates/table_without_pagination.php:64
+msgid "Type of file"
+msgstr ""
+
+#: ../RRZE/Remoter/Shortcode.php:309 ../RRZE/Remoter/Shortcode.php:488
+#: ../RRZE/Remoter/Templates/glossary.php:82
+#: ../RRZE/Remoter/Templates/table.php:66
+#: ../RRZE/Remoter/Templates/table_without_pagination.php:70
+msgid "Download"
+msgstr ""
+
+#: ../RRZE/Remoter/Shortcode.php:312 ../RRZE/Remoter/Shortcode.php:491
+#: ../RRZE/Remoter/Templates/glossary.php:67
+#: ../RRZE/Remoter/Templates/table.php:51
+#: ../RRZE/Remoter/Templates/table_without_pagination.php:50
+msgid "Directory name"
+msgstr ""
+
+#: ../RRZE/Remoter/Shortcode.php:315 ../RRZE/Remoter/Shortcode.php:494
+#: ../RRZE/Remoter/Templates/glossary.php:70
+#: ../RRZE/Remoter/Templates/table.php:54
+#: ../RRZE/Remoter/Templates/table_without_pagination.php:56
+msgid "Filename"
+msgstr ""
+
+#: ../RRZE/Remoter/Shortcode.php:318 ../RRZE/Remoter/Shortcode.php:497
+#: ../RRZE/Remoter/Templates/glossary.php:73
+#: ../RRZE/Remoter/Templates/table.php:57
+#: ../RRZE/Remoter/Templates/table_without_pagination.php:61
+msgid "Creation date"
 msgstr ""
 
 #: ../RRZE/Remoter/Templates/gallery.php:27
 msgid "Enlarge"
 msgstr ""
 
-#: ../RRZE/Remoter/Templates/table.php:146
+#: ../RRZE/Remoter/Templates/table.php:147
 msgid "Page:"
 msgstr ""
 

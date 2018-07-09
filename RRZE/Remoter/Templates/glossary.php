@@ -1,6 +1,6 @@
 <?php
 namespace RRZE\Remoter\Templates;
-use RRZE\Remoter\Help_Methods;
+use RRZE\Remoter\Helper;
 
 defined('ABSPATH') || exit;
 
@@ -92,7 +92,7 @@ $this->glossary_array = $data;
 
                 <?php switch($column) { 
                     case 'size': ?>
-                        <td><?php echo Help_Methods::formatSize($data_new[$i]['size']) ?></td>
+                        <td><?php echo Helper::formatSize($data_new[$i]['size']) ?></td>
                         <?php  
                         break;
                     case 'type': ?>
@@ -115,7 +115,7 @@ $this->glossary_array = $data;
                         <td align="center"><a href="https://<?php echo $domain . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                         <?php break;
                     case 'directory': ?>
-                        <td><?php echo Help_Methods::getFolder($data_new[$i]['path']) ?></td>
+                        <td><?php echo Helper::getFolder($data_new[$i]['path']) ?></td>
                         <?php break;
                     case 'name': ?>
                         <?php $extension = $data_new[$i]['extension']; ?>
@@ -123,13 +123,13 @@ $this->glossary_array = $data;
                             <?php $path = $data_new[$i]['name']; ?>
                             <?php $store = $meta_store; ?> 
                             <?php $file = $shortcodeValues['file'] ?>
-                            <?php $imgFormats = Help_Methods::getImageFormats(); ?>     
+                            <?php $imgFormats = Helper::getImageFormats(); ?>     
                             
                             <?php if (!in_array($extension, $imgFormats)) { ?>
                                 <td>
                                     <a href="https://<?php echo $domain . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>">
                                         <?php
-                                            echo Help_Methods::getMetafileNames($path, $store, $file);
+                                            echo Helper::getMetafileNames($path, $store, $file);
                                         ?>
                                     </a>
                                 </td> 
@@ -137,7 +137,7 @@ $this->glossary_array = $data;
                                 <td>
                                     <a class="lightbox" rel="lightbox-' . $id . '" href="https://<?php echo $domain . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>">
                                         <?php
-                                            echo Help_Methods::getMetafileNames($path, $store, $file);
+                                            echo Helper::getMetafileNames($path, $store, $file);
                                         ?>
                                     </a>
                                 </td>  

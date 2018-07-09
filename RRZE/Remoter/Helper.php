@@ -4,7 +4,7 @@ namespace RRZE\Remoter;
 
 defined('ABSPATH') || exit;
 
-class Help_Methods {
+class Helper {
     
     public static function getHeaderData($columns) {
         $shortcodeColumns = explode(",", $columns);
@@ -120,7 +120,7 @@ class Help_Methods {
 
         array_multisort($filenames, SORT_ASC, $data);
 
-        $array_without_numbers = Help_Methods::checkforfigures($unique);
+        $array_without_numbers = Helper::checkforfigures($unique);
 
         foreach ( $data as $key => $value ) {
             if ( substr($value['name'], 0, 1) !=  $array_without_numbers[0] ) {

@@ -1,6 +1,6 @@
 <?php
 namespace RRZE\Remoter\Templates;
-use RRZE\Remoter\Help_Methods;
+use RRZE\Remoter\Helper;
 
 defined('ABSPATH') || exit;
 
@@ -51,7 +51,7 @@ if($header) { ?>
             <?php break;
             case 'name': ?>
                 <th><?php if($fileheader) { 
-                    echo Help_Methods::getFolder($data[0]['path']); 
+                    echo Helper::getFolder($data[0]['path']); 
                 } else {
                     _e('Filename', 'rrze-remoter');
                 }
@@ -82,7 +82,7 @@ if($header) { ?>
         <?php switch($column) {
                 case 'size': ?>
         
-                    <td><?php echo Help_Methods::formatSize($data[$i]['size']) ?></td>
+                    <td><?php echo Helper::formatSize($data[$i]['size']) ?></td>
                     
                 <?php break;
                 case 'type': ?>
@@ -110,25 +110,25 @@ if($header) { ?>
                 <?php break;
                 case 'directory': ?>
                     
-                    <td><?php echo Help_Methods::getFolder($data[$i]['path']) ?></td>
+                    <td><?php echo Helper::getFolder($data[$i]['path']) ?></td>
                     
                 <?php break;
                 case 'name': ?>
                     <?php $extension = $data[$i]['extension']; ?>
-                    <?php $replaced_name = Help_Methods::convertUmlauts($data[$i]['name']) ?>
+                    <?php $replaced_name = Helper::convertUmlauts($data[$i]['name']) ?>
                     <?php if ($shortcodeValues['link']) { ?> 
                         <?php $path = $replaced_name ?>
                         <?php $store = $meta_store; ?> 
                         <?php $file = $shortcodeValues['file'] ?>
-                        <?php $imgFormats = Help_Methods::getImageFormats(); ?>     
+                        <?php $imgFormats = Helper::getImageFormats(); ?>     
                             
                         <?php if (!in_array($extension, $imgFormats)) { ?>
                         <td>
-                            <a class="no_mtli" rel="no_mtli" href="https://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : Help_Methods::getMetafileNames($path, $store, $file); ?></a>
+                            <a class="no_mtli" rel="no_mtli" href="https://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : Helper::getMetafileNames($path, $store, $file); ?></a>
                         </td> 
                         <?php } else { ?>
                         <td>
-                            <a class="lightbox" rel="lightbox-' . $id . '" href="https://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : Help_Methods::getMetafileNames($path, $store, $file);?></a>
+                            <a class="lightbox" rel="lightbox-' . $id . '" href="https://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : Helper::getMetafileNames($path, $store, $file);?></a>
                         </td>  
                         <?php } ?>
 

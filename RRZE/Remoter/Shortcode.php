@@ -2,12 +2,12 @@
 
 namespace RRZE\Remoter;
 
-use RRZE\Remoter\Grab_Remote_Files;
-use RRZE\Remoter\Help_Methods;
+use RRZE\Remoter\Remote_Files;
+use RRZE\Remoter\Helper;
 
 defined('ABSPATH') || exit;
 
-class Build_Shortcode {
+class Shortcode {
 
     protected $plugin_file;
     
@@ -89,14 +89,14 @@ class Build_Shortcode {
             return '';
         }
 
-        $domain = get_post_meta($remoter_post->ID, 'domain', true);
-        $api_key = get_post_meta($remoter_post->ID, 'apikey', true);
+        $apiurl = get_post_meta($remoter_post->ID, '_rrze_remoter_apiurl', true);
+        $apikey = get_post_meta($remoter_post->ID, '_rrze_remoter_apikey', true);
 
-        $data = Grab_Remote_Files::get_files_from_remote_server($this->shortcode_atts, $domain, $api_key);
+        $data = Remote_Files::getFiles($this->shortcode_atts, $apiurl, $apikey);
 
         if ($data) {
             $view = $shortcodeValues['view'];
-            $tableHeader = Help_Methods::getHeaderData($shortcodeValues['showColumns']);
+            $tableHeader = Helper::getHeaderData($shortcodeValues['showColumns']);
             $meta = $data;
 
             $meta_store = array();
@@ -115,17 +115,17 @@ class Build_Shortcode {
                 case 'glossary':
                     ob_start();
                     $id = uniqid();
-                    $metajson = Help_Methods::getJsonFile($shortcodeValues, $data);
-                    $metadata = Help_Methods::getJsonData($metajson, $domain);
-                    $letters = Help_Methods::createLetters();
-                    $unique = Help_Methods::getUsedLetters($data);
-                    $array_without_numbers = Help_Methods::checkforfigures($unique);
+                    $metajson = Helper::getJsonFile($shortcodeValues, $data);
+                    $metadata = Helper::getJsonData($metajson, $apiurl);
+                    $letters = Helper::createLetters();
+                    $unique = Helper::getUsedLetters($data);
+                    $array_without_numbers = Helper::checkforfigures($unique);
                     
                     if (empty($array_without_numbers)) {
                         _e('There are no entries for this file type!', 'rrze-remoter');
                     } else {
-                        $dataSorted = Help_Methods::sortArray($data, $unique);
-                        $data_new = Help_Methods::deleteMetaTxtEntries($dataSorted);
+                        $dataSorted = Helper::sortArray($data, $unique);
+                        $data_new = Helper::deleteMetaTxtEntries($dataSorted);
                         include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/glossary.php';
                     }
                     $content = ob_get_clean();
@@ -135,12 +135,12 @@ class Build_Shortcode {
                     ob_start();
                     $this->res = $data;
                     
-                    $metajson = Help_Methods::getJsonFile($shortcodeValues, $data);
-                    $metadata = Help_Methods::getJsonData($metajson, $domain);
+                    $metajson = Helper::getJsonFile($shortcodeValues, $data);
+                    $metadata = Helper::getJsonData($metajson, $apiurl);
                     
                     $number_of_chunks = (int) $this->shortcode_atts['itemsperpage'];
                     $dataFirstPage = $data;
-                    $dataChunk = Help_Methods::deleteMetaTxtEntries($dataFirstPage);
+                    $dataChunk = Helper::deleteMetaTxtEntries($dataFirstPage);
                     $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
                     $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
                     array_multisort(array_column($dataChunk, $sortOrderby), $sortOrder, $dataChunk);
@@ -165,12 +165,12 @@ class Build_Shortcode {
                     $order = $this->shortcode_atts['order'];
                     $orderby = $this->shortcode_atts['orderby'];
                     $alias = $shortcodeValues['alias'];
-                    $metajson = Help_Methods::getJsonFile($shortcodeValues, $data);
-                    $metadata = Help_Methods::getJsonData($metajson, $domain);
+                    $metajson = Helper::getJsonFile($shortcodeValues, $data);
+                    $metadata = Helper::getJsonData($metajson, $apiurl);
                     $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
                     $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
                     $deletejson = $data;
-                    $data = Help_Methods::deleteMetaTxtEntries($deletejson);
+                    $data = Helper::deleteMetaTxtEntries($deletejson);
                     array_multisort(array_column($data, $sortOrderby), $sortOrder, $data);
                     include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/table_without_pagination.php';
                     $content = ob_get_clean();
@@ -238,7 +238,7 @@ class Build_Shortcode {
                             'columns': columns,
                             'link': link,
                             'arr': arr,
-                            'meta': meta
+                            'meta': meta    
                         },
                         success: function (data) {
                             $("#result").html(data);
@@ -334,7 +334,7 @@ class Build_Shortcode {
 
                     switch ($column) {
                         case 'size':
-                            $t .= '<td>' . Help_Methods::formatSize($value['size']) . '</td>';
+                            $t .= '<td>' . Helper::formatSize($value['size']) . '</td>';
                             break;
                         case 'type':
                             $extension = $value['extension'];
@@ -356,24 +356,24 @@ class Build_Shortcode {
                             $t .= '<td align="center"><a href="https://' . $host . $value['dir'] . $value['name'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                             break;
                         case 'directory':
-                            $t .= '<td>' . Help_Methods::getFolder($value['path']) . '</td>';
+                            $t .= '<td>' . Helper::getFolder($value['path']) . '</td>';
                             break;
                         case 'name':
                             $extension = $value['extension'];
                             if ($link) {
                                 $path = $value['name'];
-                                $imgFormats = Help_Methods::getImageFormats();
+                                $imgFormats = Helper::getImageFormats();
 
                                 if (!in_array($extension, $imgFormats)) {
                                     $t .= '<td>';
                                     $t .= '<a href="https://' . $host . $value['dir'] . $value['name'] . '">';
-                                    $t .= Help_Methods::getMetafileNames($path, $meta, $file = '');
+                                    $t .= Helper::getMetafileNames($path, $meta, $file = '');
                                     $t .= '</a>';
                                     $t .= '</td>';
                                 } else {
                                     $t .= '<td>';
                                     $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="https://' . $host . $value['dir'] . $value['name'] . '">';
-                                    $t .= Help_Methods::getMetafileNames($path, $meta, $file = '');
+                                    $t .= Helper::getMetafileNames($path, $meta, $file = '');
                                     $t .= '</a>';
                                     $t .= '</td>';
                                 }
@@ -515,7 +515,7 @@ class Build_Shortcode {
 
                 switch ($column) {
                     case 'size':
-                        $t .= '<td>' . Help_Methods::formatSize($data[$i]['size']) . '</td>';
+                        $t .= '<td>' . Helper::formatSize($data[$i]['size']) . '</td>';
                         break;
                     case 'type':
                         if ($extension == 'pdf') {
@@ -536,23 +536,23 @@ class Build_Shortcode {
                         $t .= '<td align="center"><a href="https://' . $host . $data[$i]['dir'] . $data[$i]['name'] . '"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>';
                         break;
                     case 'directory':
-                        $t .= '<td>' . Help_Methods::getFolder($data[$i]['path']) . '</td>';
+                        $t .= '<td>' . Helper::getFolder($data[$i]['path']) . '</td>';
                         break;
                     case 'name':
                         if ($link) {
                             $path = $data[$i]['name'];
-                            $imgFormats = Help_Methods::getImageFormats();
+                            $imgFormats = Helper::getImageFormats();
 
                             if (!in_array($extension, $imgFormats)) {
                                 $t .= '<td>';
                                 $t .= '<a href="https://' . $host . $data[$i]['dir'] . $data[$i]['name'] . '">';
-                                $t .= Help_Methods::getMetafileNames($path, $meta, $file = '');
+                                $t .= Helper::getMetafileNames($path, $meta, $file = '');
                                 $t .= '</a>';
                                 $t .= '</td>';
                             } else {
                                 $t .= '<td>';
                                 $t .= '<a class="lightbox" rel="lightbox-' . $id . '" href="https://' . $host . $data[$i]['dir'] . $data[$i]['name'] . '">';
-                                $t .= Help_Methods::getMetafileNames($path, $meta, $file = '');
+                                $t .= Helper::getMetafileNames($path, $meta, $file = '');
                                 $t .= '</a>';
                                 $t .= '</td>';
                             }

@@ -1,6 +1,6 @@
 <?php
 namespace RRZE\Remoter\Templates;
-use RRZE\Remoter\Help_Methods;
+use RRZE\Remoter\Helper;
 
 defined('ABSPATH') || exit;
 ?>
@@ -77,7 +77,7 @@ defined('ABSPATH') || exit;
 
                     <?php  switch($column) { 
                         case 'size': ?>
-                            <td><?php echo Help_Methods::formatSize($data[$i][$j]['size']) ?></td>
+                            <td><?php echo Helper::formatSize($data[$i][$j]['size']) ?></td>
                             <?php break;
                         case 'type': ?>
                             <?php  $extension = $data[$i][$j]['extension']; ?>
@@ -99,22 +99,22 @@ defined('ABSPATH') || exit;
                             <td align="center"><a href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                            <?php break;
                         case 'directory': ?>
-                            <td><?php echo Help_Methods::getFolder($data[$i][$j]['path']) ?></td>
+                            <td><?php echo Helper::getFolder($data[$i][$j]['path']) ?></td>
                          <?php break;
                         case 'name': ?>
                             <?php $extension = $data[$i][$j]['extension']; ?>
-                            <?php $replaced_name = Help_Methods::convertUmlauts($data[$i][$j]['name']) ?>
+                            <?php $replaced_name = Helper::convertUmlauts($data[$i][$j]['name']) ?>
                             <?php if ($shortcodeValues['link']) { ?> 
                                 <?php $path = $replaced_name; ?>
                                 <?php $store = $meta_store; ?> 
                                 <?php $file = $shortcodeValues['file'] ?>
-                                <?php $imgFormats = Help_Methods::getImageFormats(); ?>     
+                                <?php $imgFormats = Helper::getImageFormats(); ?>     
                             
                                 <?php if (!in_array($extension, $imgFormats)) { ?>
                                     <td>
                                         <a href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
                                             <?php
-                                                echo Help_Methods::getMetafileNames($path, $store, $file);
+                                                echo Helper::getMetafileNames($path, $store, $file);
                                             ?>
                                         </a>
                                     </td> 
@@ -122,7 +122,7 @@ defined('ABSPATH') || exit;
                                     <td>
                                         <a class="lightbox" rel="lightbox-' . $id . '" href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
                                             <?php
-                                                echo Help_Methods::getMetafileNames($path, $store, $file);
+                                                echo Helper::getMetafileNames($path, $store, $file);
                                             ?>
                                         </a>
                                     </td>  

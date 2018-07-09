@@ -6,9 +6,9 @@ use RRZE\Remoter\CPT\Create_Custom_Post_Type_Server;
 use RRZE\Remoter\CPT\Custom_Post_Type_Server;
 use RRZE\Remoter\CPT\Customize_List_View;
 use RRZE\Remoter\CPT\Create_Post_Type_Submenu_Page;
-use RRZE\Remoter\CPT\Create_Metaboxes;
-use RRZE\Remoter\Grab_Remote_Files;
-use RRZE\Remoter\Build_Shortcode;
+use RRZE\Remoter\CPT\Metaboxes;
+use RRZE\Remoter\Remote_Files;
+use RRZE\Remoter\Shortcode;
 
 defined('ABSPATH') || exit;
 
@@ -27,11 +27,10 @@ class Main {
 
         $remoter_custom_post_type = new Custom_Post_Type_Server();
         $remoter_customize_list = new Customize_List_View();
-        $remoter_add_submenu = new Create_Post_Type_Submenu_Page();
-        $remoter_create_metaboxes = new Create_Metaboxes();
+        $remoter_create_metaboxes = new Metaboxes();
         
-        $remoter_get_data = new Grab_Remote_Files();
-        $remoter_shortcode = new Build_Shortcode($plugin_file);        
+        $remote_files = new Remote_Files();
+        $shortcode = new Shortcode($plugin_file);        
     }
 
     public function wp_enqueue_scripts() {
@@ -48,6 +47,8 @@ class Main {
 
         if (is_singular() && in_array($post->post_type, ['post', 'page']) && has_shortcode($post->post_content, 'remoter')) {
 
+            wp_enqueue_script('rrze-remoter-mainjs');
+            wp_enqueue_script('rrze-remoter-scriptsjs');
             wp_enqueue_script('flexsliderjs');
             wp_enqueue_script('fancyboxjs');
                 
