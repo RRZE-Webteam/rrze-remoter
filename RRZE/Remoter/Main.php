@@ -7,7 +7,7 @@ use RRZE\Remoter\CPT\Custom_Post_Type_Server;
 use RRZE\Remoter\CPT\Customize_List_View;
 use RRZE\Remoter\CPT\Create_Post_Type_Submenu_Page;
 use RRZE\Remoter\CPT\Metaboxes;
-use RRZE\Remoter\Remote_Files;
+use RRZE\Remoter\RemoteFiles;
 use RRZE\Remoter\Shortcode;
 
 defined('ABSPATH') || exit;
@@ -29,7 +29,7 @@ class Main {
         $remoter_customize_list = new Customize_List_View();
         $remoter_create_metaboxes = new Metaboxes();
         
-        $remote_files = new Remote_Files();
+        $remote_files = new RemoteFiles();
         $shortcode = new Shortcode($plugin_file);        
     }
 

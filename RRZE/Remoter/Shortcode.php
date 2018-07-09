@@ -2,7 +2,7 @@
 
 namespace RRZE\Remoter;
 
-use RRZE\Remoter\Remote_Files;
+use RRZE\Remoter\RemoteFiles;
 use RRZE\Remoter\Helper;
 
 defined('ABSPATH') || exit;
@@ -92,7 +92,7 @@ class Shortcode {
         $apiurl = get_post_meta($remoter_post->ID, '_rrze_remoter_apiurl', true);
         $apikey = get_post_meta($remoter_post->ID, '_rrze_remoter_apikey', true);
 
-        $data = Remote_Files::getFiles($this->shortcode_atts, $apiurl, $apikey);
+        $data = RemoteFiles::getFiles($this->shortcode_atts, $apiurl, $apikey);
 
         if ($data) {
             $view = $shortcodeValues['view'];
@@ -172,7 +172,7 @@ class Shortcode {
                     $deletejson = $data;
                     $data = Helper::deleteMetaTxtEntries($deletejson);
                     array_multisort(array_column($data, $sortOrderby), $sortOrder, $data);
-                    include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/table_without_pagination.php';
+                    include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/table-without-pagination.php';
                     $content = ob_get_clean();
                     return $content;
                     break;
