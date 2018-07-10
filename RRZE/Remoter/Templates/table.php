@@ -1,4 +1,10 @@
-<?php $this->res = $this->remote_data; ?>
+<?php
+namespace RRZE\Remoter\Templates;
+use RRZE\Remoter\Helper;
+
+defined('ABSPATH') || exit;
+?>
+
 <?php array_multisort(array_column($this->res, $sortOrderby), $sortOrder , $this->res); ?>
 <?php if($shortcodeValues['showInfo']) { ?>
     <?php for($i = 0; $i < sizeof($metadata); $i++) { ?> 
@@ -32,6 +38,7 @@
         <?php } ?>
     <?php } ?>
 <?php } ?>
+
 <?php $this->a = $meta_store; ?>
 <div id="result">
     <table>
@@ -41,22 +48,22 @@
 
                 switch($column) {
                     case 'directory': ?>
-                        <th><?php _e('Verzeichnisname', 'rrze-remoter');?></th>
+                        <th><?php _e('Directory name', 'rrze-remoter');?></th>
                     <?php break;
                     case 'name': ?>
-                        <th><?php _e('Dateiname', 'rrze-remoter');?></th>
+                        <th><?php _e('Filename', 'rrze-remoter');?></th>
                     <?php break;
                     case 'date': ?>
-                        <th><?php _e('Erstellungsdatum', 'rrze-remoter');?></th>
+                        <th><?php _e('Creation date', 'rrze-remoter');?></th>
                     <?php break;
                     case 'type': ?>
-                        <th><?php _e('Dateityp', 'rrze-remoter');?></th>
+                        <th><?php _e('Type of file', 'rrze-remoter');?></th>
                     <?php break;
                     case 'size':?>
-                        <th><?php _e('Dateigröße', 'rrze-remoter');?></th>
+                        <th><?php _e('File size', 'rrze-remoter');?></th>
                        <?php break;
                     case 'download': ?>
-                        <th><?php _e('Herunterladen', 'rrze-remoter');?></th>
+                        <th><?php _e('Download', 'rrze-remoter');?></th>
                      <?php break;
                 }
             }
@@ -70,7 +77,7 @@
 
                     <?php  switch($column) { 
                         case 'size': ?>
-                            <td><?php echo RRZE\Remoter\Class_Help_Methods::formatSize($data[$i][$j]['size']) ?></td>
+                            <td><?php echo Helper::formatSize($data[$i][$j]['size']) ?></td>
                             <?php break;
                         case 'type': ?>
                             <?php  $extension = $data[$i][$j]['extension']; ?>
@@ -92,21 +99,22 @@
                             <td align="center"><a href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                            <?php break;
                         case 'directory': ?>
-                            <td><?php echo RRZE\Remoter\Class_Help_Methods::getFolder($data[$i][$j]['path']) ?></td>
+                            <td><?php echo Helper::getFolder($data[$i][$j]['path']) ?></td>
                          <?php break;
                         case 'name': ?>
                             <?php $extension = $data[$i][$j]['extension']; ?>
+                            <?php $replaced_name = Helper::convertUmlauts($data[$i][$j]['name']) ?>
                             <?php if ($shortcodeValues['link']) { ?> 
-                                <?php $path = $data[$i][$j]['name']; ?>
+                                <?php $path = $replaced_name; ?>
                                 <?php $store = $meta_store; ?> 
                                 <?php $file = $shortcodeValues['file'] ?>
-                                <?php $imgFormats = RRZE\Remoter\Class_Help_Methods::getImageFormats(); ?>     
+                                <?php $imgFormats = Helper::getImageFormats(); ?>     
                             
                                 <?php if (!in_array($extension, $imgFormats)) { ?>
                                     <td>
                                         <a href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
                                             <?php
-                                                echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
+                                                echo Helper::getMetafileNames($path, $store, $file);
                                             ?>
                                         </a>
                                     </td> 
@@ -114,7 +122,7 @@
                                     <td>
                                         <a class="lightbox" rel="lightbox-' . $id . '" href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
                                             <?php
-                                                echo RRZE\Remoter\Class_Help_Methods::getMetafileNames($path, $store, $file);
+                                                echo Helper::getMetafileNames($path, $store, $file);
                                             ?>
                                         </a>
                                     </td>  
@@ -136,7 +144,7 @@
     </table>
 </div>
 <div class="remoter"> 
-<nav class="pagination pagebreaks" role="navigation"><h3>Seite:</h3><span class="subpages"><?php for ($i = 1; $i <= $pagecount; $i++) { ?><a data-filetype="<?php echo $shortcodeValues['filetype'] ?>" href="#get_list"
+<nav class="pagination pagebreaks" role="navigation"><h3><?php _e('Page:', 'rrze-remoter'); ?></h3><span class="subpages"><?php for ($i = 1; $i <= $pagecount; $i++) { ?><a data-filetype="<?php echo $shortcodeValues['filetype'] ?>" href="#get_list"
 data-recursiv="<?php echo $shortcodeValues['recursive'] ?>"
 data-index="<?php echo $shortcodeValues['fileIndex'] ?>"
 data-host="<?php echo $domain ?>"
