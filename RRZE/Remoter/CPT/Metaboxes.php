@@ -4,18 +4,23 @@ namespace RRZE\Remoter\CPT;
 
 defined('ABSPATH') || exit;
 
+use \WP_Error;
+
 class Metaboxes
 {
     public $data;
     
     protected $apiurl;
+    
+    protected $notices;
 
     public function __construct()
     {
         $this->data = $this->metabox_data();
         
         add_action('add_meta_boxes', array($this, 'add_meta_boxes'));
-        add_action('save_post', array($this, 'save_meta_boxes'));
+        add_action('save_post', array($this, 'save_post'));
+        add_action('admin_notices', [$this, 'admin_notices']);
     }
 
     protected function metabox_data()
@@ -63,21 +68,20 @@ class Metaboxes
         switch ($box['args']['type']) {
             case 'text':
                 $this->render_text($box, $post->ID);
-                break;        
+                break;
         }
     }
 
     protected function render_text($box, $post_id)
     {
         wp_nonce_field(plugin_basename(__FILE__), 'meta_box_inhalt_nonce');
-        $value = get_post_meta($post_id, $box['id'], true);
-        ?>
+        $value = get_post_meta($post_id, $box['id'], true); ?>
         <label for="<?php echo $box['args']['id']; ?>"></label>
         <input type="<?php echo $box['args']['type']; ?>" id="<?php echo $box['args']['id']; ?>" name="<?php echo $box['id']; ?>" class="regular-text" value="<?php echo esc_attr($value); ?>">
         <?php
     }
 
-    public function save_meta_boxes($post_id)
+    public function save_post($post_id)
     {
         $post = get_post($post_id);
 
@@ -92,30 +96,68 @@ class Metaboxes
             if (!is_null($meta_value)) {
                 if ($meta_key == '_rrze_remoter_apiurl') {
                     $meta_value = $this->validate_apiurl($meta_value);
-                    $this->apiurl = $meta_value;
+                    if (!is_wp_error($meta_value)) {
+                        $this->apiurl = $meta_value;
+                    }
                 }
                 
-                if (!is_null($meta_value)) {
-                    $update = true;
+                if (!is_wp_error($meta_value)) {
                     update_post_meta($post_id, $meta_key, $meta_value);
+                } else {
+                    $this->notices[$meta_value->get_error_code()] = $meta_value->get_error_message();
                 }
             }
         }
         
-        if (!$update) {
+        if (!empty($this->notices)) {
+            add_filter('redirect_post_location', [$this, 'add_notices'], 99);
             return;
         }
         
-        $response = json_decode($this->request_apikey());
+        $apikey = $this->request_apikey();
+        if (is_wp_error($apikey)) {
+            return;
+        }
+        
+        $response = json_decode($apikey);
         $error = isset($response->error) ? absint($response->error) : 0;
         $value = isset($response->value) ? $response->value : 0;
         
         if (in_array($error, [60, 65]) && $value) {
             update_post_meta($post_id, '_rrze_remoter_apikey', $value);
         }
-
+    }
+        
+    public function add_notices($location)
+    {
+        remove_filter('redirect_post_location', array($this, 'add_notices'), 99);
+        foreach ($this->notices as $key => $value) {
+            $location = add_query_arg([sprintf('remoter-%s', $key) => $value], $location);
+        }
+        return $location;
     }
     
+    public function admin_notices()
+    {
+        $notices = [
+            'not-valid-apiurl' => [
+                'class' => 'notice-error',
+                'message' => __('Not a valid API URL', 'rrze-remoter')
+            ]
+        ];
+        
+        foreach ($notices as $key => $notice) {
+            $get_notice = isset($_GET[sprintf('remoter-%s', $key)]) ? $_GET[sprintf('remoter-%s', $key)] : '';
+            if (!$get_notice) {
+                continue;
+            } ?>
+            <div class="notice <?php echo $notice['class']; ?> is-dismissible">
+                <p><?php echo $notice['message']; ?></p>
+            </div>
+            <?php
+        }
+    }
+        
     protected function validate_apiurl($apiurl = null)
     {
         if ($apiurl && filter_var($apiurl, FILTER_VALIDATE_URL) !== false) {
@@ -123,18 +165,9 @@ class Metaboxes
             $url_host = parse_url($apiurl, PHP_URL_HOST);
             $url = trailingslashit($url_scheme . $url_host);
         } else {
-            add_action('admin_notices', [$this, 'notice_not_valid_apiurl']);
-            $url = null;
+            return new WP_Error('not-valid-apiurl', '1');
         }
         return $url;
-    }
-    
-    public function notice_not_valid_apiurl() {
-        ?>
-        <div class="notice notice-error">
-            <p><?php _e('Not a valid API URL', 'rrze-remoter'); ?></p>
-        </div>
-        <?php
     }
         
     public function request_apikey()
@@ -146,20 +179,16 @@ class Metaboxes
         $domain = parse_url(site_url(), PHP_URL_HOST);
         
         $url = sprintf('%1$srequest.php?domain=%2$s&request=key', $this->apiurl, $domain);
-        do_action('rrze.log.debug', ['plugin' => 'rrze-remoter', 'remote url request=key' => $url]);
         
         $sslverify = defined('WP_DEBUG') && WP_DEBUG ? false : true;
         
         $response = wp_remote_get($url, ['httpversion' => '1.1', 'sslverify' => $sslverify]);
         $status_code = wp_remote_retrieve_response_code($response);
-
-        do_action('rrze.log.debug', ['plugin' => 'rrze-remoter', 'remote url request=key status code' => $status_code]);
         
         if ($status_code == 200) {
             return $response['body'];
         }
         
-        return null;
+        return new WP_Error('request-apikey-error', '1');
     }
-    
 }
