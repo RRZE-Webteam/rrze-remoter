@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Remoter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-09 16:43+0200\n"
+"POT-Creation-Date: 2018-07-10 14:56+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam <webmaster@rrze.fau.de>\n"
@@ -82,7 +82,7 @@ msgid "ID"
 msgstr "ID"
 
 #: ../RRZE/Remoter/CPT/Customize_List_View.php:21
-#: ../RRZE/Remoter/CPT/Metaboxes.php:27
+#: ../RRZE/Remoter/CPT/Metaboxes.php:32
 msgid "API URL"
 msgstr "API-URL"
 
@@ -90,7 +90,7 @@ msgstr "API-URL"
 msgid "Date"
 msgstr "Datum"
 
-#: ../RRZE/Remoter/CPT/Metaboxes.php:135
+#: ../RRZE/Remoter/CPT/Metaboxes.php:145
 msgid "Not a valid API URL"
 msgstr "Keine gültige API-URL"
 
