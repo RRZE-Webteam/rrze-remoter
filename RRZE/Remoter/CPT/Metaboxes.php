@@ -163,7 +163,8 @@ class Metaboxes
         if ($apiurl && filter_var($apiurl, FILTER_VALIDATE_URL) !== false) {
             $url_scheme = is_ssl() ? 'https://' : 'http://';
             $url_host = parse_url($apiurl, PHP_URL_HOST);
-            $url = trailingslashit($url_scheme . $url_host);
+            $url_path = parse_url($apiurl, PHP_URL_PATH);
+            $url = trailingslashit($url_scheme . $url_host . ($url_path ? $url_path : ''));
         } else {
             return new WP_Error('not-valid-apiurl', '1');
         }
