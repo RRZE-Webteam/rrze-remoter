@@ -105,7 +105,7 @@ if($header) { ?>
                 <?php break;
                 case 'download': ?>
                         
-                    <td align="center"><a class="no_mtli" rel="no_mtli" href="https://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                    <td align="center"><a class="no_mtli" rel="no_mtli" href="<?php echo $apiurl . $data[$i]['dir'] . $data[$i]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
             
                 <?php break;
                 case 'directory': ?>
@@ -124,11 +124,11 @@ if($header) { ?>
                             
                         <?php if (!in_array($extension, $imgFormats)) { ?>
                         <td>
-                            <a class="no_mtli" rel="no_mtli" href="https://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : Helper::getMetafileNames($path, $store, $file); ?></a>
+                            <a class="no_mtli" rel="no_mtli" href="<?php echo $apiurl . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : Helper::getMetafileNames($path, $store, $file); ?></a>
                         </td> 
                         <?php } else { ?>
                         <td>
-                            <a class="lightbox" rel="lightbox-' . $id . '" href="https://<?php echo $domain . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : Helper::getMetafileNames($path, $store, $file);?></a>
+                            <a class="lightbox" rel="lightbox-' . $id . '" href="<?php echo $apiurl . $data[$i]['dir'] . $data[$i]['name'] ?>"><?php echo ($alias) ? $alias : Helper::getMetafileNames($path, $store, $file);?></a>
                         </td>  
                         <?php } ?>
 

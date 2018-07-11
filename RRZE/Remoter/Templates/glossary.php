@@ -47,7 +47,7 @@ $this->glossary_array = $data;
 
    <?php if (in_array($value, $array_without_numbers)) { ?>
 
-        <li><a href="#letter-<?php echo $value ?>" data-link="<?php echo $shortcodeValues['link'] ?>" data-columns="<?php echo $shortcodeValues['showColumns'] ?>" data-host="<?php echo $domain ?>" data-letter="<?php echo $value ?>"><?php echo $value ?></a></li>
+        <li><a href="#letter-<?php echo $value ?>" data-link="<?php echo $shortcodeValues['link'] ?>" data-columns="<?php echo $shortcodeValues['showColumns'] ?>" data-host="<?php echo $apihost ?>" data-letter="<?php echo $value ?>"><?php echo $value ?></a></li>
 
    <?php } else { ?>
 
@@ -112,7 +112,7 @@ $this->glossary_array = $data;
                         <?php }
                         break;
                     case 'download': ?>
-                        <td align="center"><a href="https://<?php echo $domain . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                        <td align="center"><a href="<?php echo $apiurl . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                         <?php break;
                     case 'directory': ?>
                         <td><?php echo Helper::getFolder($data_new[$i]['path']) ?></td>
@@ -127,7 +127,7 @@ $this->glossary_array = $data;
                             
                             <?php if (!in_array($extension, $imgFormats)) { ?>
                                 <td>
-                                    <a href="https://<?php echo $domain . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>">
+                                    <a href="<?php echo $apiurl . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>">
                                         <?php
                                             echo Helper::getMetafileNames($path, $store, $file);
                                         ?>
@@ -135,7 +135,7 @@ $this->glossary_array = $data;
                                 </td> 
                             <?php } else { ?>
                                 <td>
-                                    <a class="lightbox" rel="lightbox-' . $id . '" href="https://<?php echo $domain . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>">
+                                    <a class="lightbox" rel="lightbox-' . $id . '" href="<?php echo $apiurl . $data_new[$i]['dir'] . $data_new[$i]['name'] ?>">
                                         <?php
                                             echo Helper::getMetafileNames($path, $store, $file);
                                         ?>

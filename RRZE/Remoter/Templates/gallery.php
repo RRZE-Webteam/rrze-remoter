@@ -1,6 +1,8 @@
 <?php
 namespace RRZE\Remoter\Templates;
 
+use RRZE\Remoter\Helper;
+
 defined('ABSPATH') || exit;
 
 $stylesheet = get_stylesheet();
@@ -10,76 +12,44 @@ if (in_array($stylesheet, $themes)) {
     $usejslibs['flexslider'] = true;
 }
 
-$id = uniqid();
+$id = Helper::createHash(10);
 
-$g = '<div id="slider-' . $id . '" class="image-gallery-slider">';
-$g .= '<ul class="slides">';
+$output = '<div id="slider-' . $id . '" class="image-gallery-slider">';
+$output  .= '<ul class="slides">';
 
 foreach ($data as $key => $value) {
 
-    $path = 'https://' . $domain . $value['dir'] . $value['name'] . '';
+    $path = $apiurl . $value['dir'] . $value['name'] . '';
     $imginfo = getimagesize($path, $info);
     $iptcdata = iptcparse($info["APP13"]);
 
-    $g .= '<li><img src="https://' . $domain . $value['dir'] . $value['name'] . '"/>';
-    $g .= '<div class="gallery-image-caption">';
-    $g .= '<span class="linkorigin">';
-    $g .= '(<a href="https://' . $domain . $value['dir'] . $value['name'] . '" title="' . $iptcdata["2#120"][0] . '" class="lightbox" rel="lightbox-' . $id . '">' . __('Enlarge', 'rrze-remoter') . '</a>)';
+    $output .= '<li><img src="' . $apiurl . $value['dir'] . $value['name'] . '"/>';
+    $output .= '<div class="gallery-image-caption">';
+    $output .= '<span class="linkorigin">';
+    $output .= '(<a href="' . $apiurl . $value['dir'] . $value['name'] . '" title="' . $iptcdata["2#120"][0] . '" class="lightbox" rel="lightbox-' . $id . '">' . __('Enlarge', 'rrze-remoter') . '</a>)';
     if ($gallerytitle && $gallerydescription) {
-        $g .= '<div>' . $iptcdata["2#105"][0] . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
+        $output .= '<div>' . $iptcdata["2#105"][0] . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
     } elseif ($gallerytitle && !$gallerdescription) {
-        $g .= '<div>' . $iptcdata["2#105"][0] . '</div></span>';
+        $output .= '<div>' . $iptcdata["2#105"][0] . '</div></span>';
     } elseif (!$gallerytitle && $gallerydescription) {
-        $g .= '<div>' . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
+        $output .= '<div>' . '<br>' . $iptcdata["2#120"][0] . '</div></span>';
     } elseif (!$gallerytitle && !$gallerdescription) {
-        $g .= '<div></div>';
+        $output .= '<div></div>';
     }
-    $g .= '</li>';
+    $output .= '</li>';
 }
 
-$g .= '</ul></div>';
-echo $g;
+$output .= '</ul></div>' . PHP_EOL;
 
-$c = '<div id="carousel-' . $id . '" class="image-gallery-carousel">';
-$c .= '<ul class="slides">';
+$output .= '<div id="carousel-' . $id . '" class="image-gallery-carousel">';
+$output .= '<ul class="slides">' . PHP_EOL;
 
 foreach ($data as $key => $value) {
-    $c .= '<li><img src="https://' . $domain . $value['dir'] . $value['name'] . '" width="120" height="80" alt=""/></li>';
+    $output .= '<li><img src="' . $apiurl . $value['dir'] . $value['name'] . '" width="120" height="80" alt=""/></li>' . PHP_EOL;
 }
 
-$c .= '</ul></div>';
-echo $c;
-
-
-/* function getIptcData($data, $domain) {
-
-  $path       = 'https://'. $domain . $value['image'] . '';
-  $imginfo    = getimagesize($path, $info);
-  $iptcdata    = iptcparse($info["APP13"]);
-
-  if (is_array($iptcdata)) {
-  $data['headline']             = $iptc["2#105"][0];
-  $data['documentTitle']        = $iptc["2#120"][0];
-  $data['graphic_name']         = $iptc["2#005"][0];
-  $data['urgency']              = $iptc["2#010"][0];
-  $data['category']             = $iptc["2#015"][0];
-  $data['supp_categories']      = $iptc["2#020"][0];
-  $data['spec_instr']           = $iptc["2#040"][0];
-  $data['creation_date']        = $iptc["2#055"][0];
-  $data['authorByline']         = $iptc["2#080"][0];
-  $data['authorTitle']          = $iptc["2#085"][0];
-  $data['city']                 = $iptc["2#090"][0];
-  $data['state']                = $iptc["2#095"][0];
-  $data['country']              = $iptc["2#101"][0];
-  $data['otr']                  = $iptc["2#103"][0];
-  $data['source']               = $iptc["2#110"][0];
-  $data['photo_source']         = $iptc["2#115"][0];
-
-  }
-
-  return $data;
-
-  } */
+$output .= '</ul></div>' . PHP_EOL;
+echo $output;
 ?>
 <script>
     jQuery(document).ready(function ($) {

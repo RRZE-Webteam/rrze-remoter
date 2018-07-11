@@ -96,7 +96,7 @@ defined('ABSPATH') || exit;
                             <?php }
                             break; 
                         case 'download': ?>
-                            <td align="center"><a href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
+                            <td align="center"><a href="<?php echo $apiurl . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>"  download><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></td>
                            <?php break;
                         case 'directory': ?>
                             <td><?php echo Helper::getFolder($data[$i][$j]['path']) ?></td>
@@ -112,7 +112,7 @@ defined('ABSPATH') || exit;
                             
                                 <?php if (!in_array($extension, $imgFormats)) { ?>
                                     <td>
-                                        <a href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
+                                        <a href="<?php echo $apiurl . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
                                             <?php
                                                 echo Helper::getMetafileNames($path, $store, $file);
                                             ?>
@@ -120,7 +120,7 @@ defined('ABSPATH') || exit;
                                     </td> 
                                 <?php } else { ?>
                                     <td>
-                                        <a class="lightbox" rel="lightbox-' . $id . '" href="https://<?php echo $domain . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
+                                        <a class="lightbox" rel="lightbox-' . $id . '" href="<?php echo $apiurl . $data[$i][$j]['dir'] . $data[$i][$j]['name'] ?>">
                                             <?php
                                                 echo Helper::getMetafileNames($path, $store, $file);
                                             ?>
@@ -147,7 +147,7 @@ defined('ABSPATH') || exit;
 <nav class="pagination pagebreaks" role="navigation"><h3><?php _e('Page:', 'rrze-remoter'); ?></h3><span class="subpages"><?php for ($i = 1; $i <= $pagecount; $i++) { ?><a data-filetype="<?php echo $shortcodeValues['filetype'] ?>" href="#get_list"
 data-recursiv="<?php echo $shortcodeValues['recursive'] ?>"
 data-index="<?php echo $shortcodeValues['fileIndex'] ?>"
-data-host="<?php echo $domain ?>"
+data-host="<?php echo $apihost ?>"
 data-chunk="<?php echo $number_of_chunks ?>"
 data-pagecount-value="<?php echo $pagecount ?>"
 data-columns="<?php echo $shortcodeValues['showColumns'] ?>" 
