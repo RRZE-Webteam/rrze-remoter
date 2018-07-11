@@ -202,4 +202,20 @@ class Helper
         return $str;
     }
     
+    public static function createHash($length = 32) {
+        if (!isset($length) || intval($length) <= 8) {
+            $length = 32;
+        }
+        // PHP 7
+        if (function_exists('random_bytes')) {
+            return bin2hex(random_bytes($length));
+        }
+        // PHP 5 >= 5.3.0, PHP 7
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            return bin2hex(openssl_random_pseudo_bytes($length));
+        }
+        // PHP 4, PHP 5, PHP 7
+        return bin2hex(uniqid('', TRUE));
+    }
+  
 }
