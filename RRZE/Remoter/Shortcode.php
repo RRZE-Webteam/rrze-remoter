@@ -40,7 +40,8 @@ class Shortcode {
 
     public function shortcode($atts) {
 
-        $this->shortcode_atts = shortcode_atts(array(
+        $this->shortcode_atts = shortcode_atts(
+        [
             'id' => '',
             'file' => '',
             'index' => '',
@@ -60,7 +61,7 @@ class Shortcode {
             'fileheader' => '0',
             'gallerytitle' => '1',
             'gallerydescription' => '1'
-                ), $atts);
+        ], $atts);
 
         return $this->show_results();
     }
@@ -90,10 +91,12 @@ class Shortcode {
         }
 
         $apiurl = get_post_meta($remoter_post->ID, '_rrze_remoter_apiurl', true);
+        $apihost = parse_url($apiurl, PHP_URL_HOST);
+        
         $apikey = get_post_meta($remoter_post->ID, '_rrze_remoter_apikey', true);
 
         $data = RemoteFiles::getFiles($this->shortcode_atts, $apiurl, $apikey);
-
+                
         if ($data) {
             $view = $shortcodeValues['view'];
             $tableHeader = Helper::getHeaderData($shortcodeValues['showColumns']);
@@ -108,7 +111,7 @@ class Shortcode {
                     ob_start();
                     $gallerytitle = $shortcodeValues['gallerytitle'];
                     $gallerydescription = $shortcodeValues['gallerydescription'];
-                    include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/gallery.php';
+                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/gallery.php';
                     $content = ob_get_clean();
                     return $content;
                     break;
@@ -126,7 +129,7 @@ class Shortcode {
                     } else {
                         $dataSorted = Helper::sortArray($data, $unique);
                         $data_new = Helper::deleteMetaTxtEntries($dataSorted);
-                        include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/glossary.php';
+                        include $this->plugin_dir_path . 'RRZE/Remoter/Templates/glossary.php';
                     }
                     $content = ob_get_clean();
                     return $content;
@@ -153,7 +156,7 @@ class Shortcode {
                     } else {
                         $id = uniqid();
                         $itemscount = (isset($data[0]) ? count($data[0]) : '');
-                        include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/table.php';
+                        include $this->plugin_dir_path . 'RRZE/Remoter/Templates/table.php';
                     }
                     $content = ob_get_clean();
                     return $content;
@@ -172,19 +175,19 @@ class Shortcode {
                     $deletejson = $data;
                     $data = Helper::deleteMetaTxtEntries($deletejson);
                     array_multisort(array_column($data, $sortOrderby), $sortOrder, $data);
-                    include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/table-without-pagination.php';
+                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/table-without-pagination.php';
                     $content = ob_get_clean();
                     return $content;
                     break;
                 case 'imagetable':
                     ob_start();
-                    include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/imagetable.php';
+                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/imagetable.php';
                     $content = ob_get_clean();
                     return $content;
                     break;
                 default:
                     ob_start();
-                    include_once $this->plugin_dir_path . 'RRZE/Remoter/Templates/list.php';
+                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/list.php';
                     $orderby = $this->shortcode_atts['orderby'];
                     $content = ob_get_clean();
                     return $content;
