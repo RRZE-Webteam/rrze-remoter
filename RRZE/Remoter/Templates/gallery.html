@@ -1,0 +1,51 @@
+<div id="slider-{id}" class="image-gallery-slider">
+  <ul class="slides">
+    {images}
+    <li>
+      <img src="{url}" />
+      <div class="gallery-image-caption">
+        <span class="linkorigin">
+            (<a href="{url}" title="{title}" class="lightbox" rel="lightbox-{id}">{Enlarge}</a>)
+            <div>{description}</div>
+        </span>
+    </li>
+    {/images}
+  </ul>
+</div>
+
+<div id="carousel-{id}" class="image-gallery-carousel">
+<ul class="slides">
+  {images}
+  <li><img src="{url}" width="120" height="80" alt="" /></li>
+  {/images}
+</ul>
+</div>
+<script>
+jQuery(document).ready(function($) {
+  $("#carousel-{id}").flexslider({
+    maxItems: 7,
+    selector: "ul > li",
+    animation: "slide",
+    keyboard: true,
+    multipleKeyboard: true,
+    directionNav: true,
+    controlNav: true,
+    pausePlay: false,
+    slideshow: false,
+    asNavFor: "#slider-{id}",
+    itemWidth: 125,
+    itemMargin: 5
+  });
+  $("#slider-{id}").flexslider({
+    selector: "ul > li",
+    animation: "slide",
+    keyboard: true,
+    multipleKeyboard: true,
+    directionNav: false,
+    controlNav: false,
+    pausePlay: false,
+    slideshow: false,
+    sync: "#carousel-{id}"
+  });
+});
+</script>
