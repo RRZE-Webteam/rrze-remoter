@@ -48,12 +48,8 @@ class Shortcode
         add_action('wp_ajax_rrze_remote_glossary_ajax_request', [$this, 'rrze_remote_glossary_ajax_request']);
         add_action('wp_ajax_nopriv_rrze_remote_glossary_ajax_request', [$this, 'rrze_remote_glossary_ajax_request']);
 
-        
-        
         add_action('wp_ajax_rrze_remote_table_ajax_request', [$this, 'rrze_remote_table_ajax_request']);
         add_action('wp_ajax_nopriv_rrze_remote_table_ajax_request', [$this, 'rrze_remote_table_ajax_request']);
-
-        
     }
 
     public function shortcode($atts)
