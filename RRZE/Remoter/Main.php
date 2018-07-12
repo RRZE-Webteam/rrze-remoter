@@ -44,24 +44,6 @@ class Main {
         wp_register_style('rrze-remoter-rrze-theme-stylescss', plugins_url('assets/css/rrze-styles.css', $this->plugin_basename));
         wp_register_script('flexsliderjs', plugins_url('assets/js/jquery.flexslider.js', $this->plugin_basename), ['jquery'], '', true);
         wp_register_script('fancyboxjs', plugins_url('assets/js/jquery.fancybox.js', $this->plugin_basename), ['jquery'], '', true);
-
-        if (is_singular() && in_array($post->post_type, ['post', 'page']) && has_shortcode($post->post_content, 'remoter')) {
-
-            wp_enqueue_script('rrze-remoter-mainjs');
-            wp_enqueue_script('rrze-remoter-scriptsjs');
-            wp_enqueue_script('flexsliderjs');
-            wp_enqueue_script('fancyboxjs');
-                
-            $stylesheet = get_stylesheet();
-            $themes = ['FAU-Einrichtungen', 'FAU-Natfak', 'FAU-Philfak', 'FAU-RWFak', 'FAU-Techfak', 'FAU-Medfak', 'FAU-Events'];
-            
-            if (!in_array($stylesheet, $themes)) {
-                wp_enqueue_style('rrze-remoter-rrze-theme-stylescss');
-            } else {
-                wp_enqueue_style('rrze-remoter-stylescss');
-            }
-        }
-
     }
 
 }
