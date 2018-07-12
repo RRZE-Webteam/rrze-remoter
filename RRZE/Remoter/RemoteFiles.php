@@ -17,8 +17,6 @@ class RemoteFiles
             return null;
         }
 
-        do_action('rrze.log.debug', ['plugin' => 'rrze-remoter', 'data' => $data]);
-
         foreach ($data as $key => $value) {
             $data[$key]['dir'] = '/' . $data[$key]['path'] . '/';
             $data[$key]['extension'] = substr(strrchr($data[$key]['name'], '.'), 1);
