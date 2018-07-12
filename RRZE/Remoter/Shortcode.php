@@ -3,17 +3,21 @@
 namespace RRZE\Remoter;
 
 use RRZE\Remoter\RemoteFiles;
+use RRZE\Remoter\Parser;
 use RRZE\Remoter\Helper;
+use \WP_Error;
 
 defined('ABSPATH') || exit;
 
-class Shortcode {
-
+class Shortcode
+{
     protected $plugin_file;
     
     protected $plugin_dir_path;
     
     protected $shortcode_atts;
+    
+    protected $parser;
     
     protected $glossary_array;
     
@@ -22,24 +26,38 @@ class Shortcode {
     protected $res;
     
     protected $a;
+    
+    protected $fau_themes = [
+        'FAU-Einrichtungen',
+        'FAU-Natfak',
+        'FAU-Philfak',
+        'FAU-RWFak',
+        'FAU-Techfak',
+        'FAU-Medfak'
+    ];
 
-    public function __construct($plugin_file) {
+    public function __construct($plugin_file)
+    {
         $this->plugin_file = $plugin_file;
         $this->plugin_dir_path = plugin_dir_path($plugin_file);
-
-        add_action('wp_ajax_rrze_remote_table_ajax_request', [$this, 'rrze_remote_table_ajax_request']);
-        add_action('wp_ajax_nopriv_rrze_remote_table_ajax_request', [$this, 'rrze_remote_table_ajax_request']);
+        
+        $this->parser = new Parser();
+                
         add_shortcode('remoter', [$this, 'shortcode']);
-        add_action('wp_footer', [$this, 'rrze_remote_table_script_footer']);
-
+        
         add_action('wp_ajax_rrze_remote_glossary_ajax_request', [$this, 'rrze_remote_glossary_ajax_request']);
         add_action('wp_ajax_nopriv_rrze_remote_glossary_ajax_request', [$this, 'rrze_remote_glossary_ajax_request']);
 
-        add_action('wp_footer', [$this, 'rrze_remote_glossary_script_footer']);
+        
+        
+        add_action('wp_ajax_rrze_remote_table_ajax_request', [$this, 'rrze_remote_table_ajax_request']);
+        add_action('wp_ajax_nopriv_rrze_remote_table_ajax_request', [$this, 'rrze_remote_table_ajax_request']);
+
+        
     }
 
-    public function shortcode($atts) {
-
+    public function shortcode($atts)
+    {
         $this->shortcode_atts = shortcode_atts(
         [
             'id' => '',
@@ -61,13 +79,36 @@ class Shortcode {
             'fileheader' => '0',
             'gallerytitle' => '1',
             'gallerydescription' => '1'
-        ], $atts);
+        ],
+            $atts
+        );
 
-        return $this->show_results();
+        $content = $this->output();
+        if (is_wp_error($content)) {
+            return sprintf('[remote] %s', $content->get_error_message());
+        }
+                
+        wp_enqueue_script('rrze-remoter-mainjs');
+        wp_enqueue_script('rrze-remoter-scriptsjs');
+        wp_enqueue_script('flexsliderjs');
+        wp_enqueue_script('fancyboxjs');
+            
+        $stylesheet = get_stylesheet();
+        
+        if (!in_array($stylesheet, $this->fau_themes)) {
+            wp_enqueue_style('rrze-remoter-rrze-theme-stylescss');
+        } else {
+            wp_enqueue_style('rrze-remoter-stylescss');
+        }
+                    
+        add_action('wp_footer', [$this, 'rrze_remote_glossary_script_footer']);
+        add_action('wp_footer', [$this, 'rrze_remote_table_script_footer']);
+                
+        return $content;        
     }
 
-    private function show_results() {
-
+    private function output()
+    {
         $shortcodeValues = array(
             'fileIndex' => $this->shortcode_atts['index'],
             'view' => $this->shortcode_atts['view'],
@@ -97,8 +138,8 @@ class Shortcode {
 
         $data = RemoteFiles::getFiles($this->shortcode_atts, $apiurl, $apikey);
                 
-        if ($data) {
-            $view = $shortcodeValues['view'];
+        if ($data) {            
+            $view = $this->shortcode_atts['view'];
             $tableHeader = Helper::getHeaderData($shortcodeValues['showColumns']);
             $meta = $data;
 
@@ -107,18 +148,10 @@ class Shortcode {
             $orderby = $this->shortcode_atts['orderby'];
             
             switch ($view) {
-                case 'gallery':
-                    ob_start();
-                    $gallerytitle = $shortcodeValues['gallerytitle'];
-                    $gallerydescription = $shortcodeValues['gallerydescription'];
-                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/gallery.php';
-                    $content = ob_get_clean();
-                    return $content;
-                    break;
                 case 'glossary':
                     ob_start();
-                    $id = uniqid();
-                    $metajson = Helper::getJsonFile($shortcodeValues, $data);
+                    $id = Helper::createHash(10);
+                    $metajson = Helper::getJsonFile($this->shortcode_atts, $data);
                     $metadata = Helper::getJsonData($metajson, $apiurl);
                     $letters = Helper::createLetters();
                     $unique = Helper::getUsedLetters($data);
@@ -138,7 +171,7 @@ class Shortcode {
                     ob_start();
                     $this->res = $data;
                     
-                    $metajson = Helper::getJsonFile($shortcodeValues, $data);
+                    $metajson = Helper::getJsonFile($this->shortcode_atts, $data);
                     $metadata = Helper::getJsonData($metajson, $apiurl);
                     
                     $number_of_chunks = (int) $this->shortcode_atts['itemsperpage'];
@@ -154,59 +187,175 @@ class Shortcode {
                     if (empty($pagecount)) {
                         _e('There are no entries for this file type!', 'rrze-remoter');
                     } else {
-                        $id = uniqid();
+                        $id = Helper::createHash(10);
                         $itemscount = (isset($data[0]) ? count($data[0]) : '');
-                        include $this->plugin_dir_path . 'RRZE/Remoter/Templates/table.php';
+                        include $this->plugin_dir_path . 'RRZE/Remoter/Templates/pagination.php';
                     }
                     $content = ob_get_clean();
                     return $content;
                     break;
-                case 'table':
+                case 'table':                
                     ob_start();
                     $fileheader = $shortcodeValues['fileheader'];
                     $header = $shortcodeValues['showHeader'];
                     $order = $this->shortcode_atts['order'];
                     $orderby = $this->shortcode_atts['orderby'];
                     $alias = $shortcodeValues['alias'];
-                    $metajson = Helper::getJsonFile($shortcodeValues, $data);
+                    $metajson = Helper::getJsonFile($this->shortcode_atts, $data);
                     $metadata = Helper::getJsonData($metajson, $apiurl);
+                    
                     $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
                     $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
+                    
                     $deletejson = $data;
                     $data = Helper::deleteMetaTxtEntries($deletejson);
+                    
                     array_multisort(array_column($data, $sortOrderby), $sortOrder, $data);
-                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/table-without-pagination.php';
+                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/table.php';
                     $content = ob_get_clean();
                     return $content;
+                    break;
+                case 'gallery':
+                    return $this->galleryView($data, $apiurl);
                     break;
                 case 'imagetable':
-                    ob_start();
-                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/imagetable.php';
-                    $content = ob_get_clean();
-                    return $content;
+                    return $this->imagetableView($data, $apiurl);
                     break;
                 default:
-                    ob_start();
-                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/list.php';
-                    $orderby = $this->shortcode_atts['orderby'];
-                    $content = ob_get_clean();
-                    return $content;
+                    return $this->listView($data, $apiurl);
             }
+                        
         } else {
-            $error = $shortcodeValues['errormsg'];
-            if ($error) {
-                _e('No data could be found on the server!', 'rrze-remoter');
-            } else {
-                echo '';
-            }
+            return new WP_Error('no_remote_data_found', __('No data could be found on the server!', 'rrze-remoter'));
         }
     }
+        
+    protected function listView($remote_data, $apiurl) {
+        $data = [];
+        
+        $template = $this->plugin_dir_path . 'RRZE/Remoter/Templates/list.html';
+        
+        $sortOrderby = $this->shortcode_atts['orderby'] == 'size' ? 'size' : 'name';
+        $sortOrder = $this->shortcode_atts['order'] == 'asc' ? SORT_ASC : SORT_DESC;
+        array_multisort(array_column($data, $sortOrderby), $sortOrder , $remote_data);
+                
+        foreach ($remote_data as $key => $value) {
+            $ext = $value['extension'];
+            if($ext == 'pdf') { 
+                $icon ='fa-file-pdf-o';
+            } elseif ($ext == 'pptx' || $ext =='ppt') { 
+                $icon ='fa-file-powerpoint-o';
+            } elseif ($ext == 'docx' || $ext =='doc' ) { 
+                $icon ='fa fa-file-word-o';
+            } elseif ($ext == 'xlsx' || $ext =='xls') { 
+                $icon ='fa-file-excel-o';
+            } elseif ($ext == 'mpg' || $ext =='mpeg'|| $ext =='mp4' || $ext =='m4v') { 
+                $icon = 'fa-file-movie-o';
+            } else { 
+                $icon ='fa-file-image-o';
+            }
+            
+            $data['files'][$key]['icon'] = $icon;
+            $data['files'][$key]['url'] = $apiurl . $value['dir'] . $value['name'] . '';;
+            $data['files'][$key]['name'] = Helper::replaceCharacterList(Helper::changeUmlautsList($value['name']));
+            $data['files'][$key]['size'] = Helper::formatSize($value['size']);
+            
+        }
+        
+        return $this->parser->template($template, $data);
+    }
+    
+    protected function galleryView($remote_data, $apiurl) {
+        $data = [];
+        
+        $template = $this->plugin_dir_path . 'RRZE/Remoter/Templates/gallery.html';
+        
+        $stylesheet = get_stylesheet();
+        
+        if (in_array($stylesheet, $this->fau_themes)) {
+            global $usejslibs;
+            $usejslibs['flexslider'] = true;
+        }
+        
+        $data['id'] = Helper::createHash(10);
+        
+        $gallerytitle = $this->shortcode_atts['gallerytitle'];
+        $gallerydescription = $this->shortcode_atts['gallerydescription'];        
+        
+        foreach ($remote_data as $key => $value) {
 
-    public function rrze_remote_table_script_footer() {
+            $url = $apiurl . $value['dir'] . $value['name'] . '';
+            $timeout = 10;
+            $tmpfile = Helper::download_url($url, $timeout);
+            if (is_wp_error($tmpfile)) {
+                continue;
+            }
+            $imginfo = getimagesize($tmpfile, $info);
+            unlink($tmpfile); // important!
+            
+            if (!$imginfo[0] || !$imginfo[1]) {
+                continue;
+            }
 
+            $iptcdata = isset($info["APP13"]) ? iptcparse($info["APP13"]) : null;
+            
+            $title = $iptcdata && isset($iptcdata["2#120"][0]) ? $iptcdata["2#120"][0] : '';
+            $desc = $iptcdata && isset($iptcdata["2#105"][0]) ? $iptcdata["2#105"][0] : '';
+            
+            if ($gallerytitle && $gallerydescription) {
+                $description = $desc . '<br/>' . $title;
+            } elseif ($gallerytitle && !$gallerdescription) {
+                $description = $title;
+            } elseif (!$gallerytitle && $gallerydescription) {
+                $description = $desc;
+            } else {
+                $description = '';
+            }
+            
+            $data['images'][$key]['id'] = $data['id'];
+            $data['images'][$key]['url'] = $url;
+            $data['images'][$key]['title'] = $title;
+            $data['images'][$key]['description'] = $description;
+            $data['images'][$key]['Enlarge'] = __('Enlarge', 'rrze-remoter');
+        }
+        
+        return $this->parser->template($template, $data);
+    }
+    
+    protected function imagetableView($remote_data, $apiurl) {
+        $data = [];
+        
+        $template = $this->plugin_dir_path . 'RRZE/Remoter/Templates/imagetable.html';
+
+        $data['id'] = Helper::createHash(10);
+        
+        foreach ($remote_data as $key => $value) {
+            $url = $apiurl . $value['dir'] . $value['name'] . '';
+            $timeout = 10;
+            $tmpfile = Helper::download_url($url, $timeout);
+            if (is_wp_error($tmpfile)) {
+                continue;
+            }
+            $imginfo = getimagesize($tmpfile, $info);
+            unlink($tmpfile); // important!
+            
+            if (!$imginfo[0] || !$imginfo[1]) {
+                continue;
+            }
+
+            $iptcdata = isset($info["APP13"]) ? iptcparse($info["APP13"]) : null;
+            
+            $data['images'][$key]['id'] = $data['id'];
+            $data['images'][$key]['url'] = $url;                        
+        }
+        
+        return $this->parser->template($template, $data);
+    }
+    
+    public function rrze_remote_table_script_footer()
+    {
         $arr = (!empty($this->res)) ? $this->res : '';
-        $meta = (!empty($this->a)) ? $this->a : '';
-        ?>
+        $meta = (!empty($this->a)) ? $this->a : ''; ?>
 
         <script>
             jQuery(document).ready(function ($) {
@@ -258,10 +407,9 @@ class Shortcode {
     <?php
     }
 
-    public function rrze_remote_table_ajax_request() {
-
+    public function rrze_remote_table_ajax_request()
+    {
         if (isset($_REQUEST)) {
-
             $meta = $_REQUEST['meta'];
 
             $dataArray = $_REQUEST['arr'];
@@ -294,13 +442,12 @@ class Shortcode {
 
             $columns = explode(",", $_REQUEST['columns']);
 
-            $id = uniqid();
+            $id = Helper::createHash(10);
 
             $t = '<table>';
             $t .= '<tr>';
 
             foreach ($columns as $key => $column) {
-
                 switch ($column) {
                     case 'size':
                         $t .= '<th>' . __('File size', 'rrze-remoter') . '</th>';
@@ -326,7 +473,6 @@ class Shortcode {
             $t .= '</tr>';
 
             foreach ($data[$i] as $key => $value) {
-
                 $t .= '</tr>';
 
                 foreach ($columns as $key => $column) {
@@ -381,7 +527,6 @@ class Shortcode {
                                     $t .= '</td>';
                                 }
                             } else {
-
                                 $t .= '<td>' . $value['name'] . '</td>';
                             }
                             break;
@@ -403,11 +548,10 @@ class Shortcode {
         wp_die();
     }
 
-    public function rrze_remote_glossary_script_footer() {
-
+    public function rrze_remote_glossary_script_footer()
+    {
         $glossary_files = (!empty($this->glossary_array)) ? $this->glossary_array : '';
-        $glossary_meta = (!empty($this->meta)) ? $this->meta : '';
-        ?>
+        $glossary_meta = (!empty($this->meta)) ? $this->meta : ''; ?>
         <script>
             jQuery(document).ready(function ($) {
 
@@ -447,11 +591,9 @@ class Shortcode {
         <?php
     }
 
-    public function rrze_remote_glossary_ajax_request() {
-
-        //print_r($_REQUEST);
-
-        $id = uniqid();
+    public function rrze_remote_glossary_ajax_request()
+    {
+        $id = Helper::createHash(10);
         $link = $_REQUEST['link'];
         $host = $_REQUEST['host'];
 
@@ -479,7 +621,6 @@ class Shortcode {
         $t .= '<tr>';
 
         foreach ($columns as $key => $column) {
-
             switch ($column) {
                 case 'size':
                     $t .= '<th>' . __('File size', 'rrze-remoter') . '</th>';
@@ -506,7 +647,6 @@ class Shortcode {
         //echo $t;
 
         for ($i = 0; $i < sizeof($data); $i++) {
-
             $t .= '</tr>';
 
             foreach ($columns as $key => $column) {
@@ -560,7 +700,6 @@ class Shortcode {
                                 $t .= '</td>';
                             }
                         } else {
-
                             $t .= '<td>' . basename($data[$i]['path']) . '</td>';
                         }
                         break;
@@ -575,8 +714,6 @@ class Shortcode {
 
         $t .= '</table></div>';
         echo $t;
-
-        wp_die();
+        exit;
     }
-
 }
