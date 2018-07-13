@@ -81,7 +81,11 @@ class Shortcode
 
         $content = $this->output();
         if (is_wp_error($content)) {
-            return sprintf('[remote] %s', $content->get_error_message());
+            if ($this->shortcode_atts['errormsg']) {
+                return sprintf('[remoter] %s', $content->get_error_message());
+            } else {
+                return '';
+            }
         }
                 
         wp_enqueue_script('rrze-remoter-mainjs');
