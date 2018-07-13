@@ -108,24 +108,40 @@ class Metaboxes
                 }
             }
         }
-        
+                
+        $apikey = $this->request_apikey();
+        if (is_wp_error($apikey)) {
+            $this->notices[$apikey->get_error_code()] = $apikey->get_error_message();
+        }
+                
         if (!empty($this->notices)) {
             add_filter('redirect_post_location', [$this, 'add_notices'], 99);
             return;
         }
-        
-        $apikey = $this->request_apikey();
-        if (is_wp_error($apikey)) {
-            return;
-        }
-        
+                
         $response = json_decode($apikey);
         $error = isset($response->error) ? absint($response->error) : 0;
         $value = isset($response->value) ? $response->value : 0;
         
-        if (in_array($error, [60, 65]) && $value) {
-            update_post_meta($post_id, '_rrze_remoter_apikey', $value);
+        switch ($error) {
+            case 5:
+                $this->notices['remote-config-error'] = '1';
+                break;
+            case 30:
+                $this->notices['remote-request-type-error'] = '1';
+                break;            
+            case 60:
+            case 65:
+                update_post_meta($post_id, '_rrze_remoter_apikey', $value);
+                break;
+            default:
+                $this->notices['request-apikey-error'] = '1';
         }
+        
+        if (!empty($this->notices)) {
+            add_filter('redirect_post_location', [$this, 'add_notices'], 99);
+        }
+        
     }
         
     public function add_notices($location)
@@ -142,8 +158,20 @@ class Metaboxes
         $notices = [
             'not-valid-apiurl' => [
                 'class' => 'notice-error',
-                'message' => __('Not a valid API URL', 'rrze-remoter')
-            ]
+                'message' => __('Not a valid API URL.', 'rrze-remoter')
+            ],
+            'request-apikey-error' => [
+                'class' => 'notice-error',
+                'message' => __('The API Key request was unsuccessful.', 'rrze-remoter')
+            ],
+            'remote-config-error' => [
+                'class' => 'notice-error',
+                'message' => __('The remote configuration file contains errors.', 'rrze-remoter')
+            ],
+            'remote-request-type-error' => [
+                'class' => 'notice-error',
+                'message' => __('The type of remote request does not exist.', 'rrze-remoter')
+            ]            
         ];
         
         foreach ($notices as $key => $notice) {
