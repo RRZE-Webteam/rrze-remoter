@@ -237,7 +237,7 @@ class Shortcode
         
         $sortOrderby = $this->shortcode_atts['orderby'] == 'size' ? 'size' : 'name';
         $sortOrder = $this->shortcode_atts['order'] == 'asc' ? SORT_ASC : SORT_DESC;
-        array_multisort(array_column($data, $sortOrderby), $sortOrder , $remote_data);
+        array_multisort(array_column($remote_data, $sortOrderby), $sortOrder , $remote_data);
                 
         foreach ($remote_data as $key => $value) {
             $ext = $value['extension'];
@@ -276,11 +276,15 @@ class Shortcode
             global $usejslibs;
             $usejslibs['flexslider'] = true;
         }
+                
+        $sortOrderby = $this->shortcode_atts['orderby'] == 'size' ? 'size' : 'name';
+        $sortOrder = $this->shortcode_atts['order'] == 'asc' ? SORT_ASC : SORT_DESC;
+        array_multisort(array_column($remote_data, $sortOrderby), $sortOrder , $remote_data);                
         
         $data['id'] = Helper::createHash(10);
         
         $gallerytitle = $this->shortcode_atts['gallerytitle'];
-        $gallerydescription = $this->shortcode_atts['gallerydescription'];        
+        $gallerydescription = $this->shortcode_atts['gallerydescription'];
         
         foreach ($remote_data as $key => $value) {
 
