@@ -145,7 +145,7 @@ defined('ABSPATH') || exit;
 </div>
 <div class="remoter"> 
 <nav class="pagination pagebreaks" role="navigation"><h3><?php _e('Page:', 'rrze-remoter'); ?></h3><span class="subpages"><?php for ($i = 1; $i <= $pagecount; $i++) { ?><a data-filetype="<?php echo $shortcodeValues['filetype'] ?>" href="#get_list"
-data-recursiv="<?php echo $shortcodeValues['recursive'] ?>"
+data-recursiv="<?php echo $shortcodeValues['recursiv'] ?>"
 data-index="<?php echo $shortcodeValues['fileIndex'] ?>"
 data-host="<?php echo $apihost ?>"
 data-chunk="<?php echo $number_of_chunks ?>"

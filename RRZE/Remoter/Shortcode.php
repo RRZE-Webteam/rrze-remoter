@@ -112,7 +112,7 @@ class Shortcode
         $shortcodeValues = array(
             'fileIndex' => $this->shortcode_atts['index'],
             'view' => $this->shortcode_atts['view'],
-            'recursive' => $this->shortcode_atts['recursiv'],
+            'recursiv' => $this->shortcode_atts['recursiv'],
             'filetype' => $this->shortcode_atts['filetype'],
             'showColumns' => $this->shortcode_atts['show'],
             'link' => $this->shortcode_atts['link'],

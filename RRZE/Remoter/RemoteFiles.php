@@ -10,10 +10,13 @@ class RemoteFiles
     {
         $response = json_decode(self::getData($apiurl, $apikey), true);
 
-        $error = $response['error'];
-        $data = json_decode($response['value'], true);
+        $error = isset($response['error']) ? $response['error'] : 0;
+        if ($error != 10) {
+            return null;
+        }
         
-        if ($error == 50 || !is_array($data) || empty($data)) {
+        $data = json_decode($response['value'], true);
+        if (!is_array($data) || empty($data)) {
             return null;
         }
 
