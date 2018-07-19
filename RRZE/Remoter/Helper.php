@@ -155,7 +155,7 @@ class Helper
     
     public static function getJsonFile($shortcode_atts, $data)
     {
-        $recursiv = $shortcode_atts['recursive'];
+        $recursiv = $shortcode_atts['recursiv'];
         $path = $shortcode_atts['index'];
         $maskpath = str_replace('/', '\/', $path);
         $patternmeta1 = ($recursiv == 1) ? '/(' . $maskpath . ')/' : '/(' . $maskpath . ')$/';
