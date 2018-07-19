@@ -204,48 +204,110 @@ class Helper
         return $str;
     }
     
-    public static function download_url($url, $timeout = 300)
+    /**
+     * Unserialize value only if it was serialized.
+     *
+     * @param string $original Maybe unserialized original, if is needed.
+     * @return mixed Unserialized data can be any type.
+     */
+    public static function maybeUnserialize($original)
     {
-        //WARNING: The file is not automatically deleted, The script must unlink() the file.
-        require_once(ABSPATH . 'wp-admin/includes/file.php');
-        
-        if (! $url) {
-            return new WP_Error('http_no_url', __('Invalid URL Provided.'));
+        if (self::isSerialized($original)) { // don't attempt to unserialize data that wasn't serialized going in
+            return @unserialize($original);
         }
+        return $original;
+    }
 
-        $url_filename = basename(parse_url($url, PHP_URL_PATH));
-
-        $tmpfname = wp_tempnam($url_filename);
-        if (! $tmpfname) {
-            return new WP_Error('http_no_file', __('Could not create Temporary file.'));
+    /**
+     * Check value to find if it was serialized.
+     *
+     * If $data is not an string, then returned value will always be false.
+     * Serialized data is always a string.
+     *
+     * @param string $data   Value to check to see if was serialized.
+     * @param bool   $strict Optional. Whether to be strict about the end of the string. Default true.
+     * @return bool False if not serialized and true if it was.
+     */
+    public static function isSerialized($data, $strict = true)
+    {
+        // if it isn't a string, it isn't serialized.
+        if (! is_string($data)) {
+            return false;
         }
-
-        $sslverify = defined('WP_DEBUG') && WP_DEBUG ? false : true;
-        
-        $response = wp_remote_get($url, ['timeout' => $timeout, 'stream' => true, 'sslverify' => $sslverify, 'filename' => $tmpfname]);
-
-        if (is_wp_error($response)) {
-            unlink($tmpfname);
-            return $response;
+        $data = trim($data);
+        if ('N;' == $data) {
+            return true;
         }
-
-        if (200 != wp_remote_retrieve_response_code($response)) {
-            unlink($tmpfname);
-            return new WP_Error('http_404', trim(wp_remote_retrieve_response_message($response)));
+        if (strlen($data) < 4) {
+            return false;
         }
-
-        $content_md5 = wp_remote_retrieve_header($response, 'content-md5');
-        if ($content_md5) {
-            $md5_check = verify_file_md5($tmpfname, $content_md5);
-            if (is_wp_error($md5_check)) {
-                unlink($tmpfname);
-                return $md5_check;
+        if (':' !== $data[1]) {
+            return false;
+        }
+        if ($strict) {
+            $lastc = substr($data, -1);
+            if (';' !== $lastc && '}' !== $lastc) {
+                return false;
+            }
+        } else {
+            $semicolon = strpos($data, ';');
+            $brace     = strpos($data, '}');
+            // Either ; or } must exist.
+            if (false === $semicolon && false === $brace) {
+                return false;
+            }
+            // But neither must be in the first X characters.
+            if (false !== $semicolon && $semicolon < 3) {
+                return false;
+            }
+            if (false !== $brace && $brace < 4) {
+                return false;
             }
         }
-
-        return $tmpfname;
+        $token = $data[0];
+        switch ($token) {
+            case 's':
+                if ($strict) {
+                    if ('"' !== substr($data, -2, 1)) {
+                        return false;
+                    }
+                } elseif (false === strpos($data, '"')) {
+                    return false;
+                }
+                // or else fall through
+                // no break
+            case 'a':
+            case 'O':
+                return (bool) preg_match("/^{$token}:[0-9]+:/s", $data);
+            case 'b':
+            case 'i':
+            case 'd':
+                $end = $strict ? '$' : '';
+                return (bool) preg_match("/^{$token}:[0-9.E-]+;$end/", $data);
+        }
+        return false;
     }
-    
+
+    /**
+     * Serialize data, if needed.
+     *
+     * @param string|array|object $data Data that might be serialized.
+     * @return mixed A scalar data
+     */
+    public static function maybeSerialize($data)
+    {
+        if (is_array($data) || is_object($data)) {
+            return serialize($data);
+        }
+
+        // Double serialization is required for backward compatibility.
+        if (self::isSerialized($data, false)) {
+            return serialize($data);
+        }
+
+        return $data;
+    }
+        
     public static function createHash($length = 32)
     {
         if (!isset($length) || intval($length) <= 8) {
