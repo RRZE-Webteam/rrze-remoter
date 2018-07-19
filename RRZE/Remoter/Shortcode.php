@@ -287,24 +287,17 @@ class Shortcode
         $gallerydescription = $this->shortcode_atts['gallerydescription'];
         
         foreach ($remote_data as $key => $value) {
-
             $url = $apiurl . $value['dir'] . $value['name'] . '';
-            $timeout = 10;
-            $tmpfile = Helper::download_url($url, $timeout);
-            if (is_wp_error($tmpfile)) {
-                continue;
-            }
-            $imginfo = getimagesize($tmpfile, $info);
-            unlink($tmpfile); // important!
             
-            if (!$imginfo[0] || !$imginfo[1]) {
+            $imagesize = $value['imagesize'] ? Helper::maybeUnserialize($value['imagesize']) : '';
+            if (empty($imagesize) || empty($imagesize[0]) || empty($imagesize[1])) {
                 continue;
             }
+            
+            $imageapp13 = $value['imageapp13'] ? Helper::maybeUnserialize($value['imageapp13']) : '';
 
-            $iptcdata = isset($info["APP13"]) ? iptcparse($info["APP13"]) : null;
-            
-            $title = $iptcdata && isset($iptcdata["2#120"][0]) ? $iptcdata["2#120"][0] : '';
-            $desc = $iptcdata && isset($iptcdata["2#105"][0]) ? $iptcdata["2#105"][0] : '';
+            $title = isset($imageapp13["2#120"][0]) ? $imageapp13["2#120"][0] : '';
+            $desc = isset($imageapp13["2#105"][0]) ? $imageapp13["2#105"][0] : '';
             
             if ($gallerytitle && $gallerydescription) {
                 $description = $desc . '<br/>' . $title;
@@ -335,19 +328,11 @@ class Shortcode
         
         foreach ($remote_data as $key => $value) {
             $url = $apiurl . $value['dir'] . $value['name'] . '';
-            $timeout = 10;
-            $tmpfile = Helper::download_url($url, $timeout);
-            if (is_wp_error($tmpfile)) {
-                continue;
-            }
-            $imginfo = getimagesize($tmpfile, $info);
-            unlink($tmpfile); // important!
             
-            if (!$imginfo[0] || !$imginfo[1]) {
+            $imagesize = $value['imagesize'] ? Helper::maybeUnserialize($value['imagesize']) : '';
+            if (empty($imagesize) || empty($imagesize[0]) || empty($imagesize[1])) {
                 continue;
             }
-
-            $iptcdata = isset($info["APP13"]) ? iptcparse($info["APP13"]) : null;
             
             $data['images'][$key]['id'] = $data['id'];
             $data['images'][$key]['url'] = $url;                        
