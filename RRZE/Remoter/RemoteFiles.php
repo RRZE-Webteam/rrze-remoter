@@ -9,26 +9,37 @@ class RemoteFiles
     public static function getFiles($index, $apiurl, $apikey)
     {
         $response = json_decode(self::getData($apiurl, $apikey), true);
-
         $error = isset($response['error']) ? $response['error'] : 0;
         if ($error != 10) {
             return null;
         }
         
-        $data = json_decode($response['value'], true);
-        if (!is_array($data) || empty($data)) {
+        $remote_data = explode(PHP_EOL, $response['value']);
+        if (!is_array($remote_data) || empty($remote_data)) {
             return null;
         }
-
-        foreach ($data as $key => $value) {
-            $data[$key]['dir'] = '/' . $data[$key]['path'] . '/';
-            $data[$key]['extension'] = substr(strrchr($data[$key]['name'], '.'), 1);
-            $data[$key]['date'] = strtotime($data[$key]['date']);
-            if (strpos($data[$key]['name'], '.') === false) {
-                unset($data[$key]);
-            }
+        
+        $data = [];
+        
+        foreach ($remote_data as $key => $value) {
+            $value = json_decode($value, true);
+            
+            $data[$key]['path'] = $value['path'];
+            $data[$key]['name'] = $value['name'];
+            $data[$key]['size'] = $value['size'];
+            $data[$key]['dir'] = '/' . $value['path'] . '/';
+            $data[$key]['extension'] = substr(strrchr($value['name'], '.'), 1);
+            $data[$key]['date'] = strtotime($value['date']);
+            $data[$key]['imagesize'] = isset($value['imagesize']) ? Helper::maybeUnserialize($value['imagesize']) : [];
+            $data[$key]['imageapp13'] = isset($value['imagesize']) ? Helper::maybeUnserialize($value['imageapp13']) : [];
         }
-
+        
+        unset($remote_data);
+        
+        if (empty($data)) {
+            return null;
+        }
+        
         if (!empty($index['index']) && !empty($index['file'])) {
             $file = $index['file'];
             $pattern1 = '/' . $file . '/';

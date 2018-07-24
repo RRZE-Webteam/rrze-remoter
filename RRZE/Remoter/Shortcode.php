@@ -289,12 +289,12 @@ class Shortcode
         foreach ($remote_data as $key => $value) {
             $url = $apiurl . $value['dir'] . $value['name'] . '';
             
-            $imagesize = $value['imagesize'] ? Helper::maybeUnserialize($value['imagesize']) : '';
+            $imagesize = $value['imagesize'];
             if (empty($imagesize) || empty($imagesize[0]) || empty($imagesize[1])) {
                 continue;
             }
             
-            $imageapp13 = $value['imageapp13'] ? Helper::maybeUnserialize($value['imageapp13']) : '';
+            $imageapp13 = $value['imageapp13'];
 
             $title = isset($imageapp13["2#120"][0]) ? $imageapp13["2#120"][0] : '';
             $desc = isset($imageapp13["2#105"][0]) ? $imageapp13["2#105"][0] : '';

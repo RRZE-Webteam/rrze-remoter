@@ -205,6 +205,26 @@ class Helper
     }
     
     /**
+     * Serialize data, if needed.
+     *
+     * @param string|array|object $data Data that might be serialized.
+     * @return mixed A scalar data
+     */
+    public static function maybeSerialize($data)
+    {
+        if (is_array($data) || is_object($data)) {
+            return serialize($data);
+        }
+
+        // Double serialization is required for backward compatibility.
+        if (self::isSerialized($data, false)) {
+            return serialize($data);
+        }
+
+        return $data;
+    }
+    
+    /**
      * Unserialize value only if it was serialized.
      *
      * @param string $original Maybe unserialized original, if is needed.
@@ -286,26 +306,6 @@ class Helper
                 return (bool) preg_match("/^{$token}:[0-9.E-]+;$end/", $data);
         }
         return false;
-    }
-
-    /**
-     * Serialize data, if needed.
-     *
-     * @param string|array|object $data Data that might be serialized.
-     * @return mixed A scalar data
-     */
-    public static function maybeSerialize($data)
-    {
-        if (is_array($data) || is_object($data)) {
-            return serialize($data);
-        }
-
-        // Double serialization is required for backward compatibility.
-        if (self::isSerialized($data, false)) {
-            return serialize($data);
-        }
-
-        return $data;
     }
         
     public static function createHash($length = 32)
