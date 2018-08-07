@@ -5,7 +5,6 @@ namespace RRZE\Remoter;
 use RRZE\Remoter\RemoteFiles;
 use RRZE\Remoter\Parser;
 use RRZE\Remoter\Helper;
-use RRZE\Remoter\Views\Table\Table;
 use \WP_Error;
 
 defined('ABSPATH') || exit;
@@ -16,11 +15,7 @@ class Shortcode
     
     protected $plugin_dir_path;
     
-    public $atts;
-    
-    public $data;
-    
-    public $viewsDir;
+    protected $shortcode_atts;
     
     protected $parser;
     
@@ -46,8 +41,6 @@ class Shortcode
         $this->plugin_file = $plugin_file;
         $this->plugin_dir_path = plugin_dir_path($plugin_file);
         
-        $this->viewsDir = plugin_dir_path($plugin_file) . 'RRZE/Remoter/Views/';
-        
         $this->parser = new Parser();
                 
         add_shortcode('remoter', [$this, 'shortcode']);
@@ -61,7 +54,7 @@ class Shortcode
 
     public function shortcode($atts)
     {
-        $this->atts = shortcode_atts(
+        $this->shortcode_atts = shortcode_atts(
         [
             'id' => '',
             'file' => '',
@@ -88,7 +81,7 @@ class Shortcode
 
         $content = $this->output();
         if (is_wp_error($content)) {
-            if ($this->atts['errormsg']) {
+            if ($this->shortcode_atts['errormsg']) {
                 return sprintf('[remoter] %s', $content->get_error_message());
             } else {
                 return '';
@@ -117,23 +110,23 @@ class Shortcode
     private function output()
     {
         $shortcodeValues = array(
-            'fileIndex' => $this->atts['index'],
-            'view' => $this->atts['view'],
-            'recursiv' => $this->atts['recursiv'],
-            'filetype' => $this->atts['filetype'],
-            'showColumns' => $this->atts['show'],
-            'link' => $this->atts['link'],
-            'showHeader' => $this->atts['showheader'],
-            'file' => $this->atts['file'],
-            'showInfo' => $this->atts['showmetainfo'],
-            'alias' => $this->atts['alias'],
-            'errormsg' => $this->atts['errormsg'],
-            'fileheader' => $this->atts['fileheader'],
-            'gallerytitle' => $this->atts['gallerytitle'],
-            'gallerydescription' => $this->atts['gallerydescription']
+            'fileIndex' => $this->shortcode_atts['index'],
+            'view' => $this->shortcode_atts['view'],
+            'recursiv' => $this->shortcode_atts['recursiv'],
+            'filetype' => $this->shortcode_atts['filetype'],
+            'showColumns' => $this->shortcode_atts['show'],
+            'link' => $this->shortcode_atts['link'],
+            'showHeader' => $this->shortcode_atts['showheader'],
+            'file' => $this->shortcode_atts['file'],
+            'showInfo' => $this->shortcode_atts['showmetainfo'],
+            'alias' => $this->shortcode_atts['alias'],
+            'errormsg' => $this->shortcode_atts['errormsg'],
+            'fileheader' => $this->shortcode_atts['fileheader'],
+            'gallerytitle' => $this->shortcode_atts['gallerytitle'],
+            'gallerydescription' => $this->shortcode_atts['gallerydescription']
         );
 
-        $remoter_post = get_post(absint($this->atts['id']));
+        $remoter_post = get_post(absint($this->shortcode_atts['id']));
         if (!$remoter_post || $remoter_post->post_type != 'remoter') {
             return '';
         }
@@ -143,31 +136,31 @@ class Shortcode
         
         $apikey = get_post_meta($remoter_post->ID, '_rrze_remoter_apikey', true);
 
-        $this->data = RemoteFiles::getFiles($this->atts, $apiurl, $apikey);
+        $data = RemoteFiles::getFiles($this->shortcode_atts, $apiurl, $apikey);
                 
-        if ($this->data) {            
-            $view = $this->atts['view'];
+        if ($data) {            
+            $view = $this->shortcode_atts['view'];
             $tableHeader = Helper::getHeaderData($shortcodeValues['showColumns']);
-            $meta = $this->data;
+            $meta = $data;
 
             $meta_store = array();
-            $order = $this->atts['order'];
-            $orderby = $this->atts['orderby'];
+            $order = $this->shortcode_atts['order'];
+            $orderby = $this->shortcode_atts['orderby'];
             
             switch ($view) {
                 case 'glossary':
                     ob_start();
                     $id = Helper::createHash(10);
-                    $metajson = Helper::getJsonFile($this->atts, $this->data);
+                    $metajson = Helper::getJsonFile($this->shortcode_atts, $data);
                     $metadata = Helper::getJsonData($metajson, $apiurl);
                     $letters = Helper::createLetters();
-                    $unique = Helper::getUsedLetters($this->data);
+                    $unique = Helper::getUsedLetters($data);
                     $array_without_numbers = Helper::checkforfigures($unique);
                     
                     if (empty($array_without_numbers)) {
                         _e('There are no entries for this file type!', 'rrze-remoter');
                     } else {
-                        $dataSorted = Helper::sortArray($this->data, $unique);
+                        $dataSorted = Helper::sortArray($data, $unique);
                         $data_new = Helper::deleteMetaTxtEntries($dataSorted);
                         include $this->plugin_dir_path . 'RRZE/Remoter/Templates/glossary.php';
                     }
@@ -176,43 +169,60 @@ class Shortcode
                     break;
                 case 'pagination':
                     ob_start();
-                    $this->res = $this->data;
+                    $this->res = $data;
                     
-                    $metajson = Helper::getJsonFile($this->atts, $this->data);
+                    $metajson = Helper::getJsonFile($this->shortcode_atts, $data);
                     $metadata = Helper::getJsonData($metajson, $apiurl);
                     
-                    $number_of_chunks = (int) $this->atts['itemsperpage'];
-                    $dataFirstPage = $this->data;
+                    $number_of_chunks = (int) $this->shortcode_atts['itemsperpage'];
+                    $dataFirstPage = $data;
                     $dataChunk = Helper::deleteMetaTxtEntries($dataFirstPage);
                     $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
                     $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
                     array_multisort(array_column($dataChunk, $sortOrderby), $sortOrder, $dataChunk);
                     
-                    $this->data = array_chunk($dataChunk, $number_of_chunks);
+                    $data = array_chunk($dataChunk, $number_of_chunks);
                     
-                    $pagecount = count($this->data);
+                    $pagecount = count($data);
                     if (empty($pagecount)) {
                         _e('There are no entries for this file type!', 'rrze-remoter');
                     } else {
                         $id = Helper::createHash(10);
-                        $itemscount = (isset($this->data[0]) ? count($this->data[0]) : '');
+                        $itemscount = (isset($data[0]) ? count($data[0]) : '');
                         include $this->plugin_dir_path . 'RRZE/Remoter/Templates/pagination.php';
                     }
                     $content = ob_get_clean();
                     return $content;
                     break;
                 case 'table':                
-                    $table = new Table($this);
-                    return $table->tableView();
+                    ob_start();
+                    $fileheader = $shortcodeValues['fileheader'];
+                    $header = $shortcodeValues['showHeader'];
+                    $order = $this->shortcode_atts['order'];
+                    $orderby = $this->shortcode_atts['orderby'];
+                    $alias = $shortcodeValues['alias'];
+                    $metajson = Helper::getJsonFile($this->shortcode_atts, $data);
+                    $metadata = Helper::getJsonData($metajson, $apiurl);
+                    
+                    $sortOrderby = ($orderby === 'size') ? 'size' : (($orderby === 'date') ? 'date' : 'name');
+                    $sortOrder = ($order === 'asc' ? SORT_ASC : SORT_DESC);
+                    
+                    $deletejson = $data;
+                    $data = Helper::deleteMetaTxtEntries($deletejson);
+                    
+                    array_multisort(array_column($data, $sortOrderby), $sortOrder, $data);
+                    include $this->plugin_dir_path . 'RRZE/Remoter/Templates/table.php';
+                    $content = ob_get_clean();
+                    return $content;
                     break;
                 case 'gallery':
-                    return $this->galleryView($this->data, $apiurl);
+                    return $this->galleryView($data, $apiurl);
                     break;
                 case 'imagetable':
-                    return $this->imagetableView($this->data, $apiurl);
+                    return $this->imagetableView($data, $apiurl);
                     break;
                 default:
-                    return $this->listView($this->data, $apiurl);
+                    return $this->listView($data, $apiurl);
             }
                         
         } else {
@@ -220,6 +230,41 @@ class Shortcode
         }
     }
         
+    protected function listView($remote_data, $apiurl) {
+        $data = [];
+        
+        $template = $this->plugin_dir_path . 'RRZE/Remoter/Templates/list.html';
+        
+        $sortOrderby = $this->shortcode_atts['orderby'] == 'size' ? 'size' : 'name';
+        $sortOrder = $this->shortcode_atts['order'] == 'asc' ? SORT_ASC : SORT_DESC;
+        array_multisort(array_column($remote_data, $sortOrderby), $sortOrder , $remote_data);
+                
+        foreach ($remote_data as $key => $value) {
+            $ext = $value['extension'];
+            if($ext == 'pdf') { 
+                $icon ='fa-file-pdf-o';
+            } elseif ($ext == 'pptx' || $ext =='ppt') { 
+                $icon ='fa-file-powerpoint-o';
+            } elseif ($ext == 'docx' || $ext =='doc' ) { 
+                $icon ='fa fa-file-word-o';
+            } elseif ($ext == 'xlsx' || $ext =='xls') { 
+                $icon ='fa-file-excel-o';
+            } elseif ($ext == 'mpg' || $ext =='mpeg'|| $ext =='mp4' || $ext =='m4v') { 
+                $icon = 'fa-file-movie-o';
+            } else { 
+                $icon ='fa-file-image-o';
+            }
+            
+            $data['files'][$key]['icon'] = $icon;
+            $data['files'][$key]['url'] = $apiurl . $value['dir'] . $value['name'] . '';;
+            $data['files'][$key]['name'] = Helper::replaceCharacterList(Helper::changeUmlautsList($value['name']));
+            $data['files'][$key]['size'] = Helper::formatSize($value['size']);
+            
+        }
+        
+        return $this->parser->template($template, $data);
+    }
+    
     protected function galleryView($remote_data, $apiurl) {
         $data = [];
         
@@ -232,14 +277,14 @@ class Shortcode
             $usejslibs['flexslider'] = true;
         }
                 
-        $sortOrderby = $this->atts['orderby'] == 'size' ? 'size' : 'name';
-        $sortOrder = $this->atts['order'] == 'asc' ? SORT_ASC : SORT_DESC;
+        $sortOrderby = $this->shortcode_atts['orderby'] == 'size' ? 'size' : 'name';
+        $sortOrder = $this->shortcode_atts['order'] == 'asc' ? SORT_ASC : SORT_DESC;
         array_multisort(array_column($remote_data, $sortOrderby), $sortOrder , $remote_data);                
         
         $data['id'] = Helper::createHash(10);
         
-        $gallerytitle = $this->atts['gallerytitle'];
-        $gallerydescription = $this->atts['gallerydescription'];
+        $gallerytitle = $this->shortcode_atts['gallerytitle'];
+        $gallerydescription = $this->shortcode_atts['gallerydescription'];
         
         foreach ($remote_data as $key => $value) {
             $url = $apiurl . $value['dir'] . $value['name'] . '';
@@ -291,41 +336,6 @@ class Shortcode
             
             $data['images'][$key]['id'] = $data['id'];
             $data['images'][$key]['url'] = $url;                        
-        }
-        
-        return $this->parser->template($template, $data);
-    }
-    
-    protected function listView($remote_data, $apiurl) {
-        $data = [];
-        
-        $template = $this->plugin_dir_path . 'RRZE/Remoter/Templates/list.html';
-        
-        $sortOrderby = $this->atts['orderby'] == 'size' ? 'size' : 'name';
-        $sortOrder = $this->atts['order'] == 'asc' ? SORT_ASC : SORT_DESC;
-        array_multisort(array_column($remote_data, $sortOrderby), $sortOrder , $remote_data);
-                
-        foreach ($remote_data as $key => $value) {
-            $ext = $value['extension'];
-            if($ext == 'pdf') { 
-                $icon ='fa-file-pdf-o';
-            } elseif ($ext == 'pptx' || $ext =='ppt') { 
-                $icon ='fa-file-powerpoint-o';
-            } elseif ($ext == 'docx' || $ext =='doc' ) { 
-                $icon ='fa fa-file-word-o';
-            } elseif ($ext == 'xlsx' || $ext =='xls') { 
-                $icon ='fa-file-excel-o';
-            } elseif ($ext == 'mpg' || $ext =='mpeg'|| $ext =='mp4' || $ext =='m4v') { 
-                $icon = 'fa-file-movie-o';
-            } else { 
-                $icon ='fa-file-image-o';
-            }
-            
-            $data['files'][$key]['icon'] = $icon;
-            $data['files'][$key]['url'] = $apiurl . $value['dir'] . $value['name'] . '';;
-            $data['files'][$key]['name'] = Helper::replaceCharacterList(Helper::changeUmlautsList($value['name']));
-            $data['files'][$key]['size'] = Helper::formatSize($value['size']);
-            
         }
         
         return $this->parser->template($template, $data);
