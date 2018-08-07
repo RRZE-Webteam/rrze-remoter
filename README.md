@@ -10,7 +10,7 @@ __Wichtig__: Dieses WordPress-Plugin hängt von der Installation des PHP-Skripts
 
 ### Erstellen eines neuen Remote-Servers
 
-1. Verwenden Sie das Menü "Remote-Server / erstellen", um einen neuen Remote-Server zu erstellen
+1. Verwenden Sie das Menü "Remote Server / Erstellen", um einen neuen Remote-Server zu erstellen
 2. Geben Sie den Titel und die API-URL des Remote-Servers ein und klicken Sie dann auf "Veröffentlichen"
 3. Die Daten können nun über den Shortcode [remoter] vom Remote-Server abgerufen werden.
 
