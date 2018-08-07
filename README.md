@@ -14,7 +14,7 @@ __Wichtig__: Dieses WordPress-Plugin hängt von der Installation des PHP-Skripts
 2. Geben Sie den Titel und die API-URL des Remote-Servers ein und klicken Sie dann auf "Veröffentlichen"
 3. Die Daten können nun über den Shortcode [remoter] vom Remote-Server abgerufen werden.
 
-### Shortcode-Parametern
+### Shortcode-Parameter
 
 - **id** - Wird bei der Anlage des Remote-Servers automatisch vergeben. (Standardwert leer)
 - **file** - Wird lediglich nach einer bestimmten Datei gesucht, so muss hier der Dateiname angeben werden. (Standardwert leer)
@@ -55,20 +55,19 @@ __Galerieansicht__
 ```
 [remoter  id=""  index="images" filetype="jpg,gif" recursiv="0" view="gallery"]
 ```
-Es wird im Verzeichnis images nach den Dateiformaten jpg und gif gesucht.
+Es wird im Verzeichnis images nach den Dateiformaten "jpg" oder "gif" gesucht.
 
 __Tabelle mit Pagination__
 ```
-[remoter id="" index="Dateien" filter="englisch" filetype="pdf,jpg" recursiv="1" itemsperpage="1" view="pagination" link="1" show="directory,size,type,date,download,name" orderby="size" order="asc"]
+[remoter id="" index="dateien" filter="englisch" filetype="pdf,jpg" recursiv="1" itemsperpage="1" view="pagination" link="1" show="directory,size,type,date,download,name" orderby="size" order="asc"]
 ```
-Es wird ab dem Verzeichnis univerisitaet rekursiv nach den Dateiformaten (pdf,jpg) gesucht. Da der Filter auf Englisch gesetzt wurde wird nach Dateien mit dem Wort Englisch und dem dem Dateiformat (pdf oder jpg) gesucht.
-Pro Seite wird eine Datei angezeigt. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Verzeichnis, Dateigröße, Dateityp, Datum, Download und Dateiname ausgegeben. Das Ergebnis wird nach der Spalte Dateigröße aufsteigend sortiert.
+Es wird ab dem Verzeichnis "dateien" rekursiv nach den Dateiformaten "pdf" oder "jpg" gesucht. Da der Filter auf "englisch" gesetzt wurde wird nach Dateien mit dem Wort "englisch" und dem dem Dateiformat "pdf" oder "jpg" gesucht. Pro Seite wird eine Datei angezeigt. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Verzeichnis, Dateigröße, Dateityp, Datum, Download und Dateiname ausgegeben. Das Ergebnis wird nach der Spalte Dateigröße aufsteigend sortiert.
 
 __Tabelle ohne Pagination__
 ```
-[remoter id="" index="Dateien" filetype="pdf" link="1" recursiv="1" view="table" orderby="name" show="name,download,size,directory,date" order="asc" showheader="1"]
+[remoter id="" index="dateien" filetype="pdf" link="1" recursiv="1" view="table" orderby="name" show="name,download,size,directory,date" order="asc" showheader="1"]
 ```
-Es wird ab dem Verzeichnis univerisitaet rekursiv nach allen Dateien mit dem Dateiformat (pdf) gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname, Download, Dateigröße, Verzeichnnis und Datum ausgegeben. Das Ergebnis wird nach der Spalte Dateiname aufsteigend sortiert.
+Es wird ab dem Verzeichnis "dateien" rekursiv nach allen Dateien mit dem Dateiformat "pdf" gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname, Download, Dateigröße, Verzeichnnis und Datum ausgegeben. Das Ergebnis wird nach der Spalte Dateiname aufsteigend sortiert.
 
 __Tabelle mit Html-Header im TinyMCE__
 
@@ -85,13 +84,13 @@ __Tabelle mit Html-Header im TinyMCE__
 </div>
 ```
 
-Es wird nach den Dateinamen, welche bei file angegeben wurden rekursiv gesucht. Ausgangspunkt der Suche ist das Verzeichnis im Parameter index. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname und Download (Default) ausgegeben.
+Es wird nach den Dateinamen, welche bei file angegeben wurden rekursiv gesucht. Ausgangspunkt der Suche ist das Verzeichnis im Parameter index. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname und Download (Standardwert) ausgegeben.
 
 __Glossar__
 ```
-[remoter id="" index="Dateien" filetype="pdf" recursiv="1" view="glossary" link="1" show="download,type,date,size,name,directory"]
+[remoter id="" index="dateien" filetype="pdf" recursiv="1" view="glossary" link="1" show="download,type,date,size,name,directory"]
 ```
-Es wird ab dem Verzeichnis univerisitaet rekursiv nach allen Dateien mit dem Dateiformat (pdf) gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge von show ausgegeben.
+Es wird ab dem Verzeichnis "dateien" rekursiv nach allen Dateien mit dem Dateiformat "pdf" gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge von show ausgegeben.
 
 ### Ausgabe der Datei .meta.json (Optional)
 
