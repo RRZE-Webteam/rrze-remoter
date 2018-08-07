@@ -32,7 +32,7 @@ class Create_Custom_Post_Type_Server {
             'name' => $this->single,
             'singular_name' => $this->single,
             'name_admin_bar' => $this->single,
-            'add_new' => _x('Add new', $this->post_type, 'rrze-remoter'),
+            'add_new' => __('Add new', 'rrze-remoter'),
             'add_new_item' => sprintf(__('Add new %s', 'rrze-remoter'), $this->single),
             'edit_item' => sprintf(__('Edit %s', 'rrze-remoter'), $this->single),
             'new_item' => sprintf(__('New %s', 'rrze-remoter'), $this->single),
