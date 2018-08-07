@@ -19,23 +19,23 @@ __Wichtig__: Dieses WordPress-Plugin hängt von der Installation des PHP-Skripts
 - **id** - Wird bei der Anlage des Remote-Servers automatisch vergeben. (Standardwert leer)
 - **file** - Wird lediglich nach einer bestimmten Datei gesucht, so muss hier der Dateiname angeben werden. (Standardwert leer)
 - **index** - Das Verzeichnis in dem oder ab welchem gesucht werden soll. (Standardwert leer)
-- **recursiv** - Ist dieser werden auf 1, so werden alle Unterverzeichnisse mit durchsucht. Bei 0 wird nur das angegebene Verzeichnis ausgelesen. (Standardwert recursiv="1")
+- **recursiv** - Bei recursiv="1" ist, dann werden alle Unterverzeichnisse mit durchsucht. Bei recursiv="0" wird nur das angegebene Verzeichnis ausgelesen. (Standardwert recursiv="1")
 - **itemsperpage** - Die Anzahl der Dateien pro Seite. (nur bei view="pagination" relevant!) (Standardwert itemsperpage="5")
-- **filetype** - Nach welchen Dateiendungen gesucht wird (z. B. pdf, jpg). Es werden PDF und JPG Dateien angezeigt. (Standardwert filetype="pdf")
+- **filetype** - Nach welchen Dateiendungen gesucht wird. Der Parameter akzeptiert mehrere Werte, die durch ein Komma getrennt sind. Beispielsweise filetype="pdf,jpg" es werden PDF- und JPG-Dateien angezeigt. (Standardwert filetype="pdf")
 - **link** - Bei link="1" wird der Dateiename verlinkt. (Standardwert link="0")
 - **alias** - Wird der Parameter "file" verwendet, so kann ein alternativer Anzeigename für den Dateinamen übergeben werden. (Standardwert leer)
 - **view**  - Hier wird das Ausgabeformat angegeben. (Standardwert view="list"). Zur Auswahl stehen
     - die Galerie (view="gallery")
     - die Tabelle mit Pagination (view="pagination")
-    - eine Tabelle ohne Pagination (view="table" mit showheader=1)
-    - eine Tablle mit Html-Header im TinyMCE (view="table" mit showheader=0)
+    - eine Tabelle ohne Pagination (view="table" mit showheader="1")
+    - eine Tablle mit Html-Header im TinyMCE (view="table" mit showheader="0")
     - ein Glossar (view="glossary")
     - eine Liste (view="list").
 
 
-- **orderby** - Hier kann die Spalte ausgewählt werden nach welcher sortiert wird. (Sortierung möglich für die Spalten: name, size, date) (Standardwert orderby="name")
-- **order** - Hier kann die Reihenfolge festgelegt werden asc (aufsteigend) oder desc (absteigend). (Standardwert order="asc")
-- **show** - Hier werden die anzuzeigenden Tabellenspalten bestimmt. Der Parameter akzeptiert mehrere Werte, die durch ein Komma getrennt sind. Die Spalten werden genau in der Reihenfolge ausgegeben, wie sie angegeben werden (z. B. show="name,size,directory". (Standardwert show="name,download"). Zur Auswahl stehen
+- **orderby** - Hier kann die Spalte ausgewählt werden nach welcher sortiert wird. Sortierung möglich für die Spalten: "name", "size", "date". (Standardwert orderby="name")
+- **order** - Hier kann die Reihenfolge festgelegt werden "asc" (aufsteigend) oder "desc" (absteigend). (Standardwert order="asc")
+- **show** - Hier werden die anzuzeigenden Tabellenspalten bestimmt. Der Parameter akzeptiert mehrere Werte, die durch ein Komma getrennt sind. Die Spalten werden genau in der Reihenfolge ausgegeben, wie sie angegeben werden. Beispielsweise show="name,size,directory". (Standardwert show="name,download"). Zur Auswahl stehen
     -  Dateiname (show="name")
     -  Download (show="download")
     -  Dateigröße (show="size")
@@ -53,7 +53,7 @@ __Wichtig__: Dieses WordPress-Plugin hängt von der Installation des PHP-Skripts
 
 __Galerieansicht__
 ```
-[remoter  id=""  index="images" filetype="jpg,gif" recursiv="0" view="gallery"]
+[remoter id="" index="images" filetype="jpg,gif" recursiv="0" view="gallery"]
 ```
 Es wird im Verzeichnis images nach den Dateiformaten "jpg" oder "gif" gesucht.
 
