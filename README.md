@@ -91,26 +91,3 @@ __Glossar__
 [remoter id="" index="dateien" filetype="pdf" recursiv="1" view="glossary" link="1" show="download,type,date,size,name,directory"]
 ```
 Es wird ab dem Verzeichnis "dateien" rekursiv nach allen Dateien mit dem Dateiformat "pdf" gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge von show ausgegeben.
-
-### Ausgabe der Datei .meta.json (Optional)
-
-In jedem Verzeichnis kann eine Datei mit dem Namen **.meta.json** hinzugefügt werden. Diese Datei folgt dem **JSON Syntax** und hat eine **vordefinierte Struktur**. Mit der **.meta.json** lassen sich **kryptische Dateinamen** in der Anzeige vermeiden. So kann jedem Dateinamen ein **alternativer Anzeigename** zugeordnet werden, welcher dann auch angezeigt wird. Darüber hinaus wird oberhalb des jeweiligen Ausgabeformates (z. B. table) ein Accordion mit den JSON-Daten angezeigt. Hier der grundlegende Aufbau der .meta.json im JSON Syntax:
-
-```
-[{
-"<b>directory</b>": {
-    "<b>titel</b>": "Studienordnungen Buchwissenschaften",
-    "<b>beschreibung</b>": "In diesem Verzeichnis sind Studienordnungen für den Studiengang Buchwissenschaften",
-    "<b>file-aliases</b>": [{
-      "<b>Dateiname</b>": "<b>Anzeigename</b>",
-      "Buchwissenschaften_23_5_lb_zb.pdf": "Prüfungsordnung für Buchwissenschaft",
-      "":"",
-      ...
-    }]
-  }
-}]
-```
-
-Wird diesem Format **nicht strikt gefolgt**, so kann die **.meta.json nicht ausgelesen** werden und dementsprechend keine schönen Anzeigenamen ausgegeben werden. Zur besseren Handhabung mit dem **JSON Sytax** empfielt sich die Installation z. B. des Editors [Visual Studio Code](https://code.visualstudio.com/). Mit diesem kann auf einfach Art und Weise mit dem JSON Sytax gearbeitet werden und ein **Code Highlighting** (in der blauen Fußzeile unten rechts) zur besseren Darstellung eingestellt werden. Alternativ können auch sogenannte Online JSON Formatter und Validator wie [JSON Formatter](https://jsonformatter.curiousconcept.com/) oder [JSON Viewer](https://codebeautify.org/jsonviewer) um nur ein paar, der zahlreich vorhanden aufzuzählen, verwendet werden.
-
-Wird eine rekursive Suche durchgeführt, so werden alle .meta.json Dateien ausgelesen und geordnet nach den Verzeichnissen in einem Accordion oberhalb z. B. der Tabelle angezeigt. Falls ein Verzeichnis keine .meta.json beinhaltet so ist der Anzeigename gleich dem Dateinamen. Um nicht unötig viele .meta.json Dateien pflegen zu müssen, bietet sich an im gewünschten Ausgangsverzeichnis eine einzige .meta.json anzulegen und auch für die unterhalb dieses Verzeichnis liegende Dokumente einen Dateiennamen mit dem entsprechenden Anzeigenamen zu pflegen.
