@@ -45,7 +45,6 @@ __Wichtig__: Dieses WordPress-Plugin hängt von der Installation des PHP-Skripts
 
 - **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader="1"). Bei showheader="0" muss der Tabellenkopf selbst über den TinyMCE erzeugt werden. (Standardwert showheader="0")
 - **filter** - Eine zusätzliche Möglichkeit das Suchergebnis einzuschränken. Wird filter gesetzt, so müssen auch ein oder mehrere filetypes (z. B. filter="pdf") gesetzt werden. (Standardwert leer)
-- **showmetainfo** - Die Ausgabe der .meta.json Datei wird oberhalb z. B. der Tabelle in einem Accordion angezeigt und kann ein- (showmetainfo="1") und ausgeblendet (showmetainfo="0") werden. (Standardwert showmetainfo="1")
 - **gallerytitle** - Unterhalb des Gallerie Bildes wird der IPTC-Titel angezeigt (Standardwert gallerytitle="1")
 - **gallerydescription** - Unterhalb der Gallerie Beschreibung wird die IPTC-Beschreibung angezeigt (Standardwert gallerydescription="1")
 
