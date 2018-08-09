@@ -28,7 +28,7 @@ __Wichtig__: Dieses WordPress-Plugin hängt von der Installation des PHP-Skripts
     - die Galerie (view="gallery")
     - die Tabelle mit Pagination (view="pagination")
     - eine Tabelle ohne Pagination (view="table" mit showheader="1")
-    - eine Tablle mit Html-Header im TinyMCE (view="table" mit showheader="0")
+    - eine Tabelle mit Html-Header mit dem klassischen WP-Editor (view="table" mit showheader="0")
     - ein Glossar (view="glossary")
     - eine Liste (view="list").
 
@@ -66,9 +66,10 @@ __Tabelle ohne Pagination__
 ```
 [remoter id="" index="dateien" filetype="pdf" link="1" recursiv="1" view="table" orderby="name" show="name,download,size,directory,date" order="asc" showheader="1"]
 ```
+
 Es wird ab dem Verzeichnis "dateien" rekursiv nach allen Dateien mit dem Dateiformat "pdf" gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname, Download, Dateigröße, Verzeichnnis und Datum ausgegeben. Das Ergebnis wird nach der Spalte Dateiname aufsteigend sortiert.
 
-__Tabelle mit Html-Header im TinyMCE__
+__Tabelle mit Html-Header mit dem klassischen WP-Editor__
 
 ```
 <div>
@@ -77,8 +78,8 @@ __Tabelle mit Html-Header im TinyMCE__
             <th>Dateiname</th>
             <th>Download</th>
         </tr>
-        [remoter id="2212879" index="universitaet/organisation/recht/pruefungsordnungen/phil" alias="Testfile" file="Buchwissenschaften 2-Fach-BA 20150815 i.d.F. 20170415 -Aenderungssatzung.pdf"]
-        [remoter id="2212879" index="universitaet/organisation/recht/pruefungsordnungen/phil" alias="Testfile2" file="Buchwissenschaften 2-Fach-BA 20150815 i.d.F. 20170415 -konsolidierte Fassung.pdf"]
+        [remoter id="2212879" index="dateien/recht/pruefungsordnungen" alias="Testfile" file="Buchwissenschaften-Aenderungssatzung.pdf"]
+        [remoter id="2212879" index="dateien/recht/pruefungsordnungen" alias="Testfile2" file="Buchwissenschaften-konsolidierte-Fassung.pdf"]
     </table>
 </div>
 ```
