@@ -28,7 +28,7 @@ __Wichtig__: Dieses WordPress-Plugin hängt von der Installation des PHP-Skripts
     - die Galerie (view="gallery")
     - die Tabelle mit Pagination (view="pagination")
     - eine Tabelle ohne Pagination (view="table" mit showheader="1")
-    - eine Tabelle mit Html-Header mit dem klassischen WP-Editor (view="table" mit showheader="0")
+    - eine Tabelle mit Html-Header (view="table" mit showheader="0")
     - ein Glossar (view="glossary")
     - eine Liste (view="list").
 
@@ -43,7 +43,7 @@ __Wichtig__: Dieses WordPress-Plugin hängt von der Installation des PHP-Skripts
     -  Dateityp (show="type")
     -  Erstellungsdatum (show="date")
 
-- **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader="1"). Bei showheader="0" muss der Tabellenkopf selbst über den TinyMCE erzeugt werden. (Standardwert showheader="0")
+- **showheader** - Falls der Tabellenkopf automatisch erzeugt werden soll (view="table" mit showheader="1"). Bei showheader="0" muss der Tabellenkopf im Editor hinzugefügt werden. (Standardwert showheader="0")
 - **filter** - Eine zusätzliche Möglichkeit das Suchergebnis einzuschränken. Wird filter gesetzt, so müssen auch ein oder mehrere filetypes (z. B. filter="pdf") gesetzt werden. (Standardwert leer)
 - **gallerytitle** - Unterhalb des Gallerie Bildes wird der IPTC-Titel angezeigt (Standardwert gallerytitle="1")
 - **gallerydescription** - Unterhalb der Gallerie Beschreibung wird die IPTC-Beschreibung angezeigt (Standardwert gallerydescription="1")
@@ -69,7 +69,7 @@ __Tabelle ohne Pagination__
 
 Es wird ab dem Verzeichnis "dateien" rekursiv nach allen Dateien mit dem Dateiformat "pdf" gesucht. Die Dateinamen werden verlinkt. Es werden die Spalten in der Reihenfolge Dateiname, Download, Dateigröße, Verzeichnnis und Datum ausgegeben. Das Ergebnis wird nach der Spalte Dateiname aufsteigend sortiert.
 
-__Tabelle mit Html-Header mit dem klassischen WP-Editor__
+__Tabelle mit Html-Header__
 
 ```
 <div>
