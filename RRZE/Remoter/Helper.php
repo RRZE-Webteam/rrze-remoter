@@ -13,12 +13,12 @@ class Helper
         $shortcodeColumns = explode(",", $columns);
         return $shortcodeColumns;
     }
-    
+
     public static function getImageFormats()
     {
         return array('gif', 'png', 'jpg', 'jpeg', 'tiff', 'bmp');
     }
-    
+
     public static function formatSize($bytes)
     {
         if ($bytes>= 1073741824) {
@@ -34,26 +34,26 @@ class Helper
         } else {
             $size = '0 bytes';
         }
-        
+
         return $size;
     }
-    
+
     public static function getFolder($directory)
     {
         $titel = explode("/", $directory);
         $folder = $titel[count($titel)-1];
-        
+
         $str = str_replace(
             array('ae','oe','ue','eü','Oe','Ue','Ã','Ae','idF'),
             array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.'),
             $folder
         );
-        
+
         $replaced = str_replace('_', ' ', $str);
-        
+
         return $replaced;
     }
-    
+
     public static function convertUmlauts($name)
     {
         $replaced_name = str_replace(
@@ -61,10 +61,10 @@ class Helper
             array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.'),
             $name
         );
-        
+
         return $replaced_name;
     }
-    
+
     public static function deleteMetaTxtEntries($meta)
     {
         foreach ($meta as $key => $value) {
@@ -72,21 +72,21 @@ class Helper
                 unset($meta[$key]);
             }
         }
-        
+
         $data = array_values($meta);
-        
+
         return $data;
     }
-    
+
     public static function createLetters()
     {
         $letters = array(
             'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
         );
-    
+
         return $letters;
     }
-    
+
     public static function getUsedLetters($data)
     {
         foreach ($data as $file) {
@@ -99,7 +99,7 @@ class Helper
 
         return $unique;
     }
-    
+
     public static function checkforfigures($array)
     {
         foreach ($array as $key => $value) {
@@ -107,12 +107,12 @@ class Helper
                 unset($array[$key]);
             }
         }
-        
+
         $newindex = array_values($array);
-        
+
         return $newindex;
     }
-    
+
     public static function sortArray($data, $unique)
     {
         $filenames = array();
@@ -135,7 +135,7 @@ class Helper
 
         return $array_reindexed;
     }
-    
+
     public static function getMetafileNames($path, $store, $file)
     {
         if (!empty($store)) {
@@ -149,10 +149,10 @@ class Helper
         } else {
             $name = str_replace('_', ' ', $path);
         }
-        
+
         return $name;
     }
-    
+
     public static function getJsonFile($shortcode_atts, $data)
     {
         $recursiv = $shortcode_atts['recursiv'];
@@ -160,17 +160,17 @@ class Helper
         $maskpath = str_replace('/', '\/', $path);
         $patternmeta1 = ($recursiv == 1) ? '/(' . $maskpath . ')/' : '/(' . $maskpath . ')$/';
         $patternmeta2 = '/.meta.json$/i';
-        
+
         $metajson = array_filter($data, function ($a) use ($patternmeta1, $patternmeta2) {
             $c = preg_grep($patternmeta1, $a) && preg_grep($patternmeta2, $a);
             return $c;
         });
-        
+
         array_multisort(array_column($metajson, 'dir'), SORT_ASC, $metajson);
-        
+
         return $metajson;
     }
-    
+
     public static function getJsonData($metajson, $domain)
     {
         $meta = array();
@@ -183,10 +183,10 @@ class Helper
         foreach ($meta as $key => $array) {
             $metadata[] = json_decode($meta[$key], true);
         }
-        
+
         return $metadata;
     }
-    
+
     public static function replaceCharacterList($name)
     {
         $newName = str_replace('_', ' ', $name);
@@ -196,14 +196,14 @@ class Helper
     public static function changeUmlautsList($filename)
     {
         $str = str_replace(
-            array('ae','oe','ue','Ae','Oe','Ue','Ã', 'ss'),
-            array('ä','ö','ü','Ä','Ö','Ü','Ä', 'ß'),
+            array('ae','oe','ue','Ae','Oe','Ue','Ã'),
+            array('ä','ö','ü','Ä','Ö','Ü','Ä'),
             $filename
         );
 
         return $str;
     }
-    
+
     /**
      * Serialize data, if needed.
      *
@@ -223,7 +223,7 @@ class Helper
 
         return $data;
     }
-    
+
     /**
      * Unserialize value only if it was serialized.
      *
@@ -307,7 +307,7 @@ class Helper
         }
         return false;
     }
-        
+
     public static function createHash($length = 32)
     {
         if (!isset($length) || intval($length) <= 8) {
