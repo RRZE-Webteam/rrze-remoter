@@ -22,7 +22,8 @@ __Wichtig__: Dieses WordPress-Plugin hängt von der Installation des PHP-Skripts
 - **recursiv** - Bei recursiv="1" ist, dann werden alle Unterverzeichnisse mit durchsucht. Bei recursiv="0" wird nur das angegebene Verzeichnis ausgelesen. (Standardwert recursiv="1")
 - **itemsperpage** - Die Anzahl der Dateien pro Seite. (nur bei view="pagination" relevant!) (Standardwert itemsperpage="5")
 - **filetype** - Nach welchen Dateiendungen gesucht wird. Der Parameter akzeptiert mehrere Werte, die durch ein Komma getrennt sind. Beispielsweise filetype="pdf,jpg" es werden PDF- und JPG-Dateien angezeigt. (Standardwert filetype="pdf")
-- **link** - Bei link="1" wird der Dateiename verlinkt. (Standardwert link="0")
+- **link** - Bei link="1" wird der Dateiname verlinkt. (Standardwert link="0")
+- **icon** - Bei icon="0" wird das Mime-Type-Icon der Dateiname nicht angezeigt. (Standardwert icon="1")
 - **alias** - Wird der Parameter "file" verwendet, so kann ein alternativer Anzeigename für den Dateinamen übergeben werden. (Standardwert leer)
 - **view**  - Hier wird das Ausgabeformat angegeben. (Standardwert view="list"). Zur Auswahl stehen
     - die Galerie (view="gallery")
