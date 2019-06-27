@@ -13,17 +13,17 @@ class RemoteFiles
         if ($error != 10) {
             return null;
         }
-        
+
         $remote_data = explode(PHP_EOL, $response['value']);
         if (!is_array($remote_data) || empty($remote_data)) {
             return null;
         }
-        
+
         $data = [];
-        
+
         foreach ($remote_data as $key => $value) {
             $value = json_decode($value, true);
-            
+
             $data[$key]['path'] = $value['path'];
             $data[$key]['name'] = $value['name'];
             $data[$key]['size'] = $value['size'];
@@ -33,13 +33,13 @@ class RemoteFiles
             $data[$key]['imagesize'] = isset($value['imagesize']) ? Helper::maybeUnserialize($value['imagesize']) : [];
             $data[$key]['imageapp13'] = isset($value['imagesize']) ? Helper::maybeUnserialize($value['imageapp13']) : [];
         }
-        
+
         unset($remote_data);
-        
+
         if (empty($data)) {
             return null;
         }
-        
+
         if (!empty($index['index']) && !empty($index['file'])) {
             $file = $index['file'];
             $pattern1 = '/' . $file . '/';
@@ -62,8 +62,13 @@ class RemoteFiles
         }
 
         $matches = array_filter($data, function ($a) use ($pattern1, $pattern2) {
-            $b = preg_grep($pattern1, $a) && preg_grep($pattern2, $a);
-            return $b;
+            if (isset($a['imagesize'])) {
+                unset($a['imagesize']);
+            }
+            if (isset($a['imageapp13'])) {
+                unset($a['imageapp13']);
+            }
+            return preg_grep($pattern1, $a) && preg_grep($pattern2, $a);
         });
 
         return $matches;
