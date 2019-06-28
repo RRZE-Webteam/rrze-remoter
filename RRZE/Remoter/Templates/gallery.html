@@ -1,8 +1,8 @@
-<div id="slider-{id}" class="gallery-image-slider">
+<div id="slider-{id}" class="gallery-slider flexslider">
     <ul class="slides">
         {images}
         <li>
-            <img src="{url}" />
+            <img src="{url}">
             <div class="enlarge">
                 (<a href="{url}" title="{title}" class="lightbox" rel="lightbox-{id}">{Enlarge}</a>)
             </div>
@@ -13,11 +13,12 @@
         {/images}
     </ul>
 </div>
-
-<div id="carousel-{id}" class="image-gallery-carousel">
+<div id="carousel-{id}" class="gallery-carousel flexslider">
     <ul class="slides">
         {images}
-        <li><img src="{url}" width="120" height="80" alt="" /></li>
+        <li>
+            <img src="{url}" width="120" height="80" alt="">
+        </li>
         {/images}
     </ul>
 </div>
@@ -41,7 +42,7 @@
             keyboard: true,
             multipleKeyboard: true,
             directionNav: true,
-            controlNav: true,
+            controlNav: false,
             pausePlay: false,
             slideshow: false,
             asNavFor: "#slider-{id}",
