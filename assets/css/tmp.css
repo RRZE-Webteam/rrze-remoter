@@ -1,0 +1,43 @@
+/* ---- Flexslider mixed height fix ----- */
+/* Set Max heights  on containers and img elements */
+@media (max-width: 420px) {
+    .gallery-image-slider ul.slides>li {
+        height: 200px;
+    }
+}
+
+@media (min-width: 421px) {
+    .gallery-image-slider ul.slides>li {
+        height: 300px;
+    }
+}
+
+/* Make content autofit to max-height property, and center both vertically and horizontally with transform */
+.gallery-image-slider ul.slides>li>* {
+    height: auto;
+    max-height: 100%;
+    max-width: 100%;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    overflow-y: hidden;
+}
+
+/* For images specifically, set height to 100% and width to auto so you are keeping aspect ratio */
+.gallery-image-slider ul.slides>li>img {
+    height: 100%;
+    width: auto !important;
+}
+
+/* Don't let content clip over edge */
+.gallery-image-slider ul.slides>li {
+    overflow: hidden;
+}
+
+.gallery-image-slider ul.slides>li>p {
+    overflow-y: auto
+}
+
+/* --- End Flexslider solution -- */
