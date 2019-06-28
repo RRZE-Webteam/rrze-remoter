@@ -35,12 +35,28 @@ i.fa.fa-arrow-circle-down {
     display: inline;
 }
 
-.gallery-image-slider div.enlarge {
+.gallery-slider div.enlarge {
     padding: 0.2em 0;
     text-align: center;
 }
 
-.gallery-image-slider div.caption {
-    padding: 0.3em 0 0.5em;
+.gallery-slider div.caption {
+    padding: 0.3em 0;
     text-align: center;
+}
+
+.gallery-slider.flexslider,
+.gallery-carousel.flexslider {
+    margin: 0;
+}
+
+.gallery-carousel.flexslider .flex-direction-nav,
+.gallery-carousel.flexslider .flex-pauseplay {
+    position: static;
+}
+
+.gallery-carousel.flexslider .flex-direction-nav a {
+    color: rgba(255,255,255,1);
+    background-color: rgba(255,255,255,0);
+    text-indent: -99999999999999999em;
 }
