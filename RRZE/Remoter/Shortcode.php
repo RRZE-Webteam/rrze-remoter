@@ -27,15 +27,6 @@ class Shortcode
 
     protected $a;
 
-    protected $fau_themes = [
-        'FAU-Einrichtungen',
-        'FAU-Natfak',
-        'FAU-Philfak',
-        'FAU-RWFak',
-        'FAU-Techfak',
-        'FAU-Medfak'
-    ];
-
     public function __construct($plugin_file)
     {
         $this->plugin_file = $plugin_file;
@@ -89,18 +80,8 @@ class Shortcode
             }
         }
 
-        wp_enqueue_script('rrze-remoter-mainjs');
-        wp_enqueue_script('rrze-remoter-scriptsjs');
-        wp_enqueue_script('flexsliderjs');
-        wp_enqueue_script('fancyboxjs');
-
-        $stylesheet = get_stylesheet();
-
-        if (!in_array($stylesheet, $this->fau_themes)) {
-            wp_enqueue_style('rrze-remoter-rrze-theme-stylescss');
-        } else {
-            wp_enqueue_style('rrze-remoter-stylescss');
-        }
+        wp_enqueue_style('rrze-remoter');
+        wp_enqueue_script('rrze-remoter');
 
         add_action('wp_footer', [$this, 'rrze_remote_glossary_script_footer']);
         add_action('wp_footer', [$this, 'rrze_remote_table_script_footer']);
@@ -271,13 +252,6 @@ class Shortcode
         $data = [];
 
         $template = $this->plugin_dir_path . 'RRZE/Remoter/Templates/gallery.html';
-
-        $stylesheet = get_stylesheet();
-
-        if (in_array($stylesheet, $this->fau_themes)) {
-            global $usejslibs;
-            $usejslibs['flexslider'] = true;
-        }
 
         $sortOrderby = $this->shortcode_atts['orderby'] == 'size' ? 'size' : 'name';
         $sortOrder = $this->shortcode_atts['order'] == 'asc' ? SORT_ASC : SORT_DESC;
