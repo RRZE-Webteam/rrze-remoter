@@ -158,12 +158,17 @@ class Helper
         $recursiv = $shortcode_atts['recursiv'];
         $path = $shortcode_atts['index'];
         $maskpath = str_replace('/', '\/', $path);
-        $patternmeta1 = ($recursiv == 1) ? '/(' . $maskpath . ')/' : '/(' . $maskpath . ')$/';
-        $patternmeta2 = '/.meta.json$/i';
+        $pattern1 = ($recursiv == 1) ? '/(' . $maskpath . ')/' : '/(' . $maskpath . ')$/';
+        $pattern2 = '/.meta.json$/i';
 
-        $metajson = array_filter($data, function ($a) use ($patternmeta1, $patternmeta2) {
-            $c = preg_grep($patternmeta1, $a) && preg_grep($patternmeta2, $a);
-            return $c;
+        $metajson = array_filter($data, function ($a) use ($pattern1, $pattern2) {
+            if (isset($a['imagesize'])) {
+                unset($a['imagesize']);
+            }
+            if (isset($a['imageapp13'])) {
+                unset($a['imageapp13']);
+            }
+            return preg_grep($pattern1, $a) && preg_grep($pattern2, $a);
         });
 
         array_multisort(array_column($metajson, 'dir'), SORT_ASC, $metajson);
