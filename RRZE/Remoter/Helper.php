@@ -44,8 +44,8 @@ class Helper
         $folder = $titel[count($titel)-1];
 
         $str = str_replace(
-            array('ae','oe','ue','eü','Oe','Ue','Ã','Ae','idF'),
-            array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.'),
+            array('ae','oe','ue','eü','Oe','Ue','Ã','Ae','idF','GöChem','aür','öthan','_'),
+            array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.','GoeChem','auer','oethan',' '),
             $folder
         );
 
@@ -57,8 +57,8 @@ class Helper
     public static function convertUmlauts($name)
     {
         $replaced_name = str_replace(
-            array('ae','oe','ue','eü','Oe','Ue','Ã','Ae','idF'),
-            array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.'),
+            array('ae','oe','ue','eü','Oe','Ue','Ã','Ae','idF','GöChem','aür','öthan','_'),
+            array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.','GoeChem','auer','oethan',' '),
             $name
         );
 
