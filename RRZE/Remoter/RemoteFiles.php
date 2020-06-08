@@ -22,16 +22,34 @@ class RemoteFiles
         $data = [];
 
         foreach ($remote_data as $key => $value) {
-            $value = json_decode($value, true);
+            if (empty($value)) {
+                continue;
+            }
+            $valAry = json_decode($value, true);
+            if (is_null($valAry)) {
+                do_action(
+                    'rrze.log.warning', 
+                    [
+                        'plugin' =>'rrze-remoter', 
+                        'method' => __METHOD__, 
+                        'message' => 'JSON cannot be decoded.',
+                        'value' => $valAry
+                    ]
+                );
+                continue;
+            }
+            $data[$key] = [
+                'path' => $valAry['path'],
+                'name' => $valAry['name'],
+                'size' => $valAry['size'],
+                'dir' => '/' . $valAry['path'] . '/',
+                'extension' => substr(strrchr($valAry['name'], '.'), 1),
+                'date' => $valAry['date'],
+                'imagesize' => isset($valAry['imagesize']) ? Helper::maybeUnserialize($valAry['imagesize']) : [],
+                'imageapp13' => isset($valAry['imagesize']) ? Helper::maybeUnserialize($valAry['imageapp13']) : []
 
-            $data[$key]['path'] = $value['path'];
-            $data[$key]['name'] = $value['name'];
-            $data[$key]['size'] = $value['size'];
-            $data[$key]['dir'] = '/' . $value['path'] . '/';
-            $data[$key]['extension'] = substr(strrchr($value['name'], '.'), 1);
-            $data[$key]['date'] = strtotime($value['date']);
-            $data[$key]['imagesize'] = isset($value['imagesize']) ? Helper::maybeUnserialize($value['imagesize']) : [];
-            $data[$key]['imageapp13'] = isset($value['imagesize']) ? Helper::maybeUnserialize($value['imageapp13']) : [];
+
+            ];
         }
 
         unset($remote_data);
