@@ -240,7 +240,7 @@ class Shortcode
 
             $data['files'][$key]['icon'] = $icon_html;
             $data['files'][$key]['url'] = $apiurl . $value['dir'] . $value['name'] . '';
-            $data['files'][$key]['name'] = Helper::replaceCharacterList(Helper::changeUmlautsList($value['name']));
+            $data['files'][$key]['name'] = Helper::convertUmlauts($value['name']);
             $data['files'][$key]['size'] = Helper::formatSize($value['size']);
         }
 
