@@ -43,15 +43,7 @@ class Helper
         $titel = explode("/", $directory);
         $folder = $titel[count($titel)-1];
 
-        $str = str_replace(
-            array('ae','oe','ue','eü','Oe','Ue','Ã','Ae','idF','GöChem','aür','öthan','_'),
-            array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.','GoeChem','auer','oethan',' '),
-            $folder
-        );
-
-        $replaced = str_replace('_', ' ', $str);
-
-        return $replaced;
+        return self::convertUmlauts($folder);
     }
 
     public static function convertUmlauts($name)
