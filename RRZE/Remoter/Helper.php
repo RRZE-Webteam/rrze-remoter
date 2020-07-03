@@ -49,8 +49,8 @@ class Helper
     public static function convertUmlauts($name)
     {
         $replaced_name = str_replace(
-            array('ae','oe','ue','eü','Oe','Ue','Ã','Ae','idF','GöChem','aür','öthan','_'),
-            array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.','GoeChem','auer','oethan',' '),
+            array('ae','oe','ue','eü','Oe','Ue','Ã','Ae','idF','GöChem','aür','öthan','_','Litaün','Isräl'),
+            array( 'ä','ö','ü','eue','Ö','Ü','Ä','Ä','i.d.F.','GoeChem','auer','oethan',' ','Litauen','Israel'),
             $name
         );
 
