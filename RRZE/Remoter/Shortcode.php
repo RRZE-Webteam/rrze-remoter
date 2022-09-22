@@ -27,6 +27,10 @@ class Shortcode
 
     protected $a;
 
+    const TRANSIENT_PREFIX = 'rrze_remoter_cache_';
+
+    const TRANSIENT_EXPIRATION = DAY_IN_SECONDS;
+
     public function __construct($plugin_file)
     {
         $this->plugin_file = $plugin_file;
@@ -72,6 +76,7 @@ class Shortcode
         );
 
         $content = $this->output();
+
         if (is_wp_error($content)) {
             if ($this->shortcode_atts['errormsg']) {
                 return sprintf('[remoter] %s', $content->get_error_message());
@@ -108,8 +113,15 @@ class Shortcode
             'gallerydescription' => $this->shortcode_atts['gallerydescription']
         );
 
+        $ret = get_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues));
+
+        if (!empty($ret)) {
+            return $ret;
+        }
+
         $remoter_post = get_post(absint($this->shortcode_atts['id']));
         if (!$remoter_post || $remoter_post->post_type != 'remoter') {
+            set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), '', self::TRANSIENT_EXPIRATION);
             return '';
         }
 
@@ -147,6 +159,7 @@ class Shortcode
                         include $this->plugin_dir_path . 'RRZE/Remoter/Templates/glossary.php';
                     }
                     $content = ob_get_clean();
+                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
                     return $content;
                     break;
                 case 'pagination':
@@ -174,6 +187,7 @@ class Shortcode
                         include $this->plugin_dir_path . 'RRZE/Remoter/Templates/pagination.php';
                     }
                     $content = ob_get_clean();
+                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
                     return $content;
                     break;
                 case 'table':
@@ -195,18 +209,26 @@ class Shortcode
                     array_multisort(array_column($data, $sortOrderby), $sortOrder, $data);
                     include $this->plugin_dir_path . 'RRZE/Remoter/Templates/table.php';
                     $content = ob_get_clean();
+                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
                     return $content;
                     break;
                 case 'gallery':
-                    return $this->galleryView($data, $apiurl);
+                    $content = $this->galleryView($data, $apiurl);
+                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
+                    return $content;
                     break;
                 case 'imagetable':
-                    return $this->imagetableView($data, $apiurl);
+                    $content = $this->imagetableView($data, $apiurl);
+                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
+                    return $content;
                     break;
                 default:
-                    return $this->listView($data, $apiurl);
+                $content = $this->listView($data, $apiurl);
+                set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
+                return $content;
             }
         } else {
+            set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), '', self::TRANSIENT_EXPIRATION);
             return new WP_Error('no_remote_data_found', __('No data could be found on the server!', 'rrze-remoter'));
         }
     }

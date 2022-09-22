@@ -6,6 +6,10 @@ defined('ABSPATH') || exit;
 
 class RemoteFiles
 {
+
+    // const TRANSIENT_PREFIX = 'rrze_remoter_cache_';
+    // const TRANSIENT_EXPIRATION = DAY_IN_SECONDS;
+
     public static function getFiles($index, $apiurl, $apikey)
     {
         $response = json_decode(self::getData($apiurl, $apikey), true);
@@ -92,6 +96,7 @@ class RemoteFiles
         return $matches;
     }
 
+
     public static function getData($apiurl, $apikey)
     {
         $domain = parse_url(site_url(), PHP_URL_HOST);
@@ -101,12 +106,21 @@ class RemoteFiles
 
         $sslverify = defined('WP_DEBUG') && WP_DEBUG ? false : true;
 
+
+        // $response = get_transient(self::TRANSIENT_PREFIX . $url);
+        // $status_code = wp_remote_retrieve_response_code($response);
+
+        // if ($status_code == 200) {
+        //     return $response['body'];
+        // }
+
         $response = wp_remote_get($url, ['httpversion' => '1.1', 'sslverify' => $sslverify]);
         $status_code = wp_remote_retrieve_response_code($response);
 
         do_action('rrze.log.debug', ['plugin' => 'rrze-remoter', 'remote url request=data status code' => $status_code]);
 
         if ($status_code == 200) {
+            // set_transient(self::TRANSIENT_PREFIX . $url, $response, self::TRANSIENT_EXPIRATION);
             return $response['body'];
         }
 
