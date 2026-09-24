@@ -113,7 +113,9 @@ class Shortcode
             'gallerydescription' => $this->shortcode_atts['gallerydescription']
         );
 
-        $ret = get_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues));
+        // Keep transient names within WordPress limits and include all output options.
+        $cacheKey = self::TRANSIENT_PREFIX . hash('sha256', wp_json_encode($this->shortcode_atts));
+        $ret = get_transient($cacheKey);
 
         if (!empty($ret)) {
             return $ret;
@@ -121,7 +123,7 @@ class Shortcode
 
         $remoter_post = get_post(absint($this->shortcode_atts['id']));
         if (!$remoter_post || $remoter_post->post_type != 'remoter') {
-            set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), '', self::TRANSIENT_EXPIRATION);
+            set_transient($cacheKey, '', self::TRANSIENT_EXPIRATION);
             return '';
         }
 
@@ -159,7 +161,7 @@ class Shortcode
                         include $this->plugin_dir_path . 'RRZE/Remoter/Templates/glossary.php';
                     }
                     $content = ob_get_clean();
-                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
+                    set_transient($cacheKey, $content, self::TRANSIENT_EXPIRATION);
                     return $content;
                     break;
                 case 'pagination':
@@ -187,7 +189,7 @@ class Shortcode
                         include $this->plugin_dir_path . 'RRZE/Remoter/Templates/pagination.php';
                     }
                     $content = ob_get_clean();
-                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
+                    set_transient($cacheKey, $content, self::TRANSIENT_EXPIRATION);
                     return $content;
                     break;
                 case 'table':
@@ -209,26 +211,26 @@ class Shortcode
                     array_multisort(array_column($data, $sortOrderby), $sortOrder, $data);
                     include $this->plugin_dir_path . 'RRZE/Remoter/Templates/table.php';
                     $content = ob_get_clean();
-                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
+                    set_transient($cacheKey, $content, self::TRANSIENT_EXPIRATION);
                     return $content;
                     break;
                 case 'gallery':
                     $content = $this->galleryView($data, $apiurl);
-                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
+                    set_transient($cacheKey, $content, self::TRANSIENT_EXPIRATION);
                     return $content;
                     break;
                 case 'imagetable':
                     $content = $this->imagetableView($data, $apiurl);
-                    set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
+                    set_transient($cacheKey, $content, self::TRANSIENT_EXPIRATION);
                     return $content;
                     break;
                 default:
                 $content = $this->listView($data, $apiurl);
-                set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), $content, self::TRANSIENT_EXPIRATION);
+                set_transient($cacheKey, $content, self::TRANSIENT_EXPIRATION);
                 return $content;
             }
         } else {
-            set_transient(self::TRANSIENT_PREFIX . json_encode($shortcodeValues), '', self::TRANSIENT_EXPIRATION);
+            set_transient($cacheKey, '', self::TRANSIENT_EXPIRATION);
             return new WP_Error('no_remote_data_found', __('No data could be found on the server!', 'rrze-remoter'));
         }
     }
